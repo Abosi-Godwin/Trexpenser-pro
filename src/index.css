@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-optical-sizing: auto;
+    font-family: "Nunito", sans-serif;
+}
+
+.modal {
+    background: rgba(94, 74, 184, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(5px);
+}
