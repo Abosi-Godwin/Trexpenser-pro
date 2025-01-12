@@ -1,5 +1,5 @@
 {
-  "name": "expenses_tracker",
+  "name": "expenses_tracker pro",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mui/icons-material": "^5.16.4",
     "@ramonak/react-progress-bar": "^5.2.0",
     "@react-icons/all-files": "^4.1.0",
     "alert": "^6.0.2",

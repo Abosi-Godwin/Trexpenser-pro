@@ -126,7 +126,7 @@ const FooterCta = () => {
                     className="grid grid-cols-mine gap-0 bg-color-2 py-4
                 rounded-md"
                 >
-                    <div className="flex justify-end">
+                    <div className="flex justify-end ">
                         <FaQuoteLeft />
                     </div>
                     <div>

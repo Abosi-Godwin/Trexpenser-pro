@@ -18,20 +18,15 @@ module.exports = {
             },
             width: {
                 "1/10": "10%",
-                "9/10": "90%",
-                40: "40%",
-                50: "50%"
+                "9/10": "90%"
             },
             height: {
                 "1/10": "10%",
-                "9/10": "90%",
-                40: "40%",
-                50: "50%"
+                "9/10": "90%"
             },
             gridTemplateColumns: {
-                mine: "3fr 3fr 1fr 3fr",
                 transactions: "2fr 2fr",
-                
+                mine: "1fr 5fr 1fr"
             }
         }
     },
