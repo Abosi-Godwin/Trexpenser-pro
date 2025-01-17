@@ -1,21 +1,9 @@
 import { budgets } from "../data/data.js";
 import ProgressBar from "@ramonak/react-progress-bar";
-import { formatCurrency, roundDownPrice  } from "../Utils/CustomMethods.js";
+import { formatCurrency, roundDownPrice } from "../Utils/CustomMethods.js";
 import { useTransactions } from "../contexts/TransactionsContext.jsx";
 import { format, compareAsc } from "date-fns";
 
-    const getTotalSpent = category =>
-        roundDownPrice(
-            transactions
-                .filter(data => data.category === category)
-                .filter(
-                    data =>
-                        format(data.date, "MMM, dd, yyyy") >=
-                        format(new Date(minmaxDate[0]), "MMM, dd, yyyy")
-                )
-                .map(data => data.amount)
-        );
-        
 const BudgetTrackingChart = () => {
     const { transactions } = useTransactions();
 
@@ -31,8 +19,6 @@ const BudgetTrackingChart = () => {
         ])
         .sort(compareAsc)
         .map(date => format(date, "MMM, dd, yyyy"));
-
-    
 
     return (
         <div>
@@ -52,14 +38,33 @@ const BudgetTrackingChart = () => {
             </div>
             <div className="flex flex-col gap-2">
                 {budgets.map(budget => (
-                    <BudgetRoll budget={budget} key={budget.Id} />
+                    <BudgetRoll
+                        budget={budget}
+                        key={budget.Id}
+                        transactions={transactions}
+                        minmaxDate={minmaxDate}
+                    />
                 ))}
             </div>
         </div>
     );
 };
 
-const BudgetRoll = ({ budget }) => {
+const BudgetRoll = ({ budget, transactions, minmaxDate }) => {
+    const getTotalSpent = (category, transactions) =>
+        transactions
+            .filter(data => data.category === category)
+            .filter(
+                data =>
+                    format(data.date, "MMM, dd, yyyy") >=
+                    format(new Date(minmaxDate[0]), "MMM, dd, yyyy")
+            )
+            .map(data => data.amount);
+
+    const limitAmount = budget.amount;
+    const spentAmount = roundDownPrice(
+        getTotalSpent(budget.category, transactions));
+    
     return (
         <div className="bg-color-8 text-color-1 p-2 rounded-md">
             <h1 className="text-md text-color-1 font-bold uppercase my-1">
@@ -67,10 +72,11 @@ const BudgetRoll = ({ budget }) => {
             </h1>
             <p>
                 <strong>Limit:</strong>
-                {" " + formatCurrency(budget.amount)}
+                {" " + formatCurrency(limitAmount)}
             </p>
             <p>
-                <strong>Spent:</strong> {getTotalSpent(budget.category)}
+                <strong>Spent:</strong>
+                {" " + formatCurrency(spentAmount)}
             </p>
             <p className="text-sm">
                 <strong>Duration:</strong>
@@ -80,8 +86,8 @@ const BudgetRoll = ({ budget }) => {
                 )}`}
             </p>
             <ProgressBar
-                completed={150}
-                maxCompleted={budget.amount}
+                completed={+spentAmount}
+                maxCompleted={+limitAmount}
                 bgColor="#7c74e0"
                 baseBgColor="#e4e7fb"
                 height={15}
