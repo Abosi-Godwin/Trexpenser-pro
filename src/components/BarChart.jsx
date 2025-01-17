@@ -1,6 +1,8 @@
 import "chartjs-adapter-moment";
 import { formatCurrency } from "../Utils/CustomMethods.js";
 import { useTransactions } from "../contexts/TransactionsContext.jsx";
+
+import { savingsGoals } from "../data/data.js";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -27,10 +29,11 @@ ChartJS.register(
 defaults.maintainAspectRatio = false;
 defaults.responsive = true;
 
-function BarChart() {
+function BarChart({ showTitle, type }) {
     const { transactions } = useTransactions();
     const options = {
         responsive: true,
+        indexAxis: type,
         scales: {
             x: {
                 type: "time",
@@ -39,13 +42,13 @@ function BarChart() {
                     tooltipFormat: "MMM DD, YYYY"
                 },
                 title: {
-                    display: true,
+                    display: showTitle,
                     text: "Date"
                 }
             },
             y: {
                 title: {
-                    display: true,
+                    display: showTitle,
                     text: "Amount"
                 },
                 min: 0
@@ -94,10 +97,75 @@ function BarChart() {
             }
         ]
     };
+    
+    
+    const config = {
+        type: "bar",
+        data: {
+            labels: savingsGoals.map(data => data.name),
+            datasets: [
+                {
+                    label: "Amount Saved",
+                    data: savingsGoals.map(data => data.currentAmount),
+                    backgroundColor: "#b0b4f1",
+                    borderColor: "#5e4ab8",
+                    borderWidth: 1
+                },
+                {
+                    label: "Target Amount",
+                    data: savingsGoals.map(data => data.targetAmount),
+                    backgroundColor: "#5e4ab8",
+                    borderColor: "#b0b4f1",
+                    borderWidth: 0.8
+                }
+            ]
+        },
+        options: {
+            indexAxis: "y",
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: savingsGoals.map(data => data.targetAmount)[-1],
+                    title: {
+                        display: true,
+                        text: "Amount saved"
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "Savings Goals"
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: tooltipItems => tooltipItems[0].label,
+                        label: tooltipItem => {
+                            const chart = tooltipItem.chart;
+                            const dataIndex = tooltipItem.dataIndex;
+                            const savedValue =
+                                chart.data.datasets[0].data[dataIndex];
+                            const targetValue =
+                                chart.data.datasets[1].data[dataIndex];
+                            return [
+                                `Saved: ${formatCurrency(savedValue)}`,
+                                `Target: ${formatCurrency(targetValue)}`
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+    };
 
     return (
         <div className="h-80">
-            <Bar data={data} options={options} />
+            <Bar
+                data={type === "x" ? data : config.data}
+                options={type === "x" ? options : config.options}
+            />
         </div>
     );
 }

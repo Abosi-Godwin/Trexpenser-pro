@@ -11,9 +11,9 @@ const FaqSection = () => {
                     Find quick answers to help you get started with Trexpenser.
                 </p>
             </div>
-            <div className="grid grid-cols-1 gap-4 py-5">
-                {faqs.map((data,index) => (
-                    <Faq faqData={data} key={index}/>
+            <div className="grid grid-cols-1 gap-4 py-5 md:grid-cols-2">
+                {faqs.map((data, index) => (
+                    <Faq faqData={data} key={index} />
                 ))}
             </div>
         </div>

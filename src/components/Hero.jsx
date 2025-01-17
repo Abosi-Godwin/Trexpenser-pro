@@ -4,10 +4,14 @@ const HeroSection = () => {
     return (
         <div
             className="py-16 px-4 flex flex-col justify-center gap-12
-        items-center"
+        items-center md:flex-row-reverse"
         >
-            <div className="flex flex-col gap-10 items-center justify-center">
-                <div className="flex flex-col gap-2 items-center justify-center">
+            <div
+                className="flex flex-col gap-10 items-center justify-center
+           "
+            >
+                <div className="flex flex-col gap-2 items-center justify-center
+                md:w-1/2">
                     <h1 className="text-2xl font-bold text-color-8 text-center uppercase">
                         Simplify your financial journey with Trexpenser
                     </h1>
@@ -38,8 +42,8 @@ const HeroSection = () => {
                 </div>
             </div>
 
-            <div className="p-2">
-                <img src="/saving_img2.svg" className="w-52 h-auto" />
+            <div className="p-2 md:w-1/2">
+                <img src="/saving_img2.svg" className="w-52 h-auto w-full" />
             </div>
         </div>
     );

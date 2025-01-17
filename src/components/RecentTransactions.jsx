@@ -11,7 +11,7 @@ const RecentTransactions = () => {
     return (
         <div
             className="overflow-hidden rounded-md shadow-md
-                    shadow-color-2 w-full p-4 bg-white"
+                    shadow-color-2 w-full p-4 bg-white md:w-fit"
         >
             <div className="mb-5 flex justify-between items-center">
                 <div>
@@ -35,7 +35,8 @@ const RecentTransactions = () => {
             rounded-md"
             >
                 <div
-                    className="w-[480px] h-full p-2 rounded-md divide-y-2 divide-color-2"
+                    className="w-[480px] h-full p-2 rounded-md divide-y-2
+                    divide-color-2 md:w-fit"
                 >
                     <div
                         className={`w-full p-2 rounded flex

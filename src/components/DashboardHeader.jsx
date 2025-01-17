@@ -1,15 +1,17 @@
-import Nav from "./Nav.jsx";
-import LineChart from "./LineChart.jsx";
-import BarChart from "./BarChart.jsx";
-import DoughnutChart from "./DoughnutChart.jsx";
-import RecentTransactions from "./RecentTransactions.jsx";
-import { useTransactions } from "../contexts/TransactionsContext.jsx";
+import Nav from "./Nav";
+import LineChart from "./LineChart";
+import BarChart from "./BarChart";
+import DoughnutChart from "./DoughnutChart";
+import ApexLineChart from "./ApexLineChart";
+import AreaChart from "./AreaChart";
+import RecentTransactions from "./RecentTransactions";
+import SavingsAndBudgetAnalytics from "./SavingsAndBudgetAnalytics";
+import { useTransactions } from "../contexts/TransactionsContext";
 import {
     formatCurrency,
     roundTotalPrice,
-    roundTotalIncomePrice,
-    roundTotalExpensesPrice
-} from "../Utils/CustomMethods.js";
+    roundDownPrice
+} from "../Utils/CustomMethods";
 
 const DashboardHeader = () => {
     const { incomes, expenses, transactions } = useTransactions();
@@ -18,15 +20,13 @@ const DashboardHeader = () => {
     const expensePrices = expenses.map(income => income.amount);
 
     const totalBalance = formatCurrency(roundTotalPrice(transactions));
-    const totalIncome = formatCurrency(roundTotalIncomePrice(incomePrices));
-    const totalExpenses = formatCurrency(
-        roundTotalExpensesPrice(expensePrices)
-    );
+    const totalIncome = formatCurrency(roundDownPrice(incomePrices));
+    const totalExpenses = formatCurrency(roundDownPrice(expensePrices));
 
     return (
-        <header className="bg-color-1">
+        <header className="bg-color-1 md:min-h-screen">
             <Nav></Nav>
-            <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-4 md:px-8">
                 <div
                     className="flex flex-col items-start justify-center bg-white rounded-md shadow-md
                     shadow-color-2 p-3 gap-4"
@@ -48,7 +48,8 @@ const DashboardHeader = () => {
                         </p>
                     </div>
                     <div>
-                        <LineChart type="double" label="Transaction" />
+                      
+                        <ApexLineChart />
                     </div>
                 </div>
 
@@ -103,7 +104,7 @@ const DashboardHeader = () => {
                     shadow-color-2 p-3 gap-4"
                 >
                     <div>
-                        <BarChart />
+                        <BarChart showTitle={false} type="x" />
                     </div>
                 </div>
 
@@ -124,8 +125,14 @@ const DashboardHeader = () => {
                         <DoughnutChart label="income" />
                     </div>
                 </div>
-                <div className="md:col-span-3">
+
+                <div
+                    className="md:col-span-3            bg-cred-600 gap-4 flex
+                    flex-col
+                md:flex-row"
+                >
                     <RecentTransactions />
+                    <SavingsAndBudgetAnalytics />
                 </div>
             </div>
         </header>

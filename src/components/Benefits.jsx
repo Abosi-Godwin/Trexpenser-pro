@@ -12,7 +12,7 @@ const BenefitsSection = () => {
                     efficient.
                 </p>
             </div>
-            <div className="grid grid-cols-1 gap-5 py-5">
+            <div className="grid grid-cols-1 gap-5 py-5 md:grid-cols-2">
                 {benefits.map((data, index) => {
                     const Icon = data?.icon;
                     return (

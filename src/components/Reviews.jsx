@@ -27,7 +27,7 @@ const ReviewsSection = () => {
                     finances.
                 </p>
             </div>
-            <div className="grid grid-cols-1 gap-5 py-5">
+            <div className="grid grid-cols-1 gap-5 py-5 md:grid-cols-3">
                 {userReviews.map((data, index) => (
                     <div
                         key={data.id}

@@ -10,7 +10,6 @@ function Footer() {
     const [userEmail, setUserEmail] = useState("");
     const handleEmailSub = e => {
         e.preventDefault();
-       
     };
     return (
         <div className="bg-color-9 py-10 px-5">
@@ -28,7 +27,7 @@ function Footer() {
                     <h1 className="font-bold text-xl text-color-2 mb-3">
                         Join Our Newsletter
                     </h1>
-                    <form className="flex flex-col gap-2">
+                    <form className="grid grid-col-1 gap-2 md:grid-cols-quarter">
                         <input
                             type="email"
                             required

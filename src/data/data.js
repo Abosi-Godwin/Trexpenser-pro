@@ -13,6 +13,7 @@ import {
     FaAccessibleIcon
 } from "react-icons/fa6";
 
+
 export const datas = [
     {
         id: 1,
@@ -284,7 +285,7 @@ export const budgets = [
         category: "Entertainment",
         amount: 500,
         startDate: "2024-07-01",
-        endDate: "2024-08-05",
+        endDate: "2024-08-15",
         Id: 0
     }
 ];

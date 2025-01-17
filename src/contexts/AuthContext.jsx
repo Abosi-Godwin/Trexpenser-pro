@@ -3,7 +3,7 @@ import { loginDatas } from "../data/data.js";
 const AuthContext = createContext({});
 const useAuth = () => useContext(AuthContext);
 
-const userVals = { user: null, isAuthenticated: false };
+const userVals = { user: null, isAuthenticated: true };
 
 const reducer = (state, action) => {
     switch (action.type) {

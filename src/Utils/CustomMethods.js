@@ -11,9 +11,12 @@ export const roundTotalPrice = array => {
         0
     );
 };
-export const roundTotalIncomePrice = array => {
+export const roundDownPrice = array => {
     return array.reduce((ac, ini) => ac + ini, 0);
 };
-export const roundTotalExpensesPrice = array => {
-    return array.reduce((ac, ini) => ac + ini, 0);
+ 
+
+export const formatDate = date => {
+    const currentDate = new Date();
+    return new Date(date).toDateString();
 };

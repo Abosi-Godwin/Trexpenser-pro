@@ -11,7 +11,7 @@ const FeaturesSection = () => {
                     with these powerful features.
                 </p>
             </div>
-            <div className="grid grid-cols-1 gap-5 py-5">
+            <div className="grid grid-cols-1 gap-5 py-5 md:grid-cols-2">
                 {features.map((data, index) => {
                     const Icon = data.icon;
                     return (
