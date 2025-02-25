@@ -3,10 +3,21 @@ import { loginDatas } from "../data/data.js";
 const AuthContext = createContext({});
 const useAuth = () => useContext(AuthContext);
 
-const userVals = { user: null, isAuthenticated: true };
+const userVals = {
+    user: null,
+    users: [...loginDatas],
+    registered: false,
+    isAuthenticated: true
+};
 
 const reducer = (state, action) => {
     switch (action.type) {
+        case "signup":
+            return {
+                ...state,
+                users: [...state.users, action.payLoad],
+                registered: true
+            };
         case "login":
             return {
                 ...state,
@@ -26,9 +37,12 @@ const reducer = (state, action) => {
 };
 
 const AuthProvider = ({ children }) => {
-    const [{ user, isAuthenticated }, dispatch] = useReducer(reducer, userVals);
+    const [{ user, users, isAuthenticated, registered }, dispatch] = useReducer(
+        reducer,
+        userVals
+    );
 
-    const login = (email, password) => {
+    const logIn = (email, password) => {
         const info = loginDatas.find(
             data => data.email === email && data.password === password
         );
@@ -38,7 +52,13 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
+    const signUp = data => {
+      console.log(data)
+        dispatch({ type: "signup", payLoad: data });
+        console.log(users);
+    };
+
+    const logOut = () => {
         dispatch({ type: "logout" });
     };
 
@@ -46,9 +66,12 @@ const AuthProvider = ({ children }) => {
         <AuthContext.Provider
             value={{
                 user,
+                users,
                 isAuthenticated,
-                login,
-                logout
+                registered,
+                logIn,
+                signUp,
+                logOut
             }}
         >
             {children}

@@ -28,6 +28,7 @@ module.exports = {
                 transactions: "2fr 2fr",
                 mine: "1fr 5fr 1fr",
                 quarter: "80% 20%",
+                backQuarter: "15% 85%"
             }
         }
     },

@@ -4,6 +4,7 @@ export const formatCurrency = number => {
         currency: "USD"
     }).format(number);
 };
+
 export const roundTotalPrice = array => {
     return array.reduce(
         (ac, ini) =>
@@ -11,6 +12,7 @@ export const roundTotalPrice = array => {
         0
     );
 };
+
 export const roundDownPrice = array => {
     return array.reduce((ac, ini) => ac + ini, 0);
 };

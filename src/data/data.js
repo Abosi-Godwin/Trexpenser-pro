@@ -518,6 +518,8 @@ export const faqs = [
         answer: "You can edit or delete a savings goal by navigating to your dashboard, selecting the goal, and choosing the edit or delete option."
     }
 ];
+
+
 export const loginDatas = [
     { email: "johndoe@example.com", password: "password123" },
     { email: "bbnl6060@gmail.com", password: "060620" },
