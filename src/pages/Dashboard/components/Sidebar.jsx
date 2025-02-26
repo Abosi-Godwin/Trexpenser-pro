@@ -7,14 +7,13 @@ const SideBar = () => {
         <aside
             className={`hidden row-span-full py-4 md:block  ${
                 lightTheme
-                    ? "bg-white shadow-color-2"
+                    ? "bg-color-2 shadow-color-2"
                     : "bg-color-9 text-color-1 shadow-color-7"
             }`}
         >
             <div
-                className={`w-full bg-color-9 text-xl font-bold uppercase flex
-                items-center justify-center text-center border-b
-                border-color-3   md:text-md ${
+                className={`w-full bg-color-2 text-xl font-bold uppercase flex
+                items-center justify-center text-center   md:text-md ${
                     lightTheme ? "text-color-8" : "text-color-1 "
                 }`}
             >

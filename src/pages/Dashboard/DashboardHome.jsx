@@ -23,10 +23,7 @@ const DashboardHome = () => {
     const totalExpenses = formatCurrency(roundDownPrice(expensePrices));
 
     return (
-        <section
-            className="px-5 grid grid-cols-1 gap-4 max-w-fit
-        md:py-5"
-        >
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div
                 className="flex flex-col items-start justify-center bg-white
             rounded-md shadow-md shadow-color-2 p-3 gap-4"
@@ -85,7 +82,7 @@ const DashboardHome = () => {
                 </div>
             </div>
             <div
-                className="md:col-span-2 gap-4 flex flex-col
+                className="md:col-span-3 gap-4 flex flex-col
             md:flex-row"
             >
                 <RecentTransactions />

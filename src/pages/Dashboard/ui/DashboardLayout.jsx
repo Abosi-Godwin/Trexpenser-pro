@@ -7,7 +7,8 @@ const DashboardLayout = () => {
         <div className="grid grid-cols-1 md:grid-cols-[10rem_1fr] grid-rows-[auto_1fr] h-screen">
             <SideBar />
             <HeaderBar />
-            <main className="col-start-2">
+            <main className="col-start-2 bg-color-1 p-5">
+              
                 <Outlet />
             </main>
         </div>

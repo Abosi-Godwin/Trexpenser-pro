@@ -2,7 +2,7 @@ import SavingGoals from "../features/savings/SavingGoals";
 
 const SavingsPage = () => {
     return (
-        <div className="w-full bg-color-2 h-screen pt-24 py-6 px-2">
+        <>
             <div className="flex flex-col gap-3">
                 <h1 className="uppercase text-2xl font-extrabold text-color-5">
                     Your saving {<br />} Goals
@@ -12,7 +12,7 @@ const SavingsPage = () => {
                 </p>
             </div>
             <SavingGoals />
-        </div>
+        </>
     );
 };
 

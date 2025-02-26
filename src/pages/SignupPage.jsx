@@ -1,75 +1,38 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useState, useEffect } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { supabase } from "../Utils/Supabase";
 
-const initialVal = {
-    userName: "",
-    userEmail: "",
-    userPass: "",
-    errorMessage: "",
-    hidePass: true,
-    showError: false
-};
-const reducer = (state, action) => {
-    switch (action.type) {
-        case "name":
-            return { ...state, userName: action.payLoad };
-        case "email":
-            return { ...state, userEmail: action.payLoad };
-        case "pass":
-            return { ...state, userPass: action.payLoad };
-        case "showError":
-            return {
-                ...state,
-                showError: !state.showError,
-                errorMessage: action.payLoad
-            };
-        case "hidePass":
-            return { ...state, hidePass: !state.hidePass };
-        default:
-            throw new Error("Unknown action");
-    }
-};
 const SignupPage = () => {
     const navigate = useNavigate();
-    const { signUp, registered, users } = useAuth();
+    const { registered, users } = useAuth();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm();
 
-    const [
-        { userName, userEmail, userPass, errorMessage, hidePass, showError },
-        dispatch
-    ] = useReducer(reducer, initialVal);
+    const [hidePassword, setHidePassword] = useState("true");
+    const [user, setUser] = useState(null);
 
-    const handleForm = e => {
-        e.preventDefault();
-        if (!userName || !userEmail || !userPass) {
-            dispatch({ type: "showError", payLoad: "Fill all inputs" });
-            return;
-        }
-        const userData = {
-            name: userName,
-            email: userEmail,
-            password: userPass
-        };
-        const checkUser = (userData, users) => {
-            const theresUser = users.find(
-                user => user.email === userData.email
-            );
-            //  console.log(theresUser);
-            if (theresUser) {
-                dispatch({ type: "showError", payLoad: "Email already used" });
-            } else {
-                signUp(userData);
-            }
-        };
-        checkUser(userData, users);
+    const onSubmit = async userInputs => {
+        console.log(userInputs);
+        const { data, error } = await supabase
+            .from("Users")
+            .insert([{ ...userInputs }])
+            .select();
+        setUser(data);
+        console.log(data);
+        alert("Hello");
     };
 
     useEffect(() => {
-        if (registered) {
+        if (user) {
             navigate("/login", { replace: true });
         }
-    }, [registered, navigate]);
+    }, [user, navigate]);
 
     return (
         <div
@@ -84,7 +47,7 @@ const SignupPage = () => {
                     </h1>
                 </div>
 
-                <form>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-col gap-1 py-3">
                         <div className="flex flex-col gap-1 pb-2">
                             <label className="text-md font-bold">
@@ -95,17 +58,11 @@ const SignupPage = () => {
                                 type="text"
                                 required
                                 placeholder="Enter your username..."
-                                value={userName}
-                                onChange={e =>
-                                    dispatch({
-                                        type: "name",
-                                        payLoad: e.target.value
-                                    })
-                                }
                                 className="p-3 rounded-md outline-0 border"
+                                {...register("userName")}
                             />
                         </div>
-
+                        {errors.userName && <span>This field is required</span>}
                         <div className="flex flex-col gap-1">
                             <label className="text-md font-bold">Email</label>
 
@@ -113,15 +70,12 @@ const SignupPage = () => {
                                 type="email"
                                 required
                                 placeholder="Enter your email..."
-                                value={userEmail}
-                                onChange={e =>
-                                    dispatch({
-                                        type: "email",
-                                        payLoad: e.target.value
-                                    })
-                                }
                                 className="p-3 rounded-md outline-0 border"
+                                {...register("userEmail", { required: true })}
                             />
+                            {errors.userEmail && (
+                                <span>This field is required</span>
+                            )}
                         </div>
 
                         <div className="flex flex-col gap-1 pt-3">
@@ -132,36 +86,22 @@ const SignupPage = () => {
                                 <label className="text-md font-bold">
                                     Password
                                 </label>
-                                <div
-                                    className="p-2"
-                                    onClick={() =>
-                                        dispatch({ type: "hidePass" })
-                                    }
-                                >
-                                    {!hidePass ? <FaEyeSlash /> : <FaEye />}
+                                <div className="p-2" onClick={!hidePassword}>
+                                    {!hidePassword ? <FaEyeSlash /> : <FaEye />}
                                 </div>
                             </div>
                             <input
-                                type={hidePass ? "password" : "text"}
+                                type={hidePassword ? "password" : "text"}
                                 required
                                 placeholder="Enter your password..."
-                                value={userPass}
-                                onChange={e =>
-                                    dispatch({
-                                        type: "pass",
-                                        payLoad: e.target.value
-                                    })
-                                }
                                 className="p-3 rounded-md outline-0 border"
+                                {...register("userPassword", {
+                                    required: true
+                                })}
                             />
-
-                            <p
-                                className={`text-red-500 pt-1 ${
-                                    !showError && "hidden"
-                                }`}
-                            >
-                                {errorMessage}
-                            </p>
+                            {errors.userPassword && (
+                                <span>This field is required</span>
+                            )}
                         </div>
                     </div>
 
@@ -169,7 +109,6 @@ const SignupPage = () => {
                         <div className="py-5">
                             <input
                                 type="Submit"
-                                onClick={e => handleForm(e)}
                                 className="bg-color-8 text-color-2 font-extrabold
                             rounded-md p-2 uppercase w-full"
                             />
