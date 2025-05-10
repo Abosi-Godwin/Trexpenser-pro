@@ -1,0 +1,185 @@
+import { supabase } from "../Utils/Supabase";
+
+export const formatCurrency = number => {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    }).format(number);
+};
+
+export const roundTotalPrice = array => {
+    return array.reduce(
+        (ac, ini) =>
+            ini.type === "income" ? ac + ini.amount : ac - ini.amount,
+        0
+    );
+};
+
+export const roundDownPrice = array => {
+    return array.reduce((ac, ini) => ac + ini, 0);
+};
+
+export const formatDate = date => new Date(date).toDateString();
+
+export const getCurrentUser = async () => {
+    const {
+        data: { session }
+    } = await supabase.auth.getSession();
+
+    if (!session) return null;
+
+    const { data: user, error } = await supabase.auth.getUser();
+    if (!user?.user) return;
+
+    if (error) {
+        console.error(error.message);
+        throw new Error(error.message);
+    }
+
+    return user;
+};
+
+export const addUsers = async datas => {
+    const { data, error } = await supabase
+        .from("Users")
+        .insert([{ ...datas }])
+        .select();
+
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+    return data;
+};
+
+export const userSignUp = async ({ userName, userEmail, userPassword }) => {
+    let { data, error } = await supabase.auth.signUp({
+        email: userEmail,
+        password: userPassword,
+        options: {
+            data: {
+                userName
+            }
+        }
+    });
+
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
+export const userLogIn = async ({ userEmail, userPassword }) => {
+    let { data, error } = await supabase.auth.signInWithPassword({
+        email: userEmail,
+        password: userPassword
+    });
+
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+
+    return data;
+};
+
+export const insertTransaction = async transaction => {
+    const { data, error } = await supabase
+        .from("transactions")
+        .insert([{ ...transaction }])
+        .select();
+
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+    return data;
+};
+export const deleteTransacationApi = async transactionId => {
+    const { error } = await supabase
+        .from("transactions")
+        .delete()
+        .eq("id", transactionId);
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+};
+
+export const userLogOut = async () => {
+    let { error } = await supabase.auth.signOut();
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+};
+
+export const getUserTransactions = async userId => {
+    const { data, error } = await supabase
+        .from("transactions")
+        .select("*")
+        .eq("user_id", userId);
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+    return data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+};
+
+export const getInsightsAPI = async inputData => {
+    const { data, error } = await supabase.functions.invoke(
+        "geminiAI_insight",
+        {
+            body: { prompt: inputData }
+        }
+    );
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+    //Analytics
+    console.log(data);
+    return data;
+};
+
+export const getSavingsApi = async userId => {
+    let { data, error } = await supabase
+        .from("savings")
+        .select("*")
+        .eq("user_id", userId);
+
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+    return data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+};
+
+export const addSavingsApi = async savingsObj => {
+    const { data, error } = await supabase
+        .from("savings")
+        .insert([{ ...savingsObj }])
+        .select();
+
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+    return data;
+};
+
+export const updateSavingsApi = async (amountToSave, savingsId) => {
+    const { data, error } = await supabase
+        .from("savings")
+        .update({ amount_saved: amountToSave })
+        .eq("id", savingsId)
+        .select();
+
+    if (error) {
+        console.error("updating savings error", error);
+        throw new Error(error.message);
+    }
+    return data;
+};
