@@ -1,24 +1,20 @@
-import PropTypes from "prop-types";
 import { useState } from "react";
-RadioButton.propTypes = {
-  onHandleInputChange: PropTypes.func,
-valSetter: PropTypes.func,
-  
-}
 
+function RadioButton({ onHandleInputChange, defaultOption }) {
+    console.log(defaultOption);
+    const [selectedValue, setSelectedValue] = useState(defaultOption);
 
-function RadioButton({ onHandleInputChange, valSetter }) {
-    const [selectedValue, setSelectedValue] = useState("Manual");
     function handleSelectedValue(e) {
         const value = e.target.value;
         setSelectedValue(value);
-        onHandleInputChange(value, valSetter);
+
+        onHandleInputChange("type", selectedValue);
     }
     return (
-        <div>
-            <h3 className="text-lg font-bold text-color-8">Savings type?</h3>
+        <>
+            <h3>Savings type?</h3>
             <ul className="grid w-full gap-6 md:grid-cols-2">
-                <li>
+                <li className="has-checked:bg-amber-600">
                     <input
                         type="radio"
                         id="Manual"
@@ -40,7 +36,7 @@ function RadioButton({ onHandleInputChange, valSetter }) {
                                 Manual <i className="text-sm">(Default)</i>
                             </div>
                             <div className="w-full">
-                                You will manually add some funds.
+                                Manually add some funds.
                             </div>
                         </div>
                     </label>
@@ -75,7 +71,7 @@ function RadioButton({ onHandleInputChange, valSetter }) {
                     </label>
                 </li>
             </ul>
-        </div>
+        </>
     );
 }
 export default RadioButton;

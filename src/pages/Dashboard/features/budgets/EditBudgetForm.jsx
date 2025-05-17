@@ -1,15 +1,12 @@
 import { useState } from "react";
-import Input from "./Inputs/Input.jsx";
-import Button from "./Inputs/Button.jsx";
-import DateInput from "./Inputs/DateInput.jsx";
+import Input from "../../ui/Input";
+import Button from "../../ui/Button";
+import DateInput from "../../ui/DateInput";
 //import Categories from "./Inputs/Categories.jsx";
-import Modal from "./Modal.jsx";
+import Modal from "../../ui/Modal";
 
 function EditBudgetForm({ data, onFormClose, onFormSubmit }) {
-    /* useEffect(() => {
-        const today = new Date().toISOString().split("T")[0];
-        //setCurrentDate(today);
-    }, []);*/
+    
 
     const budgetCategory = data.category;
     const [amount, setAmount] = useState(data.amount);

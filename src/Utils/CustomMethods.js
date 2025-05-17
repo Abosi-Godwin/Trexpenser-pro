@@ -21,6 +21,9 @@ export const roundDownPrice = array => {
 
 export const formatDate = date => new Date(date).toDateString();
 
+export const sortData = data =>
+    data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
 export const getCurrentUser = async () => {
     const {
         data: { session }
@@ -52,10 +55,10 @@ export const addUsers = async datas => {
     return data;
 };
 
-export const userSignUp = async ({ userName, userEmail, userPassword }) => {
+export const userSignUp = async ({ userName, email, password }) => {
     let { data, error } = await supabase.auth.signUp({
-        email: userEmail,
-        password: userPassword,
+        email,
+        password,
         options: {
             data: {
                 userName
@@ -71,10 +74,11 @@ export const userSignUp = async ({ userName, userEmail, userPassword }) => {
     return data;
 };
 
-export const userLogIn = async ({ userEmail, userPassword }) => {
+export const userLogIn = async ({ email, password }) => {
+  console.log(email, password)
     let { data, error } = await supabase.auth.signInWithPassword({
-        email: userEmail,
-        password: userPassword
+        email,
+        password
     });
 
     if (error) {
@@ -154,7 +158,7 @@ export const getSavingsApi = async userId => {
         console.error(error);
         throw new Error(error.message);
     }
-    return data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return sortData(data);
 };
 
 export const addSavingsApi = async savingsObj => {
@@ -182,4 +186,17 @@ export const updateSavingsApi = async (amountToSave, savingsId) => {
         throw new Error(error.message);
     }
     return data;
+};
+
+export const getUserBudgets = async userId => {
+    let { data, error } = await supabase
+        .from("budgets")
+        .select("*")
+        .eq("user_id", userId);
+    if (error) {
+        console.error(error);
+        throw new Error(error.message);
+    }
+
+    return sortData(data);
 };

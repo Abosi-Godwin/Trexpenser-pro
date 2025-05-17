@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Input from "./Inputs/Input.jsx";
-import Button from "./Inputs/Button.jsx";
-import DateInput from "./Inputs/DateInput.jsx";
-import Categories from "./Inputs/Categories.jsx";
+import Input from "../../ui/Input";
+import Button from "../../ui/Button";
+import DateInput from "../../ui/DateInput";
+import SelectInput from "../../ui/SelectInput";
 import { Toaster, toast } from "alert";
 
 function BudgetForm({ budgetCategories, allBudgets, onFormSubmit }) {
@@ -11,8 +11,7 @@ function BudgetForm({ budgetCategories, allBudgets, onFormSubmit }) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [currentDate, setCurrentDate] = useState("");
-    
-    
+
     function handleInputChange(value, setterFunc) {
         setterFunc(value);
     }
@@ -91,7 +90,7 @@ function BudgetForm({ budgetCategories, allBudgets, onFormSubmit }) {
             <div>
                 <form>
                     <div className="flex justify-between items-center gap-4">
-                        <Categories
+                        <SelectInput
                             options={budgetCategories}
                             labelFor="budgetType"
                             label="Category to track"

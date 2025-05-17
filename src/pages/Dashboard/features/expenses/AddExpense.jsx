@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+/*import { useEffect, useReducer } from "react";
 import Button from "../../ui/Button";
 import DateInput from "../../ui/DateInput";
 import Input from "../../ui/Input";
@@ -12,6 +12,7 @@ import {
     expenseTypes
 } from "../../../../data/data";
 
+import { reducer } from "../../../../Hooks/useReducerFunc";
 const datas = {
     type: "",
     category: "",
@@ -20,30 +21,22 @@ const datas = {
     date: ""
 };
 
-const reducerFunc = (state, action) => {
-    switch (action.type) {
-        /*
-        case "inputType":
-            return { ...state, type: action.payload };*/
-
-        case "UPDATE_FIELD":
-            return { ...state, [action.payload.field]: action.payload.value };
-        default:
-
-    }
-};
-
 function AddExpenseForm({ onHandleForm }) {
-    const [{ type, category, description, amount, date }, dispatch] =
-        useReducer(reducerFunc, datas);
+    const {
+        type,
+        category,
+        description,
+        amount,
+        date = state,
+        dispatch
+    } = reducer(datas);
 
     function handleInputChange(value, inputType) {
+        console.log(value);
         dispatch({
             type: "UPDATE_FIELD",
-            payload: { field: inputType, value: value }
+            payload: { field: inputType, value }
         });
-
-       
     }
 
     function handleFormSubmit(e) {
@@ -66,8 +59,8 @@ function AddExpenseForm({ onHandleForm }) {
             };
             onHandleForm(newExpense);
             //onFormSubmit(newExpense);
-            /*setDescription("");
-            setAmount("");*/
+            setDescription("");
+            setAmount("");
         }
     }
 
@@ -159,3 +152,4 @@ function AddExpenseForm({ onHandleForm }) {
     );
 }
 export default AddExpenseForm;
+*/

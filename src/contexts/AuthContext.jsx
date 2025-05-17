@@ -8,6 +8,7 @@ import {
     userLogOut,
     getCurrentUser,
     getUserTransactions,
+    getUserBudgets,
     insertTransaction,
     deleteTransacationApi,
     getInsightsAPI,
@@ -38,10 +39,13 @@ const AuthProvider = ({ children }) => {
         mutate: signUp,
         isPending: isSigningUp,
         isError: signUpIsError,
+        isSuccess: signedUpSuccess,
         error: signUpError
     } = useMutation({
         mutationFn: userSignUp,
-        onError: err => console.error("Error signing up", err)
+        onError: err => {
+            toast.error(`Failed, ${err.message}`);
+        }
     });
 
     const {
@@ -55,6 +59,9 @@ const AuthProvider = ({ children }) => {
             queryClient.invalidateQueries({
                 queryKey: ["user"]
             });
+        },
+        onError: error => {
+            toast(error.message);
         }
     });
 
@@ -152,6 +159,17 @@ const AuthProvider = ({ children }) => {
         }
     });
 
+    const {
+        data: budgets,
+        error: budgetsError,
+        isError: isBudgetsError,
+        isPending: isBudgetsLoading
+    } = useQuery({
+        queryKey: ["Budgets", userId],
+        queryFn: () => getUserBudgets(userId),
+        enabled: !!userId
+    });
+
     useEffect(() => {
         if (transactions) {
             setIncomes(
@@ -189,6 +207,7 @@ const AuthProvider = ({ children }) => {
                 //DATAS
                 user,
                 transactions,
+                budgets,
                 incomes,
                 expenses,
                 addedTransaction,
@@ -200,6 +219,7 @@ const AuthProvider = ({ children }) => {
                 isUserLoading,
                 isSigningUp,
                 signUpIsError,
+                signedUpSuccess,
                 istransactionsLoading,
                 logInIsPending,
                 logInIsError,

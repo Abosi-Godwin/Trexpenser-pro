@@ -1,22 +1,21 @@
 import ProgressBar from "@ramonak/react-progress-bar";
-import EdithAndDelBtn from "./EdithAndDelBtn.jsx";
-
-function Budget({
-    budget,
-    expenses,
-    onCurrencyFormat,
-    onFormEditOpen,
-    onFormDeleteOpen
-}) { 
-    const allExpenses = expenses.filter(
-        expense => expense.category === budget.category
+import EdithAndDelBtn from "../../ui/EdithAndDelBtn";
+import { useAuth } from "../../../../contexts/AuthContext";
+import { formatCurrency } from "../../../../Utils/CustomMethods";
+function Budget({ budget, onFormEditOpen, onFormDeleteOpen }) {
+    const { transactions } = useAuth();
+    console.log(budget);
+    const allExpenses = transactions.filter(
+        transaction =>
+            transaction.type === "expense" &&
+            transaction.category === budget.category
     );
 
     const trackingCategory = budget.category;
 
-    const startDate = budget.startDate;
+    const startDate = budget.start_date;
 
-    const endDate = budget.endDate;
+    const endDate = budget.end_date;
 
     const spendingLimit = budget.amount;
 
@@ -27,13 +26,14 @@ function Budget({
         .reduce((acc, ini) => acc + ini, 0);
 
     const spentPercent = (totalSpent / spendingLimit) * 100;
-   
+
     return (
-        <li className="list-none flex items-center justify-between border bg-color-6 text-color-2 rounded-md p-2">
+        <li className="list-none flex items-center justify-between rounded-md p-2">
             <div>
                 <h1 className="text-xl">{budget.category}</h1>
-                <h1 className="font-extrabold">
-                    {onCurrencyFormat(budget.amount)}
+                <p>{budget.notes}</p>
+                <h1 className="font-extrabold mt-2">
+                    {formatCurrency(budget.amount)}
                 </h1>
                 <ProgressBar
                     completed={totalSpent}
@@ -45,8 +45,8 @@ function Budget({
                     labelSize={10}
                 />
                 <p>
-                    {budget.startDate.replace(/-/g, "/")} -{" "}
-                    {budget.endDate.replace(/-/g, "/")}
+                    {startDate.replace(/-/g, "/")} -{" "}
+                    {endDate.replace(/-/g, "/")}
                 </p>
             </div>
             <EdithAndDelBtn
@@ -58,3 +58,28 @@ function Budget({
     );
 }
 export default Budget;
+{
+    /*
+<div className="pt-4">
+    <h1 className="text-color-7 font-bold text-xl">Active expenses tracking</h1>{" "}
+    <div>
+        <div>
+            <ul className="flex flex-col gap-4">
+                {allBudgets.map(budget => {
+                    return (
+                        <Budget
+                            budget={budget}
+                            expenses={allExpenses}
+                            key={budget.Id}
+                            onCurrencyFormat={onCurrencyFormat}
+                            onFormEditOpen={handleOpenBudgetEditForm}
+                            onFormDeleteOpen={handleOpenBudgetDelForm}
+                        />
+                    );
+                })}
+            </ul>
+        </div>
+    </div>
+</div>;
+*/
+}

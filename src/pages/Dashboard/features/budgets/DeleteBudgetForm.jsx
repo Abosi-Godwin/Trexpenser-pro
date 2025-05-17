@@ -1,5 +1,5 @@
-import Button from "./Inputs/Button.jsx";
-import Modal from "./Modal.jsx";
+import Button from "../../ui/Button";
+import Modal from "../../ui/Modal";
 
 function DeleteBudgetForm({
     data,

@@ -5,15 +5,27 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
 import { slideUpVariant } from "../Utils/AnimationVariants";
-import MiniLoader from "./Dashboard/ui/MiniLoader.jsx";
+import MiniLoader from "./Dashboard/ui/MiniLoader";
+
+import Input from "./Dashboard/ui/Input";
+import Button from "./Dashboard/ui/Button";
+
 const LoginPage = () => {
     const { logIn, logInError, logInIsError, logInIsPending } = useAuth();
 
-    const { register, handleSubmit } = useForm();
-    const [hidePass, setHidePass] = useState(true);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm();
+    const [hidePassword, setHidePassword] = useState(true);
 
-    const handleLogin = enteredInfos => logIn(enteredInfos);
-
+    const handleLogin = enteredInfos => {
+        logIn(enteredInfos);
+    };
+    const handleHidePassword = () => {
+        setHidePassword(prev => !prev);
+    };
     return (
         <div
             className="bg-light-sectionBackground flex items-center justify-center h-screen
@@ -33,54 +45,47 @@ const LoginPage = () => {
                 </div>
 
                 <form onSubmit={handleSubmit(handleLogin)}>
-                    <div className="flex flex-col gap-1 py-3">
-                        <div className="flex flex-col gap-1">
-                            <label className="text-md font-bold">
-                                Your Email
-                            </label>
+                    <div className="flex flex-col gap-3 py-3">
+                        <Input
+                            label="email"
+                            inputType="email"
+                            placeholder="Enter your email..."
+                            className="p-3 rounded-md outline-0 border"
+                            disable={logInIsPending}
+                            register={register}
+                            error={errors}
+                            rules={{ required: "Enter your email" }}
+                        />
 
-                            <input
-                                type="email"
-                                required
-                                placeholder="Enter your email..."
-                                className="p-3 rounded-md outline-0 border"
-                                disabled={logInIsPending}
-                                {...register("userEmail")}
-                            />
-                        </div>
+                        <Input
+                            inputType={hidePassword ? "password" : "text"}
+                            placeholder="Enter your password..."
+                            label="password"
+                            className="p-3 rounded-md outline-0 border"
+                            disable={logInIsPending}
+                            register={register}
+                            error={errors}
+                            rules={{
+                                required: "Password is required"
+                            }}
+                            onHidePassword={handleHidePassword}
+                            toggle={hidePassword}
+                        />
 
-                        <div className="flex flex-col gap-1 pt-3">
-                            <div
-                                className="flex justify-between items-center
-                            pr-2"
-                            >
-                                <label className="text-md font-bold">
-                                    Your Password
-                                </label>
-                                <div
-                                    className="p-2"
-                                    onClick={() => setHidePass(prev => !prev)}
-                                >
-                                    {!hidePass ? <FaEyeSlash /> : <FaEye />}
-                                </div>
-                            </div>
-                            <input
-                                type={hidePass ? "password" : "text"}
-                                required
-                                placeholder="Enter your password..."
-                                disabled={logInIsPending}
-                                className="p-3 rounded-md outline-0 border"
-                                {...register("userPassword")}
-                            />
-                            {logInIsError && (
-                                <p className="text-red-500 pt-3">
-                                    {logInError.message.split(":")[1]}
-                                </p>
-                            )}
-                        </div>
+                        <Button
+                            text="Login"
+                            type="submit"
+                            className="bg-light-primaryCTA text-white font-extrabold
+                            rounded-md p-2 uppercase w-full flex items-center
+                            justify-center"
+                            disabled={logInIsPending}
+                            loader={logInIsPending}
+                            onButtonClick={handleSubmit}
+                        />
                     </div>
+
                     <div className="py-2">
-                        <div className="flex justify-between font-bold">
+                        <div className="flex justify-between font-bold py-2">
                             <div className="flex gap-2">
                                 <input type="checkbox" />
                                 <p>Remember me</p>
@@ -89,21 +94,7 @@ const LoginPage = () => {
                                 <h1 className="text-color-8">Lost password?</h1>
                             </div>
                         </div>
-                        <div className="py-5">
-                            <button
-                                type="submit"
-                                className="bg-light-primaryCTA text-white font-extrabold
-                            rounded-md p-2 uppercase w-full flex items-center
-                            justify-center"
-                                disabled={logInIsPending}
-                            >
-                                {logInIsPending ? (
-                                    <MiniLoader />
-                                ) : (
-                                    "Login"
-                                )}
-                            </button>
-                        </div>
+
                         <div>
                             <p>Not intentional about your budget yet?</p>
                             <Link

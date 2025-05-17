@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import RadioButton from "../../ui/RadioButton";
 import DateInput from "../../ui/DateInput";
 import SelectInput from "../../ui/SelectInput";
-//import Saving from "../../components/Saving.jsx";
+
+import { useReducerFunc } from "../../../../Hooks/useReducerFunc";
 
 const savingFrequencyOptions = [
     "Daily",
@@ -17,37 +18,45 @@ const savingFrequencyOptions = [
     "Annually"
 ];
 
-const AddSavingsForm = ({ onCloseForm }) => {
-    const savingsTypes = ["Manual", "Automatic"];
-    const [savingsType, setSavingsType] = useState(savingsTypes[0]);
-    const [savingsGoalName, setSavingsGoalName] = useState("");
-    const [targetAmount, setTargetAmount] = useState("");
-    const initialAmount = 0;
-    const [startDate, setStartDate] = useState("");
-    const [targetDate, setTargetDate] = useState("");
-    const [savingPercent, setSavingPercent] = useState(1);
-    const [frequency, setFrequency] = useState();
+const savingsTypes = ["Manual", "Automatic"];
+const fields = {
+    savingsType: savingsTypes[0],
+    savingsGoalName: "",
+    targetAmount: "",
+    startDate: "",
+    targetDate: "",
+    initialAmount: "",
+    savingPercent: "",
+    frequency: savingFrequencyOptions[0],
+};
 
-    const [currentDate, setCurrentDate] = useState("");
+const AddSavingsForm = ({ onCloseForm }) => {
+    const { states, inputChange } = useReducerFunc(fields);
+
+    const {
+        savingsType,
+        savingsGoalName,
+        targetAmount,
+        startDate,
+        targetDate,
+        initialAmount,
+        savingPercent,
+        frequency,
+        currentDate
+    } = states;
+
+    function handleInputChange(type, value) {
+        console.log(states);
+        inputChange(type, value);
+    }
+
     function handleFormSubmit(e) {
         e.preventDefault();
-        savingsType === "Manual"
-            ? console.log({
-                  savingsGoalName,
-                  targetAmount,
-                  initialAmount,
-                  startDate,
-                  targetDate
-              })
-            : console.log(savingsType);
     }
-    function handleInputChange(e, setFunc) {
-        setFunc(e);
-    }
+
     useEffect(() => {
         const currentDate = new Date().toISOString().split("T")[0];
-        //setDate(currentDate);
-        setCurrentDate(currentDate);
+        inputChange("date", currentDate);
     }, []);
 
     return (
@@ -63,41 +72,28 @@ const AddSavingsForm = ({ onCloseForm }) => {
                 <form className="flex flex-col gap-3">
                     <RadioButton
                         onHandleInputChange={handleInputChange}
-                        valSetter={setSavingsType}
+                        defaultOption={savingsType}
                     />
 
                     <div
                         className="text-color-8 grid w-full gap-3
                         md:grid-cols-2"
                     >
-                        <div>
-                            <Input
-                                label="Goal name"
-                                inputType="string"
-                                placeholder="Name your savings goal..."
-                                initialValue={savingsGoalName}
-                                onHandleInputChange={e =>
-                                    handleInputChange(
-                                        e.target.value,
-                                        setSavingsGoalName
-                                    )
-                                }
-                            />
-                        </div>
-                        <div>
-                            <Input
-                                label="Target amount"
-                                inputType="number"
-                                placeholder="Enter the target amount..."
-                                initialValue={targetAmount}
-                                onHandleInputChange={e =>
-                                    handleInputChange(
-                                        e.target.value,
-                                        setTargetAmount
-                                    )
-                                }
-                            />
-                        </div>
+                        <Input
+                            label="Goal name"
+                            inputType="string"
+                            placeholder="Name your savings goal..."
+                            initialValue={savingsGoalName}
+                            onHandleInputChange={handleInputChange}
+                        />
+
+                        <Input
+                            label="Target amount"
+                            inputType="number"
+                            placeholder="Enter the target amount..."
+                            initialValue={targetAmount}
+                            onHandleInputChange={handleInputChange}
+                        />
                     </div>
 
                     <div
@@ -110,8 +106,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                                 date={startDate}
                                 maxDate=""
                                 minDate={currentDate}
-                                setDate={setStartDate}
-                                style="w-full outline-none rounded
+                                className="w-full outline-none rounded
                     text-color-8 bg-color-2 p-2"
                                 onHandleInputChange={handleInputChange}
                             />
@@ -122,8 +117,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                                 date={targetDate}
                                 maxDate=""
                                 minDate={startDate}
-                                setDate={setTargetDate}
-                                style="w-full outline-none rounded
+                                className="w-full outline-none rounded
                     text-color-8 bg-color-2 p-2"
                                 onHandleInputChange={handleInputChange}
                             />
@@ -142,12 +136,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                                     name="savingFrequency"
                                     id="savingFrequency"
                                     value={frequency}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            e.target.value,
-                                            setFrequency
-                                        )
-                                    }
+                                    onChange={handleInputChange}
                                     className="w-full bg-color-2
                 text-color-8 bg-color-2 border-none outline-none p-2 rounded"
                                 >
@@ -171,12 +160,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                                     min="1"
                                     max="100"
                                     value={savingPercent}
-                                    onChange={e =>
-                                        handleInputChange(
-                                            e.target.value,
-                                            setSavingPercent
-                                        )
-                                    }
+                                    onChange={handleInputChange}
                                     className="w-full
 h-2 bg-color-6 rounded-lg appearance-none cursor-pointer"
                                 />
@@ -193,7 +177,7 @@ h-2 bg-color-6 rounded-lg appearance-none cursor-pointer"
                             onButtonClick={onCloseForm}
                         />
                         <Button
-                            style="w-32 bg-color-6 uppercase p-2 rounded
+                            className="w-32 bg-color-6 uppercase p-2 rounded
                             text-color-2
         hover:bg-color-5 hover:text-color-2 font-bold text-xl"
                             text="Save"

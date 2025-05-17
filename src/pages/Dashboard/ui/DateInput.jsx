@@ -6,7 +6,7 @@ const DateInput = ({
     setDate,
     disable,
     className = "",
-    onHandleDateChange
+    onHandleInputChange
 }) => {
     return (
         <div>
@@ -22,7 +22,7 @@ const DateInput = ({
                 min={minDate}
                 className={className}
                 disabled={disable}
-                onChange={e => onHandleDateChange(e.target.value, label)}
+                onChange={e => onHandleInputChange(label, e.target.value)}
             />
         </div>
     );

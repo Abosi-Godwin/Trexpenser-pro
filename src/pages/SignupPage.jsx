@@ -1,25 +1,42 @@
 import { useState } from "react";
-import { FaEyeSlash, FaEye } from "react-icons/fa6";
+
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { slideUpVariant } from "../Utils/AnimationVariants";
 import { useAuth } from "../contexts/AuthContext";
+
+import Button from "./Dashboard/ui/Button";
+
 /*
  Component starts
 */
-const SignupPage = () => {
-    const { signUp, isSigningUp, signUpIsError, signUpError } = useAuth();
 
-    const { register, handleSubmit } = useForm();
+import Input from "./Dashboard/ui/Input";
+const SignupPage = () => {
+    const { signUp, isSigningUp, signUpIsError, signUpError, signedUpSuccess } =
+        useAuth();
+
+    const {
+        register,
+        reset,
+        getValues,
+        handleSubmit,
+        formState: { errors, isSubmitting }
+    } = useForm({ mode: "all" });
+
     const [hidePassword, setHidePassword] = useState(true);
 
     const handleHidePassword = () => {
         setHidePassword(prev => !prev);
     };
 
-    const submitFunc = userInputs => signUp({ ...userInputs });
+    const submitFunc = userInputs => {
+       
+        signUp({...userInputs});
 
+        if (signedUpSuccess) reset();
+    };
     return (
         <div
             className="bg-light-sectionBackground flex items-center justify-center h-screen
@@ -40,80 +57,66 @@ const SignupPage = () => {
 
                 <form onSubmit={handleSubmit(submitFunc)}>
                     <div className="flex flex-col gap-1 py-3">
-                        <div className="flex flex-col gap-1 pb-2">
-                            <label className="text-md font-bold">
-                                Username
-                            </label>
+                        <Input
+                            label="userName"
+                            inputType="text"
+                            disable={isSigningUp}
+                            placeholder="Enter your username..."
+                            className="p-3 rounded-md outline-0 border"
+                            register={register}
+                            error={errors}
+                            rules={{
+                                required: "Username can't be empty"
+                            }}
+                        />
 
-                            <input
-                                type="text"
-                                required
-                                placeholder="Enter your username..."
-                                className="p-3 rounded-md outline-0 border"
-                                {...register("userName")}
-                            />
-                        </div>
+                        <Input
+                            inputType="email"
+                            placeholder="Enter your email..."
+                            label="email"
+                            className="p-3 rounded-md outline-0 border"
+                            disable={isSigningUp}
+                            register={register}
+                            error={errors}
+                            rules={{
+                                required: "Email is required"
+                            }}
+                        />
 
-                        <div className="flex flex-col gap-1">
-                            <label className="text-md font-bold">Email</label>
-
-                            <input
-                                type="email"
-                                required
-                                placeholder="Enter your email..."
-                                className="p-3 rounded-md outline-0 border"
-                                disabled={isSigningUp}
-                                {...register("userEmail", { required: true })}
-                            />
-
-                            {signUpIsError && (
-                                <p className="text-red-500 pt-3">
-                                    {signUpError.message.split(":")[1]}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="flex flex-col gap-1 pt-3">
-                            <div
-                                className="flex justify-between items-center
-                            pr-2"
-                            >
-                                <label className="text-md font-bold">
-                                    Password
-                                </label>
-                                <div
-                                    className="p-2"
-                                    disabled={isSigningUp}
-                                    onClick={handleHidePassword}
-                                >
-                                    {!hidePassword ? <FaEyeSlash /> : <FaEye />}
-                                </div>
-                            </div>
-                            <input
-                                type={hidePassword ? "password" : "text"}
-                                required
-                                placeholder="Enter your password..."
-                                className="p-3 rounded-md outline-0 border"
-                                disabled={isSigningUp}
-                                {...register("userPassword", {
-                                    required: true
-                                })}
-                            />
-                        </div>
+                        <Input
+                            inputType={hidePassword ? "password" : "text"}
+                            placeholder="Enter your password..."
+                            label="password"
+                            className="p-3 rounded-md outline-0 border"
+                            disable={isSigningUp}
+                            register={register}
+                            error={errors}
+                            rules={{
+                                required: "Password is required",
+                                minLength: {
+                                    value: 6,
+                                    message:
+                                        "Password must be at least 6 characters"
+                                }
+                            }}
+                            onHidePassword={handleHidePassword}
+                            toggle={hidePassword}
+                        />
                     </div>
 
                     <div className="py-2">
-                        <div className="py-5">
-                            <button
-                                type="submit"
-                                className="bg-light-primaryCTA text-white
+                        <Button
+                            text="Sign up"
+                            type="submit"
+                            loader={isSigningUp}
+                            className="bg-light-primaryCTA text-white flex
+                            items-center justify-center
                                 font-extrabold rounded-md p-2 uppercase w-full
                                 hover:bg-light-secondaryAccent"
-                                disabled={isSigningUp}
-                            >
-                                {!isSigningUp ? "Submit" : "Submitting..."}
-                            </button>
-                        </div>
+                            disable={isSigningUp}
+                            onButtonClick={handleSubmit}
+                        />
+
                         <div className="flex items-center gap-3">
                             <p>Already a member?</p>
                             <Link

@@ -2,9 +2,10 @@ import { useState } from "react";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 import Button from "../ui/Button";
 import Table from "../ui/Table";
-//import AddExpenseForm from "../features/expenses/AddExpense";
 import TransactionForm from "../ui/TransactionForm";
 import useTransactions from "../../../Hooks/useTransactions";
+
+
 function Transactions() {
     const [openForm, setOpenForm] = useState(false);
     const { currentUserTransactions } = useTransactions();
@@ -14,7 +15,10 @@ function Transactions() {
         setOpenForm(prev => !prev);
     };
     return (
-        <div className="bg-light-background overflow-hidden rounded-md">
+        <div
+            className="bg-light-background overflow-hidden rounded-md
+        dark:bg-dark-background"
+        >
             <div className="flex justify-between items-center py-5 px-2">
                 <h1 className="text-2xl font-bold">All transactions </h1>
                 <Button
@@ -27,7 +31,7 @@ function Transactions() {
                 />
                 {openForm && <TransactionForm onHandleForm={handleOpenForm} />}
             </div>
-            <div className="bg-light-background">
+            <div>
                 <div
                     className="flex justify-between p-2 items-center
                 border-b-2 border-b-light-dividers"
@@ -45,7 +49,7 @@ function Transactions() {
                     You're seeing <span className="font-semibold">10</span> of
                     <span className="font-semibold">
                         {" "}
-                        {currentUserTransactions?.length} {" "}
+                        {currentUserTransactions?.length}{" "}
                     </span>
                     transactions.
                 </p>

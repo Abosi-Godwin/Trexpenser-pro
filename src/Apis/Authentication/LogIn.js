@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { userLogIn } from "../../Utils/CustomMethods";
-//console.log(userLogIn);
 export const useLogIn = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();

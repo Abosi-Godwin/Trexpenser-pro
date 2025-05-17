@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useAuth } from "../../../../contexts/AuthContext";
 import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+
 import ApexRadialChart from "../../ui/ApexRadialChart";
 import { formatCurrency, formatDate } from "../../../../Utils/CustomMethods";
 import Input from "../../ui/Input";
@@ -18,6 +20,8 @@ const Saving = ({ savingsData }) => {
     } = savingsData;
 
     const { updateSavings, isUpdatingSavings, updatedSavings } = useAuth();
+
+    const { register, formState : {errors } }= useForm();
 
     const percentage = Math.floor((amount_saved / target_amount) * 100);
 
@@ -37,9 +41,9 @@ const Saving = ({ savingsData }) => {
         const savingsId = id;
 
         updateSavings({ amountToSave, savingsId });
-        setSavingsAmount("")
+        setSavingsAmount("");
     };
-  
+
     return (
         <div className="py-3">
             <div className="flex justify-between items-center mb-1.5">
@@ -92,10 +96,11 @@ const Saving = ({ savingsData }) => {
                     <>
                         <Input
                             inputType="number"
-                            initialValue={savingsAmount}
-                            onHandleInputChange={handleInputChange}
                             placeholder="Add to your savings..."
+                            label="amount"
                             disable={isUpdatingSavings}
+                            register={register}
+                            error={errors}
                             className="w-full bg-light-sectionBackground
                             border-none outline-none p-2 rounded-l-md
                             dark:bg-dark-sectionBackground"

@@ -6,7 +6,9 @@ import DateInput from "../ui/DateInput";
 import Input from "../ui/Input";
 import SelectInput from "../ui/SelectInput";
 import Modal from "../ui/Modal";
+
 import { useAuth } from "../../../contexts/AuthContext";
+import { useReducerFunc } from "../../../Hooks/useReducerFunc";
 
 import {
     incomeCategories,
@@ -22,34 +24,15 @@ const datas = {
     date: ""
 };
 
-const reducerFunc = (state, action) => {
-    switch (action.type) {
-        case "UPDATE_FIELD":
-            return { ...state, [action.payload.field]: action.payload.value };
-        default:
-            return state;
-    }
-};
-
 function TransactionForm({ onHandleForm }) {
     const [today, setToday] = useState();
+    const { user, addTransaction, isAddingTransaction } = useAuth();
 
-    const [{ type, category, description, amount, date }, dispatch] =
-        useReducer(reducerFunc, datas);
+    const { states, inputChange } = useReducerFunc(datas);
 
-    const {
-        user,
-        addTransaction,
-        isAddingTransaction,
-  
-    } = useAuth();
+    const { type, category, description, amount, date } = states;
 
-    function handleInputChange(value, inputType) {
-        dispatch({
-            type: "UPDATE_FIELD",
-            payload: { field: inputType, value: value }
-        });
-    }
+    function handleInputChange(value, inputType) {inputChange(inputType, value)}
 
     function handleFormSubmit(event) {
         event.preventDefault();

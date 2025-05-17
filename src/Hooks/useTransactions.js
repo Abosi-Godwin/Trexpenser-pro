@@ -5,7 +5,9 @@ import {
     roundTotalPrice,
     roundDownPrice
 } from "../Utils/CustomMethods";
+
 import { useAuth } from "../contexts/AuthContext";
+
 const useTransactions = () => {
     const { transactions } = useAuth();
     const [currentUserTransactions, setCurrentUserTransactions] = useState([]);
@@ -47,9 +49,7 @@ const useTransactions = () => {
 
     useEffect(() => {
         if (transactions) {
-            setCurrentUserTransactions(
-                transactions
-            );
+            setCurrentUserTransactions(transactions);
             setHasFetchedTransactions(true);
         }
     }, [transactions]);

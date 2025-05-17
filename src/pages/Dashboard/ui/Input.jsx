@@ -1,36 +1,49 @@
+import InputLabel from "./InputLabel";
+
 export default function Input({
-    max = "",
-    label = "",
-    placeholder = "",
-    initialValue = "",
+    label,
+    placeholder,
     inputType,
-    disable = false,
-    onHandleInputChange,
+    register,
+    rules,
+    error,
+    disable,
+    toggle,
+    onHidePassword,
+    onHandleInputChange = () => {},
     className = "w-full bg-light-sectionBackground border-none outline-none p-2 rounded"
 }) {
     return (
         <>
-            <label htmlFor={label} className=" capitalize">
-                {label}
-            </label>
+            {label && (
+                <InputLabel
+                    label={label}
+                    inputType={inputType}
+                    toggle={toggle}
+                    hidePassword={onHidePassword}
+                />
+            )}
             <input
                 id={label}
-                maxLength={max}
                 type={inputType}
-                value={initialValue}
                 placeholder={placeholder}
-              
-                onChange={e =>
-                    onHandleInputChange(
-                        inputType === "number"
-                            ? +e.target.value
-                            : e.target.value,
-                        label
-                    )
-                }
                 disabled={disable}
                 className={className}
+                {...register(label, rules)}
+                onChange={e =>
+                    onHandleInputChange(
+                        label,
+                        inputType === "number"
+                            ? +e.target.value
+                            : e.target.value
+                    )
+                }
             />
+             {error[label.split(" ").at(-1)] && (
+                <p className="text-red-500 text-sm mt-1">
+                    {error[label.split(" ").at(-1)].message}
+                </p>
+            )}
         </>
     );
 }
