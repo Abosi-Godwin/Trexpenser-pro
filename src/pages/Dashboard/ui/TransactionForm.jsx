@@ -1,5 +1,6 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
 import Button from "../ui/Button";
 import DateInput from "../ui/DateInput";
@@ -8,7 +9,6 @@ import SelectInput from "../ui/SelectInput";
 import Modal from "../ui/Modal";
 
 import { useAuth } from "../../../contexts/AuthContext";
-import { useReducerFunc } from "../../../Hooks/useReducerFunc";
 
 import {
     incomeCategories,
@@ -16,48 +16,63 @@ import {
     expenseTypes
 } from "../../../data/data";
 
-const datas = {
-    type: "Income",
-    category: "",
-    description: "",
-    amount: "",
-    date: ""
-};
-
 function TransactionForm({ onHandleForm }) {
     const [today, setToday] = useState();
-    const { user, addTransaction, isAddingTransaction } = useAuth();
+    const {
+        user,
+        addTransaction,
+        isAddingTransaction,
+        savings,
+        updateSavings
+    } = useAuth();
 
-    const { states, inputChange } = useReducerFunc(datas);
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors }
+    } = useForm();
 
-    const { type, category, description, amount, date } = states;
+    const type = watch("type");
 
-    function handleInputChange(value, inputType) {inputChange(inputType, value)}
+    function handleFormSubmit(datas) {
+        const { type, amount, category, date, description } = datas;
 
-    function handleFormSubmit(event) {
-        event.preventDefault();
         if (
             type === "" ||
+            type === "Select" ||
             category === "" ||
-            description === "" ||
+            category === "Select" ||
             amount === "" ||
-            date === ""
+            date === "" ||
+            description === ""
         ) {
             toast.error("All inputs are required");
             return;
         }
 
         const newTransaction = {
-            user_id: user?.user?.id,
-            type,
-            category,
-            description,
-            amount,
-            date
+            ...datas,
+            type: datas.type.toLowerCase(),
+            user_id: user?.user?.id
         };
+
         addTransaction(newTransaction, {
-            onSuccess: () => {
-                onHandleForm(event);
+            onSuccess: ([data]) => {
+                if (data.type !== "income") return;
+
+                const categorySavings = savings.find(
+                    saving => saving.funded_by === data.category
+                );
+
+                const { id, percentage } = categorySavings;
+
+                const amountMade = data.amount;
+                const amountToSave = (percentage / 100) * amountMade;
+                const savingsId = id;
+              
+                updateSavings({ amountToSave, savingsId });
+                // onHandleForm(event);
             }
         });
     }
@@ -80,42 +95,39 @@ function TransactionForm({ onHandleForm }) {
                     Add a new transaction
                 </h1>
 
-                <form className="p-3 border-t-2 border-light-mainBackground flex flex-col gap-3">
+                <form
+                    onSubmit={handleSubmit(handleFormSubmit)}
+                    className="p-3 border-t-2 border-light-mainBackground flex flex-col gap-3"
+                >
                     <div className="w-full flex justify-between gap-4">
                         <SelectInput
                             options={expenseTypes}
                             labelFor="expenseType"
-                            labelStyle="capitalize"
-                            contStyle="row w-50"
                             label="type"
-                            setDefOption={true}
-                            defOptionVal="type"
-                            onHandleInputChange={handleInputChange}
                             disable={isAddingTransaction}
+                            register={register}
+                            error={errors}
                         />
 
                         <SelectInput
                             options={
-                                type === "income"
+                                type === "Income"
                                     ? incomeCategories
                                     : expenseCategories
                             }
                             labelFor="category"
                             label="category"
-                            labelStyle="capitalize"
-                            contStyle="row w-50"
-                            setDefOption={true}
-                            defOptionVal="category"
-                            onHandleInputChange={handleInputChange}
                             disable={isAddingTransaction}
+                            register={register}
+                            error={errors}
                         />
                     </div>
                     <div className="flex flex-col gap-3">
                         <Input
                             label="description"
                             inputType="text"
-                            initialValue={description}
-                            onHandleInputChange={handleInputChange}
+                            register={register}
+                            error={errors}
                             max="20"
                             placeholder="A short simple description..."
                             disable={isAddingTransaction}
@@ -124,9 +136,9 @@ function TransactionForm({ onHandleForm }) {
                         <Input
                             label="amount"
                             inputType="number"
-                            initialValue={amount}
                             max=""
-                            onHandleInputChange={handleInputChange}
+                            register={register}
+                            error={errors}
                             placeholder="Enter the amount..."
                             disable={isAddingTransaction}
                         />
@@ -135,9 +147,10 @@ function TransactionForm({ onHandleForm }) {
                             minDate=""
                             label="date"
                             maxDate={today}
+                            register={register}
+                            error={errors}
                             className="outline-none rounded
                    bg-light-sectionBackground p-2 w-full"
-                            onHandleDateChange={handleInputChange}
                             disable={isAddingTransaction}
                         />
                     </div>
@@ -159,7 +172,7 @@ function TransactionForm({ onHandleForm }) {
                             rounded text-white
         hover:bg-light-secondaryAccent font-bold text-xl
         dark:bg-dark-primaryCTA"
-                            onButtonClick={handleFormSubmit}
+                            onButtonClick={handleSubmit}
                         />
                     </div>
                 </form>

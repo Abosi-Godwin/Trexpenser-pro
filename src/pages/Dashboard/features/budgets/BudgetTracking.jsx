@@ -1,4 +1,3 @@
-import ProgressBar from "@ramonak/react-progress-bar";
 import {
     formatCurrency,
     roundDownPrice
@@ -8,10 +7,10 @@ import { useAuth } from "../../../../contexts/AuthContext";
 import { format, compareAsc } from "date-fns";
 
 const BudgetTrackingChart = () => {
-    const { transactions, budgets } = useAuth();
-    console.log(budgets);
+    const { budgets } = useAuth();
+/*
     const totalBudgetAmount = formatCurrency(
-        budgets?.map(budget => budget.amount).reduce((acc, ini) => acc + ini, 0)
+        roundDownPrice(budgets?.map(budget => budget.amount))
     );
 
     const trackingCategories = budgets?.map(budget => budget.category);
@@ -22,11 +21,11 @@ const BudgetTrackingChart = () => {
             new Date(budget.end_date)
         ])
         .sort(compareAsc)
-        ?.map(date => format(date, "MMM, dd, yyyy"));
-
+        .map(date => format(date, "MMM, dd, yyyy"));
+*/
     return (
         <>
-            <div>
+            {/* <div>
                 <h1 className="text-xl font-extrabold">Budget Analytics</h1>
                 <p className="text-xs capitalize mb-4">
                     Track your spending flow.
@@ -38,15 +37,21 @@ const BudgetTrackingChart = () => {
                     {" " + minmaxDate[minmaxDate.length - 1]}.
                 </p>
             </div>
-            <div className="flex flex-col gap-2">
-                {budgets?.map(budget => (
+            <ul
+                className="flex flex-col gap-2  border-y-2 divide-y-2
+   divide-light-divider
+            "
+            >
+                {budgets.map(budget => (
                     <Budget
                         budget={budget}
                         key={budget.id}
                         minmaxDate={minmaxDate}
                     />
                 ))}
-            </div>
+            </ul>
+        */}
+            <h1>Tracker</h1>
         </>
     );
 };

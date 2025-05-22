@@ -3,10 +3,10 @@ import Budget from "./Budget";
 const Budgets = () => {
     const { budgets } = useAuth();
     return (
-        <div className="border-t-2 border-light-divider mt-5">
-          
+        <div className="mt-5">
             {budgets?.map(budget => {
-                return <Budget budget={budget} />;
+              
+                return <Budget budget={budget} key={budget.id} />;
             })}
         </div>
     );

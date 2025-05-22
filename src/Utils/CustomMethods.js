@@ -75,7 +75,7 @@ export const userSignUp = async ({ userName, email, password }) => {
 };
 
 export const userLogIn = async ({ email, password }) => {
-  console.log(email, password)
+    console.log(email, password);
     let { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -129,7 +129,7 @@ export const getUserTransactions = async userId => {
         console.error(error);
         throw new Error(error.message);
     }
-    return data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return sortData(data);
 };
 
 export const getInsightsAPI = async inputData => {
@@ -143,7 +143,7 @@ export const getInsightsAPI = async inputData => {
         console.error(error);
         throw new Error(error.message);
     }
-    //Analytics
+
     console.log(data);
     return data;
 };
@@ -162,19 +162,22 @@ export const getSavingsApi = async userId => {
 };
 
 export const addSavingsApi = async savingsObj => {
+    console.log("Inside API", savingsObj);
     const { data, error } = await supabase
         .from("savings")
         .insert([{ ...savingsObj }])
         .select();
 
     if (error) {
-        console.error(error);
+        console.error(error.message);
         throw new Error(error.message);
     }
     return data;
 };
 
-export const updateSavingsApi = async (amountToSave, savingsId) => {
+export const updateSavingsApi = async info => {
+    const { savingsId, amountToSave } = info;
+
     const { data, error } = await supabase
         .from("savings")
         .update({ amount_saved: amountToSave })
@@ -198,5 +201,6 @@ export const getUserBudgets = async userId => {
         throw new Error(error.message);
     }
 
-    return sortData(data);
+    // console.log(data);
+    return await sortData(data);
 };

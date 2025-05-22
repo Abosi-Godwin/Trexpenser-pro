@@ -9,13 +9,14 @@ export default function Input({
     error,
     disable,
     toggle,
+    noLabel,
     onHidePassword,
     onHandleInputChange = () => {},
     className = "w-full bg-light-sectionBackground border-none outline-none p-2 rounded"
 }) {
     return (
         <>
-            {label && (
+            {!noLabel && (
                 <InputLabel
                     label={label}
                     inputType={inputType}

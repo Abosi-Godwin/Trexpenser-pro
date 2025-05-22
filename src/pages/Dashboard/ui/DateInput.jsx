@@ -5,9 +5,11 @@ const DateInput = ({
     minDate,
     setDate,
     disable,
+    register,
     className = "",
     onHandleInputChange
 }) => {
+    
     return (
         <div>
             <label htmlFor="date-input" className="capitalize">
@@ -17,12 +19,11 @@ const DateInput = ({
             <input
                 type="date"
                 id="date-input"
-                value={today}
                 max={maxDate}
                 min={minDate}
                 className={className}
                 disabled={disable}
-                onChange={e => onHandleInputChange(label, e.target.value)}
+                {...register(label)}
             />
         </div>
     );

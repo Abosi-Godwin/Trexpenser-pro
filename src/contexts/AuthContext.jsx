@@ -13,7 +13,8 @@ import {
     deleteTransacationApi,
     getInsightsAPI,
     getSavingsApi,
-    updateSavingsApi
+    updateSavingsApi,
+    addSavingsApi
 } from "../Utils/CustomMethods";
 
 const AuthContext = createContext({});
@@ -56,9 +57,7 @@ const AuthProvider = ({ children }) => {
     } = useMutation({
         mutationFn: userLogIn,
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["user"]
-            });
+            queryClient.invalidateQueries();
         },
         onError: error => {
             toast(error.message);
@@ -85,7 +84,7 @@ const AuthProvider = ({ children }) => {
         isError: istransactionsError,
         isPending: istransactionsLoading
     } = useQuery({
-        queryKey: ["transactions", userId],
+        queryKey: ["transactions"],
         queryFn: () => getUserTransactions(userId),
         enabled: !!userId
     });
@@ -148,6 +147,20 @@ const AuthProvider = ({ children }) => {
         isPending: isUpdatingSavings,
         isSuccess: updatedSavings
     } = useMutation({
+        mutationFn:  updateSavingsApi,
+
+        onSuccess: data => {
+            queryClient.invalidateQueries({
+                queryKey: ["savings"]
+            });
+            toast.success(`${data[0].title} savings updated.`);
+        }
+    });
+    /*const {
+        mutate: updateSavings,
+        isPending: isUpdatingSavings,
+        isSuccess: updatedSavings
+    } = useMutation({
         mutationFn: ({ amountToSave, savingsId }) =>
             updateSavingsApi(amountToSave, savingsId),
 
@@ -157,6 +170,23 @@ const AuthProvider = ({ children }) => {
             });
             toast.success(`${data[0].title} savings updated.`);
         }
+    });*/
+    const {
+        mutate: createSavings,
+        isPending: isCreatingSavings,
+        isSuccess: createdSavings
+    } = useMutation({
+        mutationFn: 
+            addSavingsApi
+        ,
+
+        onSuccess: data => {
+            queryClient.invalidateQueries({
+                queryKey: ["savings"]
+            });
+            toast.success(`savings created successfully.`);
+            //  toast.success(`${data[0].title} savings updated.`);
+        }
     });
 
     const {
@@ -165,10 +195,11 @@ const AuthProvider = ({ children }) => {
         isError: isBudgetsError,
         isPending: isBudgetsLoading
     } = useQuery({
-        queryKey: ["Budgets", userId],
+        queryKey: ["budgets"],
         queryFn: () => getUserBudgets(userId),
         enabled: !!userId
     });
+    //  console.log("Context", budgets);
 
     useEffect(() => {
         if (transactions) {
@@ -202,6 +233,7 @@ const AuthProvider = ({ children }) => {
                 addTransaction,
                 deleteTransaction,
                 updateSavings,
+                createSavings,
                 //getInsights,
                 getInsightsAPI,
                 //DATAS
@@ -233,6 +265,7 @@ const AuthProvider = ({ children }) => {
                 isdeletingTransaction,
                 isUpdatingSavings,
                 updatedSavings,
+                isCreatingSavings,
                 //Errosrs
                 userError,
                 logInError,

@@ -336,6 +336,7 @@ export const savingsGoals = [
 ];
 
 export const incomeCategories = [
+    "Select",
     "Job",
     "Freelance",
     "Investments",
@@ -347,6 +348,7 @@ export const incomeCategories = [
 ];
 
 export const expenseCategories = [
+    "Select",
     "Food",
     "Housing",
     "Utilities",
@@ -363,7 +365,7 @@ export const expenseCategories = [
     "Miscellaneous"
 ];
 
-export const expenseTypes = ["income", "expense"];
+export const expenseTypes = ["Select","Income", "Expense"];
 
 export const features = [
     {

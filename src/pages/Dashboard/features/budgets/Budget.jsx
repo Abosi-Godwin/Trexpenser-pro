@@ -4,7 +4,7 @@ import { useAuth } from "../../../../contexts/AuthContext";
 import { formatCurrency } from "../../../../Utils/CustomMethods";
 function Budget({ budget, onFormEditOpen, onFormDeleteOpen }) {
     const { transactions } = useAuth();
-    console.log(budget);
+
     const allExpenses = transactions.filter(
         transaction =>
             transaction.type === "expense" &&
@@ -28,7 +28,10 @@ function Budget({ budget, onFormEditOpen, onFormDeleteOpen }) {
     const spentPercent = (totalSpent / spendingLimit) * 100;
 
     return (
-        <li className="list-none flex items-center justify-between rounded-md p-2">
+        <li
+            className="list-none flex items-center justify-between
+        p-2"
+        >
             <div>
                 <h1 className="text-xl">{budget.category}</h1>
                 <p>{budget.notes}</p>

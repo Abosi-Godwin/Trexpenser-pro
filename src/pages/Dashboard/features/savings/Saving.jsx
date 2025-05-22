@@ -16,32 +16,35 @@ const Saving = ({ savingsData }) => {
         amount_saved,
         end_date,
         start_date,
-        method
+        method,
+        percentage,
+        funded_by
     } = savingsData;
 
     const { updateSavings, isUpdatingSavings, updatedSavings } = useAuth();
 
-    const { register, formState : {errors } }= useForm();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm();
 
-    const percentage = Math.floor((amount_saved / target_amount) * 100);
+    const saved = Math.floor((amount_saved / target_amount) * 100);
 
-    const [savingsAmount, setSavingsAmount] = useState();
+    const handleSavings = savingsAmount => {
+        const { amount } = savingsAmount;
 
-    const handleInputChange = e => {
-        setSavingsAmount(e);
-    };
-
-    const handleSavings = () => {
-        if (!savingsAmount) {
+        if (!amount) {
             toast.error("Amount can't be empty ");
             return;
         }
 
-        const amountToSave = savingsAmount + +amount_saved;
+        const amountToSave = +amount + +amount_saved;
         const savingsId = id;
 
         updateSavings({ amountToSave, savingsId });
-        setSavingsAmount("");
+        reset();
     };
 
     return (
@@ -69,8 +72,8 @@ const Saving = ({ savingsData }) => {
                     </li>
                     <li className="">
                         <span className="font-bold">Saved</span>
-                        <span className="">
-                            {" "}
+                        <span>
+                          
                             {formatCurrency(amount_saved)}
                         </span>
                     </li>
@@ -88,12 +91,15 @@ const Saving = ({ savingsData }) => {
                     </li>
                 </ul>
                 <div className="flex items-end justify-end">
-                    <ApexRadialChart percentage={percentage} />
+                    <ApexRadialChart percentage={saved} />
                 </div>
             </div>
-            <div className="pt-4 flex">
+            <div className="pt-4">
                 {method === "manual" ? (
-                    <>
+                    <form
+                        onSubmit={handleSubmit(handleSavings)}
+                        className="pt-4 flex"
+                    >
                         <Input
                             inputType="number"
                             placeholder="Add to your savings..."
@@ -101,26 +107,27 @@ const Saving = ({ savingsData }) => {
                             disable={isUpdatingSavings}
                             register={register}
                             error={errors}
+                            noLabel={true}
                             className="w-full bg-light-sectionBackground
                             border-none outline-none p-2 rounded-l-md
                             dark:bg-dark-sectionBackground"
                         />
                         <Button
                             text="Save"
-                            onButtonClick={handleSavings}
+                            onButtonClick={handleSubmit}
                             className="rounded-r-md
                         font-bold bg-light-primaryCTA text-white p-2
                         dark:bg-dark-primaryCTA"
                         />
-                    </>
+                    </form>
                 ) : (
                     <>
                         <p
                             className="p-2 bg-light-sectionBackground rounded-md
                         dark:bg-dark-sectionBackground"
                         >
-                            {20}% of each income amount will be added to this
-                            savings goal.
+                            {percentage}% of each {funded_by} income will be
+                            added to this savings goal.
                         </p>
                     </>
                 )}

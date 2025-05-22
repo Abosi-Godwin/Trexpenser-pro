@@ -1,76 +1,79 @@
-import { useState } from "react";
+import RangeSlider from "./RangeSlider";
+import SelectInput from "./SelectInput";
+import { incomeCategories } from "../../../data/data";
 
-function RadioButton({ onHandleInputChange, defaultOption }) {
-    console.log(defaultOption);
-    const [selectedValue, setSelectedValue] = useState(defaultOption);
+function RadioButton({ register, error, watch, disable }) {
+    const savingMethod = watch("savingsType");
 
-    function handleSelectedValue(e) {
-        const value = e.target.value;
-        setSelectedValue(value);
-
-        onHandleInputChange("type", selectedValue);
-    }
     return (
         <>
-            <h3>Savings type?</h3>
-            <ul className="grid w-full gap-6 md:grid-cols-2">
-                <li className="has-checked:bg-amber-600">
+            <h3 className="font-bold"> Savings type?</h3>
+            <div className="grid w-full gap-1 md:grid-cols-2">
+                <div className="has-checked:bg-amber-600 flex items-start justify-between gap-3 border border-light-dividers rounded-md p-1.5">
                     <input
                         type="radio"
                         id="Manual"
                         name="savingsType"
                         value="Manual"
-                        className="hidden peer"
-                        checked={selectedValue === "Manual"}
-                        onChange={handleSelectedValue}
+                        className="hiddben pe6er"
+                        {...register("savingsType")}
                     />
                     <label
                         htmlFor="Manual"
-                        className="inline-flex items-center justify-between
-                        w-full p-2 text-color-8 bg-color-2 border
-                        border-color-8         rounded-md cursor-pointer
-                        peer-checked:text-color-2 peer-checked:bg-color-8"
+                        className="
+                         cursor-pointer
+                        peer-checked:text-light-text w-full"
                     >
-                        <div className="block">
-                            <div className="w-full text-lg font-semibold">
+                        <div className="">
+                            <h1 className=" text-lg font-semibold">
                                 Manual <i className="text-sm">(Default)</i>
-                            </div>
-                            <div className="w-full">
-                                Manually add some funds.
-                            </div>
+                            </h1>
+                            <p className="w-full">Manually add some funds.</p>
                         </div>
                     </label>
-                </li>
+                </div>
 
-                <li>
+                <div className="has-checked:bg-amber-600 flex items-start justify-between gap-3 border border-light-dividers rounded-md p-1.5">
                     <input
                         type="radio"
                         id="automatic"
                         name="savingsType"
                         value="Automatic"
-                        className="hidden peer"
-                        checked={selectedValue === "Automatic"}
-                        onChange={handleSelectedValue}
+                        className=""
+                        {...register("savingsType")}
                     />
                     <label
                         htmlFor="automatic"
-                        className="inline-flex items-center justify-between
-                        w-full p-2 text-color-8 bg-color-2 border
-                        border-color-8         rounded-md cursor-pointer
-                        peer-checked:text-color-2 peer-checked:bg-color-8
-                      "
+                        className="cursor-pointer peer-checked:text-light-text w-full"
                     >
                         <div className="block">
-                            <div className="w-full text-lg font-semibold">
+                            <h1 className="w-full text-lg font-semibold">
                                 Automatic
-                            </div>
-                            <div className="w-full">
+                            </h1>
+                            <p className="w-full">
                                 Automatically saved from income.
-                            </div>
+                            </p>
                         </div>
                     </label>
-                </li>
-            </ul>
+                </div>
+            </div>
+            {savingMethod === "Automatic" && (
+                <div className="">
+                    <RangeSlider
+                        register={register}
+                        watch={watch}
+                        show={savingMethod === "Automatic"}
+                    />
+                    <SelectInput
+                        options={incomeCategories}
+                        labelFor="funded_by"
+                        disable={disable}
+                        label="Source"
+                        register={register}
+                        error={error}
+                    />
+                </div>
+            )}
         </>
     );
 }

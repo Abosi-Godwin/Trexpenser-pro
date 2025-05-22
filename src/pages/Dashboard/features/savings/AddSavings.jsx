@@ -1,62 +1,59 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import RadioButton from "../../ui/RadioButton";
 import DateInput from "../../ui/DateInput";
-import SelectInput from "../../ui/SelectInput";
 
-import { useReducerFunc } from "../../../../Hooks/useReducerFunc";
-
-const savingFrequencyOptions = [
-    "Daily",
-    "Weekly",
-    "Bi-Weekly",
-    "Monthly",
-    "Quarterly",
-    "Semi-Annually",
-    "Annually"
-];
-
-const savingsTypes = ["Manual", "Automatic"];
-const fields = {
-    savingsType: savingsTypes[0],
-    savingsGoalName: "",
-    targetAmount: "",
-    startDate: "",
-    targetDate: "",
-    initialAmount: "",
-    savingPercent: "",
-    frequency: savingFrequencyOptions[0],
-};
-
+import { useAuth } from "../../../../contexts/AuthContext";
 const AddSavingsForm = ({ onCloseForm }) => {
-    const { states, inputChange } = useReducerFunc(fields);
+    const {
+        register,
+        watch,
+        handleSubmit,
+        formState: { errors }
+    } = useForm();
 
     const {
-        savingsType,
-        savingsGoalName,
-        targetAmount,
-        startDate,
-        targetDate,
-        initialAmount,
-        savingPercent,
-        frequency,
-        currentDate
-    } = states;
+        createSavings,
+        isCreatingSavings,
+        user: { user }
+    } = useAuth();
 
-    function handleInputChange(type, value) {
-        console.log(states);
-        inputChange(type, value);
+    const userId = user?.id;
+
+    const [savingsType, setSavingsType] = useState("manual");
+
+    const [today, setToday] = useState();
+
+    const startDate = watch("Start date");
+
+    function handleInputChange(value) {
+        setSavingsType(value);
     }
 
-    function handleFormSubmit(e) {
-        e.preventDefault();
+    function handleFormSubmit(datas) {
+        const newSavings = {
+            title: datas["Goal name"],
+            target_amount: +datas["Target amount"],
+            user_id: userId,
+            method: datas.savingsType.toLowerCase(),
+            percentage: +datas.percentage || null,
+            funded_by: datas.Source,
+            start_date: datas["Start date"],
+            end_date: datas["Target date"],
+            is_active: true
+        };
+        createSavings(newSavings,{
+          onSuccess: onCloseForm()
+        });
     }
 
     useEffect(() => {
         const currentDate = new Date().toISOString().split("T")[0];
-        inputChange("date", currentDate);
+        setToday(currentDate);
     }, []);
 
     return (
@@ -69,10 +66,17 @@ const AddSavingsForm = ({ onCloseForm }) => {
                     Add a new savings goal
                 </h3>
 
-                <form className="flex flex-col gap-3">
+                <form
+                    className="flex flex-col gap-1.5"
+                    onSubmit={handleSubmit(handleFormSubmit)}
+                >
                     <RadioButton
                         onHandleInputChange={handleInputChange}
+                        disable={isCreatingSavings}
                         defaultOption={savingsType}
+                        register={register}
+                        error={errors}
+                        watch={watch}
                     />
 
                     <div
@@ -83,90 +87,49 @@ const AddSavingsForm = ({ onCloseForm }) => {
                             label="Goal name"
                             inputType="string"
                             placeholder="Name your savings goal..."
-                            initialValue={savingsGoalName}
-                            onHandleInputChange={handleInputChange}
+                            disable={isCreatingSavings}
+                            register={register}
+                            error={errors}
                         />
 
                         <Input
                             label="Target amount"
                             inputType="number"
                             placeholder="Enter the target amount..."
-                            initialValue={targetAmount}
+                            disable={isCreatingSavings}
+                            register={register}
+                            error={errors}
                             onHandleInputChange={handleInputChange}
                         />
                     </div>
 
                     <div
-                        className="text-color-8 grid w-full gap-3
+                        className="grid grid-cols-2 w-full gap-3
                         md:grid-cols-2"
                     >
-                        <div>
-                            <DateInput
-                                label="Start date"
-                                date={startDate}
-                                maxDate=""
-                                minDate={currentDate}
-                                className="w-full outline-none rounded
+                        <DateInput
+                            label="Start date"
+                            maxDate=""
+                            minDate={today}
+                            register={register}
+                            disable={isCreatingSavings}
+                            className="w-full outline-none rounded
                     text-color-8 bg-color-2 p-2"
-                                onHandleInputChange={handleInputChange}
-                            />
-                        </div>
-                        <div>
-                            <DateInput
-                                label="Target date"
-                                date={targetDate}
-                                maxDate=""
-                                minDate={startDate}
-                                className="w-full outline-none rounded
+                            onHandleInputChange={handleInputChange}
+                        />
+
+                        <DateInput
+                            label="Target date"
+                            maxDate=""
+                            minDate={startDate}
+                            disable={isCreatingSavings}
+                            register={register}
+                            className="w-full outline-none rounded
                     text-color-8 bg-color-2 p-2"
-                                onHandleInputChange={handleInputChange}
-                            />
-                        </div>
+                            onHandleInputChange={handleInputChange}
+                        />
                     </div>
-                    {savingsType === "Automatic" && (
-                        <div
-                            className="text-color-8 grid w-full gap-3
-                        md:grid-cols-2"
-                        >
-                            <div>
-                                <label htmlFor="savingFrequency">
-                                    Saving Frequency
-                                </label>
-                                <select
-                                    name="savingFrequency"
-                                    id="savingFrequency"
-                                    value={frequency}
-                                    onChange={handleInputChange}
-                                    className="w-full bg-color-2
-                text-color-8 bg-color-2 border-none outline-none p-2 rounded"
-                                >
-                                    {savingFrequencyOptions.map(
-                                        (option, ind) => (
-                                            <SelectInput
-                                                option={option}
-                                                key={ind}
-                                            />
-                                        )
-                                    )}
-                                </select>
-                            </div>
-                            <div>
-                                <label htmlFor="savingPercent">
-                                    Percentage to deduct: {savingPercent}%
-                                </label>
-                                <input
-                                    id="savingPercent"
-                                    type="range"
-                                    min="1"
-                                    max="100"
-                                    value={savingPercent}
-                                    onChange={handleInputChange}
-                                    className="w-full
-h-2 bg-color-6 rounded-lg appearance-none cursor-pointer"
-                                />
-                            </div>
-                        </div>
-                    )}
+
                     <div
                         className="grid w-full gap-3 grid-cols-2
                         md:grid-cols-2"
@@ -177,11 +140,13 @@ h-2 bg-color-6 rounded-lg appearance-none cursor-pointer"
                             onButtonClick={onCloseForm}
                         />
                         <Button
-                            className="w-32 bg-color-6 uppercase p-2 rounded
-                            text-color-2
+                            loader={isCreatingSavings}
+                            className="bg-light-primaryCTA flex items-center
+                            justify-center uppercase p-2 rounded
+                            text-white
         hover:bg-color-5 hover:text-color-2 font-bold text-xl"
                             text="Save"
-                            onButtonClick={handleFormSubmit}
+                            onButtonClick={handleSubmit}
                         />
                     </div>
                 </form>
