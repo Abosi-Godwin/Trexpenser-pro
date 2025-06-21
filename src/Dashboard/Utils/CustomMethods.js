@@ -216,19 +216,4 @@ export const updateUserPic = async (imagePath, imageName, image) => {
         console.error("Error uploading image");
         // return;
     }
-};
-
-// Later append to user data.
-const { error: saveError } = await supabase.auth.updateUser({
-    data: {
-        picture:
-            "https://cnwbxmsiieoyrmarrdgf.supabase.co/storage/v1/object/public/avatars//IMG-20241226-WA0021.jpg"
-    }
-});
-
-//if (saveError) console.error(saveError);
-/*
-https://cnwbxmsiieoyrmarrdgf.supabase.co/storage/v1/object/public/avatars//avatar.png
- https://cnwbxmsiieoyrmarrdgf.supabase.co/storage/v1/object/public/profile-pictures//avatar.png
-https://cnwbxmsiieoyrmarrdgf.supabase.co/storage/v1/object/public/avatars//0.34305072344490506-IMG_20250618_101442_097.jpg
-*/
+}; 

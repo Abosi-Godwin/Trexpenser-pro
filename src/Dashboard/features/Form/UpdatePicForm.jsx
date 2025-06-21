@@ -3,35 +3,31 @@ import { useForm } from "react-hook-form";
 import { format, addDays, isAfter, formatDistanceStrict } from "date-fns";
 
 import { supabaseUrl } from "../../Services/Supabase";
-
+import { useUser } from "../../Hooks/useUser";
 import Modal from "../../ui/Modal";
 import Button from "./Button";
 import AvatarImg from "../../ui/AvatarImg";
 
-const UpdatePicForm = ({ user, onClose }) => {
-    const updatedAt = format(user?.updated_at, "PPpp");
-
-    const [imgSrc, setImgSrc] = useState(user?.user_metadata?.picture);
-
-    const nextUpdate = format(addDays(new Date(user.updated_at), 7), "PPpp");
-
-    const canUpdate = isAfter(nextUpdate, updatedAt);
+const UpdatePicForm = ({ onClose }) => {
+    const { user } = useUser();
 
     const { register, reset, handleSubmit } = useForm({ mode: "all" });
 
+    const updatedAt = format(user?.updated_at, "PPpp");
+    const nextUpdate = format(addDays(new Date(user.updated_at), 7), "PPpp");
+    const canUpdate = isAfter(nextUpdate, updatedAt);
+
     const handleImageUpload = data => {
         const { profileImg } = data;
-        console.log(profileImg);
+        const newImage = profileImg?.[0];
+        const imagePath = `${Math.random() - newImage.name}`;
     };
     return (
         <Modal>
             <form onSubmit={handleSubmit(handleImageUpload)}>
                 <div className="p-3 rounded-md bg-light-cardBackground w-4/5">
                     <div className="bg-ambrer-600 flex flex-col items-center justify-center gap-2 p-2 rounded-md bg-light-sidebarHeaderBackground">
-                        <AvatarImg
-                            className="w-20 h-20 rounded-full"
-                            src={imgSrc}
-                        />
+                        <AvatarImg className="w-20 h-20 rounded-full" />
                         <div>
                             {!canUpdate ? (
                                 <div>
