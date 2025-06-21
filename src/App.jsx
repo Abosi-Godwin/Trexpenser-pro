@@ -6,34 +6,33 @@ import {
 } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Provider } from "react-redux";
+
 
 //Pages
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import SubscriptionPage from "./pages/Subscription";
+import HomePage from "./Landing/HomePage";
+import LoginPage from "./Dashboard/features/authentication/LoginPage";
+import SignupPage from "./Dashboard/features/authentication/SignupPage";
+import SubscriptionPage from "./Dashboard/features/ai/Subscription";
 
 //Components
-import ProtectedRoutes from "./pages/Components/ProtectedRoutes";
-import AuthRedirect from "./pages/Components/AuthRedirect";
-import DashboardLayout from "./pages/Dashboard/ui/DashboardLayout";
+import ProtectedRoutes from "./Dashboard/features/authentication/ProtectedRoutes";
+import AuthRedirect from "./Dashboard/features/authentication/AuthRedirect";
+import DashboardLayout from "./Dashboard/ui/DashboardLayout";
 
 //Dashboard pages
-import DashboardHome from "./pages/Dashboard/DashboardHome";
-import Transactions from "./pages/Dashboard/pages/Transactions";
-import Savings from "./pages/Dashboard/pages/SavingsPage";
-import Budgets from "./pages/Dashboard/pages/BudgetPage";
-import Summary from "./pages/Dashboard/pages/Summary";
-import Profile from "./pages/Dashboard/pages/Profile";
+import DashboardHome from "./Dashboard/DashboardHome";
+import Transactions from "./Dashboard/pages/Transactions";
+import Savings from "./Dashboard/pages/SavingsPage";
+import Budgets from "./Dashboard/pages/BudgetPage";
+import Summary from "./Dashboard/pages/Summary";
+import Profile from "./Dashboard/pages/Profile";
 
 //Provideers
-import { AuthProvider } from "./contexts/AuthContext";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import { TransactionsProvider } from "./pages/Dashboard/Contexts/TransactionsContext";
-import { store } from "./store";
-import { loader as imgLoader } from "./Utils/ImgLoader";
-import { queryClient } from "./Utils/queryClient";
+import { AuthProvider } from "./Dashboard/contexts/AuthContext";
+import { ThemeProvider } from "./Dashboard/contexts/ThemeContext";
+
+import { loader as imgLoader } from "./Landing/Services/ImgLoader";
+import { queryClient } from "./Dashboard/Services/queryClient";
 
 const router = createBrowserRouter([
     {
@@ -69,13 +68,11 @@ const router = createBrowserRouter([
     {
         path: "/dashboard",
         element: (
-            <Provider store={store}>
-                <ProtectedRoutes>
-                    <TransactionsProvider>
-                        <DashboardLayout />
-                    </TransactionsProvider>
-                </ProtectedRoutes>
-            </Provider>
+            <ProtectedRoutes>
+              
+                    <DashboardLayout />
+                
+            </ProtectedRoutes>
         ),
         children: [
             {
@@ -97,6 +94,10 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/summary",
                 element: <Summary />
+            },
+            {
+                path: "/dashboard/profile",
+                element: <Profile />
             },
             {
                 path: "/dashboard/profile",
