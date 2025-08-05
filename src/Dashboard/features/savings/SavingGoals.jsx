@@ -1,11 +1,14 @@
-import { useAuth } from "../../contexts/AuthContext";
+import { useGetSavings } from "../../Hooks/useGetSavings";
 import Saving from "./Saving";
 
 function SavingGoals({ showTitle, showAction }) {
-    const { savings } = useAuth();
-  
+    const { savings } = useGetSavings();
+
     return (
-        <div className="bg-light-cardBackground rounded-md p-2">
+        <div
+            className="bg-light-cardBackground rounded-md p-2
+        dark:bg-dark-cardBackground dark:text-dark-text"
+        >
             {showTitle && (
                 <>
                     <h1 className="text-2xl font-bold">Savings goals</h1>

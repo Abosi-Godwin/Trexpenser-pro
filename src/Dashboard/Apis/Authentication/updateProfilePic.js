@@ -1,14 +1,12 @@
 import { supabase } from "../../Services/Supabase";
 
-export const updateProfilePic = async (imagePath, imageName, image) => {
-
+export const updateProfilePic = async ({ imagePath, imageName, newImage }) => {
     const { data, error } = await supabase.storage
         .from("avatars")
-        .upload(imageName, image, {
-            contentType: image.type
+        .upload(imageName, newImage, {
+            contentType: newImage.type
         });
-    if (error) {
-        console.error("Error uploading image");
-        // return;
-    }
+    if (error) console.error("Error uploading image");
+    
+    return data
 };

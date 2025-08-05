@@ -8,7 +8,7 @@ import { useTransactions } from "../../Hooks/useTransactions";
 
 import { formatCurrency } from "../../Utils/formatCurrency";
 import { formatDate } from "../../Utils/formatDate";
-
+import { roundDownPrice } from "../../Utils/CustomMethods";
 const BudgetContext = createContext();
 
 const useBudgetContext = () => {
@@ -23,71 +23,78 @@ const useBudgetContext = () => {
 };
 
 function Budget({ budget, children }) {
+    const { expenses } = useTransactions();
+
+    const startDate = budget.start_date;
+    const endDate = budget.end_date;
+    const notes = budget.notes;
+    const spendingLimit = budget.amount;
+    const trackingCategory = budget.category;
+
+    const totalSpent = roundDownPrice(
+        expenses
+            .filter(
+                expense =>
+                    expense.category === trackingCategory &&
+                    expense.date >= startDate &&
+                    expense.date <= endDate
+            )
+            .map(expense => expense.amount)
+    );
+
+    const spentPercent = Math.trunc((totalSpent / spendingLimit) * 100);
+
+    const remaining = budget.amount - totalSpent;
+    const isActive = isFuture(endDate) && totalSpent < spendingLimit;
+
     return (
-        <BudgetContext.Provider value={{ budget }}>
+        <BudgetContext.Provider
+            value={{
+                notes,
+                remaining,
+                startDate,
+                endDate,
+                spentPercent,
+                totalSpent,
+                isActive,
+                spendingLimit,
+                trackingCategory
+            }}
+        >
             <div className="p-2">{children}</div>
         </BudgetContext.Provider>
     );
 }
 
 const Infos = () => {
-    const { budget } = useBudgetContext();
-    const { expenses } = useTransactions();
-
-    const spent = expenses
-        .filter(
-            expense =>
-                expense.category === budget.category &&
-                new Date(expense.date) >= new Date(budget.start_date) &&
-                new Date(expense.date) <= new Date(budget.end_date)
-        )
-        .map(expense => expense.amount)
-        .reduce((a, b) => a + b, 0);
-    const remaining = budget.amount - spent;
-
-    const spentPercent = Math.trunc((spent / budget.amount) * 100);
+    const {
+        trackingCategory,
+        notes,
+        totalSpent,
+        spentPercent,
+        spendingLimit,
+        remaining
+    } = useBudgetContext();
 
     return (
         <div>
-            <h1 className="text-xl font-bold">{budget.category}</h1>
-            <p>{budget.notes}</p>
+            <h1 className="text-xl font-bold">{trackingCategory}</h1>
+            <p>{notes}</p>
             <div className="py-2">
-                <h1>Max: {formatCurrency(budget.amount)}</h1>
-                <h1>Spent: {formatCurrency(spent)}</h1>
+                <h1>Max: {formatCurrency(spendingLimit)}</h1>
+                <h1>Spent: {formatCurrency(totalSpent)}</h1>
                 <h1>
                     {spentPercent <= 100 ? "Remaining" : "Over spent"}:{" "}
                     {formatCurrency(remaining)}
                 </h1>
             </div>
-             
         </div>
     );
 };
 
 const Progress = () => {
-    const { expenses } = useTransactions();
-    const { budget } = useBudgetContext();
-
-    const startDate = budget.start_date;
-    const endDate = budget.end_date;
-    const trackingCategory = budget.category;
-
-    const allExpenses = expenses.filter(
-        expense => expense.category === budget.category
-    );
-
-    const spendingLimit = budget.amount;
-
-    const totalSpent = allExpenses
-        .filter(
-            expense =>
-                expense.category === trackingCategory &&
-                expense.date >= startDate &&
-                expense.date <= endDate
-        )
-        .reduce((acc, ini) => acc + ini.amount, 0);
-
-    const spentPercent = (totalSpent / spendingLimit) * 100;
+    const { totalSpent, spentPercent, spendingLimit, spent } =
+        useBudgetContext();
 
     return (
         <ProgressBar
@@ -103,10 +110,7 @@ const Progress = () => {
 };
 
 const Duration = () => {
-    const { budget } = useBudgetContext();
-
-    const startDate = budget.start_date;
-    const endDate = budget.end_date;
+    const { startDate, endDate } = useBudgetContext();
 
     return (
         <div className="pb-2">
@@ -120,9 +124,7 @@ const Action = () => {
     return <RecentItemMenuCard />;
 };
 const Status = () => {
-    const { budget } = useBudgetContext();
-    const endDate = new Date(budget.end_date);
-    const isActive = isFuture(endDate);
+    const { isActive } = useBudgetContext();
 
     return (
         <h1

@@ -1,21 +1,6 @@
-//import Transaction from "../features/transactions/Transaction";
 
-import {
-    useReactTable,
-    getCoreRowModel,
-    getPaginationRowModel,
-    getSortedRowModel
-} from "@tanstack/react-table";
 
 const Table = ({ children }) => {
-    const tableInstance = useReactTable({
-     //   columns,
-     //   data,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel()
-    });
-
     return (
         <div className="overflow-scroll p-3 rounded-md">
             <div

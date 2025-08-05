@@ -7,9 +7,9 @@ import {
 } from "../Utils/CustomMethods";
 
 import { useAuth } from "../contexts/AuthContext";
-
+import { useGetTransactions } from "./useGetTransactions";
 export const useTransactions = () => {
-    const { transactions } = useAuth();
+    const { transactions } = useGetTransactions();
 
     const [currentUserTransactions, setCurrentUserTransactions] = useState([]);
 
@@ -73,5 +73,3 @@ export const useTransactions = () => {
         expenseCategories
     };
 };
-
-

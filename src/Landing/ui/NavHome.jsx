@@ -14,7 +14,7 @@ const NavHome = () => {
         <div
             className="w-full p-5 flex justify-between shadow-md
              fixed z-50 top-0 left-0
-            md:flex-row overflow-hidden"
+            md:flex-row overflow-hidden bg-light-navbarFooter"
         >
             <div
                 className="text-2xl font-bold uppercase flex

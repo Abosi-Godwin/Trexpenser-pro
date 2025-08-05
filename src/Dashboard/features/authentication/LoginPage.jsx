@@ -14,7 +14,7 @@ import { slideUpVariant } from "../../Utils/AnimationVariants";
 
 
 const LoginPage = () => {
-    const { logIn, userDta, logInIsError, logInError, logInIsPending } =
+    const { logIn, logInIsPending } =
         useLogIn();
 
     const {

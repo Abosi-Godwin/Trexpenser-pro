@@ -17,7 +17,7 @@ const BudgetSummary = () => {
         spentPercent,
         totalSpent
     } = useBudgetsData();
-
+  
     const [openForm, setOpenForm] = useState(false);
 
     const handleOpenForm = () => setOpenForm(prev => !prev);

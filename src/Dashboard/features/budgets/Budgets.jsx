@@ -1,6 +1,8 @@
 import { useAuth } from "../../contexts/AuthContext";
-import {useBudgets} from "../../Hooks/useBudgets"
+import { useBudgets } from "../../Hooks/useBudgets";
 import Budget from "./Budget";
+
+
 const Budgets = () => {
     const { budgets } = useBudgets();
     return (

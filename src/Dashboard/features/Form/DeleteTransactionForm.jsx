@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import { format } from "date-fns";
 
 import Button from "../Form/Button";
@@ -11,13 +13,13 @@ function DeleteTransactionForm({ data, onCloseForm }) {
 
     const { deleteTransaction, isdeletingTransaction } = useDeleteTransaction();
 
-    function handleDataDelete() {
+    const handleDataDelete = useCallback(() => {
         deleteTransaction(transactionId, {
             onSuccess: () => {
                 onCloseForm();
             }
         });
-    }
+    });
 
     return (
         <Modal>

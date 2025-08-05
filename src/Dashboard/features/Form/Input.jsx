@@ -11,7 +11,7 @@ export default function Input({
     toggle,
     noLabel,
     onHidePassword,
-    className = "bg-light-sectionBackground border-none outline-none p-2 rounded"
+    className = "bg-light-sectionBackground text-light-text dark:bg-dark-sectionBackground dark:text-dark-text border-none outline-none p-2 rounded"
 }) {
     const name = label.split(" ").at(-1);
 

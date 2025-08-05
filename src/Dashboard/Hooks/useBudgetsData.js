@@ -9,13 +9,13 @@ export const useBudgetsData = () => {
     const {
         user: { id }
     } = useUser();
-
     const userId = id;
     const { budgets } = useBudgets(userId);
     const { expenses } = useTransactions();
 
-    const categories = [...new Set(budgets?.map(budget =>
-    budget.category.toLowerCase()))];
+    const categories = [
+        ...new Set(budgets?.map(budget => budget.category.toLowerCase()))
+    ];
 
     const startDate = budgets
         ?.map(budget => budget.start_date)
@@ -26,22 +26,24 @@ export const useBudgetsData = () => {
         .sort((a, b) => new Date(a) - new Date(b))
         .reverse()[0];
 
-    const spendingLimit = budgets
+    const spendingLimit = roundDownPrice(budgets?.map(budget => budget.amount));
+
+    const spendingLmt = budgets
         ?.map(budget => budget.amount)
         ?.reduce((acc, ini) => acc + ini);
+
     const totalSpent = expenses
-        ?.filter(
-            expense => expense.date >= startDate && expense.date <= endDate
+        .filter(
+            expense =>
+                expense.date >= startDate &&
+                expense.date <= endDate &&
+                categories.includes(expense.category.toLowerCase())
         )
-        ?.filter(expense => categories.includes(expense.category))
         ?.map(expense => expense.amount)
-        ?.reduce((acc, ini) => acc + ini, 0);
+        .reduce((acc, ini) => acc + ini, 0);
 
     const spentPercent = Math.floor((totalSpent / spendingLimit) * 100);
 
-    const totalBudgetAmount = roundDownPrice(
-        budgets?.map(budget => budget.amount)
-    );
     const minMaxDate = budgets
         ?.flatMap(budget => [
             new Date(budget.start_date),
@@ -49,8 +51,8 @@ export const useBudgetsData = () => {
         ])
         .sort(compareAsc)
         .filter((_, index, arr) => index === 0 || index === arr.length - 1)
-        .map(date => format(date, "MMM, dd, yyyy"));
-
+        ?.map(date => format(date, "MMM, dd, yyyy"));
+  
     return {
         budgets,
         startDate,
@@ -59,7 +61,6 @@ export const useBudgetsData = () => {
         spendingLimit,
         spentPercent,
         totalSpent,
-        minMaxDate,
-        totalBudgetAmount
+        minMaxDate
     };
 };

@@ -7,8 +7,8 @@ export const getCurrentUser = async () => {
 
     if (!session) return null;
 
-    const { data: user, error } = await supabase.auth.getUser();
-    if (!user?.user) return;
+    const { data: {user}, error } = await supabase.auth.getUser();
+    //if (!user?.user) return;
 
     if (error) {
         console.error(error.message);

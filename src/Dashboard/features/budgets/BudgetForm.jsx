@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { useTransactions } from "../../Hooks/useTransactions";
-
-import { useUser } from "../../Hooks/useUser";
-import { useBudgets } from "../../Hooks/useBudgets";
-import { useAddBudget } from "../../Hooks/useAddBudget";
 
 import Modal from "../../ui/Modal";
-
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import DateInput from "../Form/DateInput";
 import SelectInput from "../Form/SelectInput";
 import TextArea from "../Form/TextArea";
+
+import { useTransactions } from "../../Hooks/useTransactions";
+import { useUser } from "../../Hooks/useUser";
+import { useBudgets } from "../../Hooks/useBudgets";
+import { useAddBudget } from "../../Hooks/useAddBudget";
+
 function BudgetForm({ onClose }) {
     const { expenseCategories: budgetCategories } = useTransactions();
     const { user } = useUser();
@@ -67,7 +67,6 @@ function BudgetForm({ onClose }) {
             notes: description || "No description added."
         };
         addBudget(budgetData);
-        
     }
 
     function handleFormSave(infos) {
@@ -102,7 +101,13 @@ function BudgetForm({ onClose }) {
         const today = new Date().toISOString().split("T")[0];
         setCurrentDate(today);
     }, [setCurrentDate]);
-
+    
+    useEffect(() => {
+        if (isAddingBudgetSucces) {
+            onClose();
+        }
+    }, [isAddingBudgetSucces]);
+    
     return (
         <Modal>
             <div

@@ -17,7 +17,7 @@ export const roundTotalPrice = array => {
 
 export const roundDownPrice = array => {
     if (!array) return;
-    return array?.reduce((ac, ini) => ac + ini, 0);
+    return array.reduce((ac, ini) => ac + ini, 0);
 };
 
 export const formatDate = date => new Date(date).toDateString();
@@ -184,7 +184,6 @@ export const getUserBudgets = async userId => {
         throw new Error(error.message);
     }
 
-    // console.log(data);
     return await sortData(data);
 };
 
@@ -200,13 +199,10 @@ export const getInsightsAPI = async inputData => {
         throw new Error(error.message);
     }
 
-    //   console.log(data);
     return data;
 };
 
 export const updateUserPic = async (imagePath, imageName, image) => {
-    console.log(imageName);
-
     const { data, error } = await supabase.storage
         .from("profile-pictures")
         .upload(`public/${imageName}`, image, {
@@ -214,6 +210,7 @@ export const updateUserPic = async (imagePath, imageName, image) => {
         });
     if (error) {
         console.error("Error uploading image");
-        // return;
+        
     }
-}; 
+    return data 
+};

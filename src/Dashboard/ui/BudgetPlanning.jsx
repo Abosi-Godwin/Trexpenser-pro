@@ -1,9 +1,9 @@
+/*
 import { useState, useEffect } from "react";
 import Budget from "./Utilities/Budget.jsx";
 import EditBudgetForm from "./Utilities/EditBudgetForm.jsx";
 import ProgressBar from "@ramonak/react-progress-bar";
 import Modal from "./Utilities/Modal.jsx";
-
 
 function BudgetPlanning({ expensesArray, budgets, onCurrencyFormat }) {
     const allBudgets = budgets;
@@ -190,5 +190,5 @@ function BudgetPlanning({ expensesArray, budgets, onCurrencyFormat }) {
         </div>
     );
 }
-
-export default BudgetPlanning;
+*/
+//export default BudgetPlanning;

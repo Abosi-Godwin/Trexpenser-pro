@@ -8,6 +8,8 @@ import DateInput from "../Form/DateInput";
 import Modal from "../../ui/Modal";
 
 import { useAuth } from "../../contexts/AuthContext";
+import { useAddSavings } from "../../Hooks/useAddSavings";
+import { useToday } from "../../Hooks/useDate";
 const AddSavingsForm = ({ onCloseForm }) => {
     const {
         register,
@@ -16,17 +18,13 @@ const AddSavingsForm = ({ onCloseForm }) => {
         formState: { errors }
     } = useForm();
 
-    const {
-        createSavings,
-        isCreatingSavings,
-        user: { user }
-    } = useAuth();
+    const { user } = useAuth();
+    const { today } = useToday();
+    const { addSavings, isAddingSavings, isSuccessful } = useAddSavings();
 
     const userId = user?.id;
 
     const [savingsType, setSavingsType] = useState("manual");
-
-    const [today, setToday] = useState();
 
     const startDate = watch("Start date");
 
@@ -36,8 +34,8 @@ const AddSavingsForm = ({ onCloseForm }) => {
 
     function handleFormSubmit(datas) {
         const newSavings = {
-            title: datas["Goal name"],
-            target_amount: +datas["Target amount"],
+            title: datas.name,
+            target_amount: +datas.amount,
             user_id: userId,
             method: datas.savingsType.toLowerCase(),
             percentage: +datas.percentage || null,
@@ -46,16 +44,12 @@ const AddSavingsForm = ({ onCloseForm }) => {
             end_date: datas["Target date"],
             is_active: true
         };
-        createSavings(newSavings, {
-            onSuccess: onCloseForm()
+
+        addSavings(newSavings,{
+          onSucess:    onCloseForm()
         });
     }
-
-    useEffect(() => {
-        const currentDate = new Date().toISOString().split("T")[0];
-        setToday(currentDate);
-    }, []);
-
+    
     return (
         <Modal>
             <div
@@ -72,7 +66,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                 >
                     <RadioButton
                         onHandleInputChange={handleInputChange}
-                        disable={isCreatingSavings}
+                        disable={isAddingSavings}
                         defaultOption={savingsType}
                         register={register}
                         error={errors}
@@ -87,7 +81,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                             label="Goal name"
                             inputType="string"
                             placeholder="Name your savings goal..."
-                            disable={isCreatingSavings}
+                            disable={isAddingSavings}
                             register={register}
                             error={errors}
                         />
@@ -96,7 +90,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                             label="Target amount"
                             inputType="number"
                             placeholder="Enter the target amount..."
-                            disable={isCreatingSavings}
+                            disable={isAddingSavings}
                             register={register}
                             error={errors}
                             onHandleInputChange={handleInputChange}
@@ -112,7 +106,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                             maxDate=""
                             minDate={today}
                             register={register}
-                            disable={isCreatingSavings}
+                            disable={isAddingSavings}
                             className="w-full outline-none rounded-md p-2"
                             onHandleInputChange={handleInputChange}
                         />
@@ -121,7 +115,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                             label="Target date"
                             maxDate=""
                             minDate={startDate}
-                            disable={isCreatingSavings}
+                            disable={isAddingSavings}
                             register={register}
                             className="w-full outline-none rounded-md p-2"
                             onHandleInputChange={handleInputChange}
@@ -138,7 +132,7 @@ const AddSavingsForm = ({ onCloseForm }) => {
                             onButtonClick={onCloseForm}
                         />
                         <Button
-                            loader={isCreatingSavings}
+                            loader={isAddingSavings}
                             className="bg-light-primaryCTA flex items-center
                             justify-center uppercase p-2 rounded
                             text-white

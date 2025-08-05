@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { getSavingsApi } from "../Apis/Transactions/getSavings";
-const useGetSavings = userId => {
+import { useUser } from "./useUser";
+export const useGetSavings = () => {
+    const { userId } = useUser();
     const {
         data: savings,
         error: savingsError,

@@ -1,3 +1,7 @@
+/*
+import { useCallback } from "react";
+import { Outlet } from "react-router";
+
 import Nav from "./Nav";
 import LineChart from "./LineChart";
 import BarChart from "./BarChart";
@@ -6,7 +10,6 @@ import ApexLineChart from "./ApexLineChart";
 import AreaChart from "./AreaChart";
 import RecentTransactions from "./RecentTransactions";
 import SavingsAndBudgetAnalytics from "./SavingsAndBudgetAnalytics";
-import { Outlet } from "react-router";
 
 import { useTransactions } from "../Hooks/useTransactions";
 
@@ -22,13 +25,18 @@ const DashboardHeader = () => {
     const incomePrices = incomes.map(income => income.amount);
     const expensePrices = expenses.map(income => income.amount);
 
-    const totalBalance = formatCurrency(roundTotalPrice(transactions));
-    const totalIncome = formatCurrency(roundDownPrice(incomePrices));
-    const totalExpenses = formatCurrency(roundDownPrice(expensePrices));
+    const totalBalance = useCallback(() =>
+        formatCurrency(roundTotalPrice(transactions))
+    );
+    const totalIncome = useCallback(() =>
+        formatCurrency(roundDownPrice(incomePrices))
+    );
+    const totalExpenses = useCallback(() =>
+        formatCurrency(roundDownPrice(expensePrices))
+    );
 
     return (
         <header className="bg-color-1 md:min-h-screen">
-          
             <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-4 md:px-8">
                 <div
                     className="flex flex-col items-start justify-center bg-white rounded-md shadow-md
@@ -124,3 +132,4 @@ const DashboardHeader = () => {
     );
 };
 export default DashboardHeader;
+*/

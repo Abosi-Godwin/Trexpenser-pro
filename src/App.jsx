@@ -1,4 +1,5 @@
 //Modules
+import { lazy, Suspense } from "react";
 import {
     createBrowserRouter,
     RouterProvider,
@@ -7,9 +8,9 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
 
-
 //Pages
 import HomePage from "./Landing/HomePage";
+
 import LoginPage from "./Dashboard/features/authentication/LoginPage";
 import SignupPage from "./Dashboard/features/authentication/SignupPage";
 import SubscriptionPage from "./Dashboard/features/ai/Subscription";
@@ -18,21 +19,21 @@ import SubscriptionPage from "./Dashboard/features/ai/Subscription";
 import ProtectedRoutes from "./Dashboard/features/authentication/ProtectedRoutes";
 import AuthRedirect from "./Dashboard/features/authentication/AuthRedirect";
 import DashboardLayout from "./Dashboard/ui/DashboardLayout";
-
-//Dashboard pages
-import DashboardHome from "./Dashboard/DashboardHome";
-import Transactions from "./Dashboard/pages/Transactions";
-import Savings from "./Dashboard/pages/SavingsPage";
-import Budgets from "./Dashboard/pages/BudgetPage";
-import Summary from "./Dashboard/pages/Summary";
-import Profile from "./Dashboard/pages/Profile";
-
+import Loader from "./Dashboard/ui/Loader";
 //Provideers
 import { AuthProvider } from "./Dashboard/contexts/AuthContext";
 import { ThemeProvider } from "./Dashboard/contexts/ThemeContext";
 
 import { loader as imgLoader } from "./Landing/Services/ImgLoader";
 import { queryClient } from "./Dashboard/Services/queryClient";
+
+//Dashboard pages
+const DashboardHome = lazy(() => import("./Dashboard/DashboardHome"));
+const Transactions = lazy(() => import("./Dashboard/pages/Transactions"));
+const Savings = lazy(() => import("./Dashboard/pages/SavingsPage"));
+const Budgets = lazy(() => import("./Dashboard/pages/BudgetPage"));
+const Summary = lazy(() => import("./Dashboard/pages/Summary"));
+const Profile = lazy(() => import("./Dashboard/pages/Profile"));
 
 const router = createBrowserRouter([
     {
@@ -69,39 +70,57 @@ const router = createBrowserRouter([
         path: "/dashboard",
         element: (
             <ProtectedRoutes>
-              
-                    <DashboardLayout />
-                
+                <DashboardLayout />
             </ProtectedRoutes>
         ),
         children: [
             {
                 index: true,
-                element: <DashboardHome />
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <DashboardHome />
+                    </Suspense>
+                )
             },
             {
                 path: "/dashboard/transactions",
-                element: <Transactions />
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Transactions />
+                    </Suspense>
+                )
             },
             {
                 path: "/dashboard/savings",
-                element: <Savings />
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Savings />
+                    </Suspense>
+                )
             },
             {
                 path: "/dashboard/budgets",
-                element: <Budgets />
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Budgets />
+                    </Suspense>
+                )
             },
             {
                 path: "/dashboard/summary",
-                element: <Summary />
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Summary />
+                    </Suspense>
+                )
             },
             {
                 path: "/dashboard/profile",
-                element: <Profile />
-            },
-            {
-                path: "/dashboard/profile",
-                element: <Profile />
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Profile />
+                    </Suspense>
+                )
             }
         ]
     }
@@ -110,12 +129,12 @@ const router = createBrowserRouter([
 const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <ThemeProvider>
-                <AuthProvider>
+            <AuthProvider>
+                <ThemeProvider>
                     <RouterProvider router={router} />
-                </AuthProvider>
-                <ReactQueryDevtools />
-            </ThemeProvider>
+                    <ReactQueryDevtools />
+                </ThemeProvider>
+            </AuthProvider>
         </QueryClientProvider>
     );
 };

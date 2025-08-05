@@ -3,8 +3,8 @@ const SelectInput = ({
     labelFor,
     disable,
     label,
-    register,
-    error
+    onHandleChange,
+    selected = ""
 }) => {
     return (
         <div>
@@ -13,16 +13,18 @@ const SelectInput = ({
             </label>
             <br />
             <select
-                name="filteringType"
-                id="filteringType"
-                className="bg-light-sectionBackground border-none outline-none p-2 rounded
-                w-full"
+                name={label.toLowerCase()}
+                id={label.toLowerCase()}
+                className="bg-light-sectionBackground border-none outline-none
+                p-2 rounded w-full
+                  dark:bg-dark-sectionBackground dark:text-dark-text"
                 disabled={disable}
-                {...register(label)}
+                onChange={onHandleChange}
+                defaultValue={selected || options[0]}
             >
                 {options.map((option, index) => (
-                    <option value={option} key={index}>
-                        {option}
+                    <option value={option.value} key={index}>
+                        {option.label}
                     </option>
                 ))}
             </select>

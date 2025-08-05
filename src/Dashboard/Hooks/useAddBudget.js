@@ -16,7 +16,7 @@ export const useAddBudget = () => {
         mutationFn: addBudgetApi,
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["Budgets"]
+                queryKey: ["budgets"]
             });
             toast.success("Budget successfully added!");
         },

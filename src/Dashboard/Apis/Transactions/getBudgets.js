@@ -1,5 +1,5 @@
-import {supabase} from "../../Services/Supabase"
-import {sortData} from "../../Utils/sortDatas"
+import { supabase } from "../../Services/Supabase";
+import { sortData } from "../../Utils/sortDatas";
 export const getUserBudgetsApi = async userId => {
     let { data, error } = await supabase
         .from("budgets")
@@ -10,6 +10,6 @@ export const getUserBudgetsApi = async userId => {
         throw new Error(error.message);
     }
 
-    // console.log(data);
+
     return await sortData(data);
 };

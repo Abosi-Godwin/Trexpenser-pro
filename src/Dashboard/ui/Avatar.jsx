@@ -1,3 +1,4 @@
+import {  memo } from "react";
 import { useUser } from "../Hooks/useUser";
 import AvatarImg from "./AvatarImg";
 const Avatar = () => {
@@ -5,7 +6,6 @@ const Avatar = () => {
 
     const userName = user?.user_metadata?.userName;
     const userEmail = user?.user_metadata?.email;
-    
 
     return (
         <div className="w-full flex gap-2">
@@ -18,4 +18,4 @@ const Avatar = () => {
     );
 };
 
-export default Avatar;
+export default memo(Avatar);

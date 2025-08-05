@@ -37,12 +37,10 @@ const DashboardHome = () => {
             toast.success(`Welcome, ${userName}`);
         }
     }, [userName, somethingIsLoading]);
-     if (currentUserTransactions?.length === 0) {
-        return <EmptyDashboard />;
-    }
+
     return (
         <>
-            {somethingIsLoading && hasFetchedTransactions && isEmpty ? (
+            {!somethingIsLoading && hasFetchedTransactions && isEmpty ? (
                 <EmptyDashboard />
             ) : (
                 <section
@@ -100,14 +98,14 @@ const DashboardHome = () => {
             dark:bg-dark-cardBackground dark:text-dark-text"
                     >
                         <div className="flex items-center justify-between w-full">
-                            <div>
-                                <h1
-                                    className="text-3xl font-bold text-gray-700
+                          <div>
+                            <h1
+                                className="text-3xl font-bold text-gray-700
                         dark:text-dark-text"
-                                >
-                                    {totalExpenses}
-                                </h1>
-                                <p className="text-sm">Expenses overview</p>
+                            >
+                                {totalExpenses}
+                            </h1>
+                            <p className="text-sm">Expenses overview</p>
                             </div>
                         </div>
                         <div>
@@ -150,7 +148,7 @@ const DashboardHome = () => {
                     <div
                         className="md:col-span-3 grid grid-cols-1 gap-4
                         md:grid-cols-2
-             dark:bg-dark-cardBackground dark:text-dark-text rounded-md shadow-md shadow-color-2"
+             rounded-md shadow-md shadow-color-2"
                     >
                         <RecentTransactions />
 

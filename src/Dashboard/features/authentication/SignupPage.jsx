@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaGoogle } from "react-icons/fa6";
+//import { FaGoogle } from "react-icons/fa6";
 import { Toaster } from "react-hot-toast";
 
 import { slideUpVariant } from "../../Utils/AnimationVariants";
@@ -19,13 +19,13 @@ import Input from "../Form/Input";
 */
 
 const SignupPage = () => {
-    const { signUp, isSigningUp, signUpIsError, signUpError } = useSignUp();
+    const { signUp, isSigningUp } = useSignUp();
 
-    const { signUpWithGoogle, signUpWithGoogleIsPending } = useGoogleSignUp();
+    const { signUpWithGoogle } = useGoogleSignUp();
 
     const {
         register,
-        reset,
+      
         handleSubmit,
         formState: { errors }
     } = useForm({ mode: "all" });

@@ -5,15 +5,14 @@ import { FaRightFromBracket } from "react-icons/fa6";
 import SidebarItem from "../ui/SidebarItem";
 import Avatar from "./Avatar";
 
+import { useLogOut } from "../Hooks/useLogOut";
 import { useAuth } from "../contexts/AuthContext";
 import { sideBarItems } from "../data/data";
 import { dropdownVariants } from "../Utils/AnimationVariants";
-import { useLogOut } from "../Hooks/useLogOut";
 
 const NavBar = ({ isMenuOpen, closeNavBar }) => {
     const navigate = useNavigate();
-    const { user, logOut } = useAuth();
-    const { logOut1, isLoggingOut, loggedOut } = useLogOut();
+    const { logOut } = useLogOut();
 
     const handleLogOut = () => {
         logOut();

@@ -31,7 +31,8 @@ const Faq = ({ faqData }) => {
     };
 
     return (
-        <div className="grid grid-cols-1 rounded-md bg-light-text">
+        <div className="grid grid-cols-1 rounded-md
+        bg-light-sidebarHeaderBackground bg-light-text">
             <div
                 className={`flex gap-3 bg-light-sidebarHeaderBackground justify-between
                         items-center

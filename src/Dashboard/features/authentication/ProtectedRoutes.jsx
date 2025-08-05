@@ -1,29 +1,27 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useUser } from "../../Hooks/useUser";
+import { useLoader } from "../../Hooks/useLoader";
 
 import Loader from "../../ui/Loader";
 
-
-import { useAuth } from "../../contexts/AuthContext";
-import { useLoader } from "../../Hooks/useLoader";
-
-
 const ProtectedRoutes = ({ children }) => {
     const navigate = useNavigate();
-    const { user } = useAuth();
-    const somethingIsLoading = useLoader();
 
-    const authenticated = user?.user?.role === "authenticated";
-
+    const { userIsAuthenticated } = useUser();
+    const { somethingIsLoading } = useLoader();
+    
     useEffect(() => {
-        if (!authenticated && !somethingIsLoading) {
-             navigate("/login");
+        if (!somethingIsLoading && !userIsAuthenticated) {
+            navigate("/login", {
+                replace: true
+            });
         }
-    }, [authenticated, somethingIsLoading, navigate]);
+    }, [userIsAuthenticated, somethingIsLoading, navigate]);
 
     if (somethingIsLoading) return <Loader />;
 
-    return authenticated && children;
+    return userIsAuthenticated && children;
 };
 export default ProtectedRoutes;

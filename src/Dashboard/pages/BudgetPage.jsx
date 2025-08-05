@@ -3,7 +3,7 @@ import Budgets from "../features/budgets/Budgets";
 
 function BudgetPlanning() {
     return (
-        <div className="bg-light-background rounded-md p-4">
+        <div className="bg-light-background dark:bg-dark-cardBackground dark:text-dark-text rounded-md p-4">
             <BudgetSummary />
             <Budgets />
         </div>
