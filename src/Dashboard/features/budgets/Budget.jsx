@@ -2,13 +2,13 @@ import { createContext, useContext } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { isFuture } from "date-fns";
 
-import { RecentItemMenuCard } from "../../ui/RecentItemMenu";
+import MenuCard from "../../ui/MenuCard";
 
 import { useTransactions } from "../../Hooks/useTransactions";
-
 import { formatCurrency } from "../../Utils/formatCurrency";
 import { formatDate } from "../../Utils/formatDate";
 import { roundDownPrice } from "../../Utils/CustomMethods";
+
 const BudgetContext = createContext();
 
 const useBudgetContext = () => {
@@ -50,6 +50,7 @@ function Budget({ budget, children }) {
     return (
         <BudgetContext.Provider
             value={{
+                budget,
                 notes,
                 remaining,
                 startDate,
@@ -93,8 +94,7 @@ const Infos = () => {
 };
 
 const Progress = () => {
-    const { totalSpent, spentPercent, spendingLimit, spent } =
-        useBudgetContext();
+    const { totalSpent, spentPercent, spendingLimit } = useBudgetContext();
 
     return (
         <ProgressBar
@@ -121,7 +121,13 @@ const Duration = () => {
 };
 
 const Action = () => {
-    return <RecentItemMenuCard />;
+    const { budget } = useBudgetContext();
+    return (
+        <MenuCard data={budget} type="budget">
+            <MenuCard.Icon />
+            <MenuCard.Options />
+        </MenuCard>
+    );
 };
 const Status = () => {
     const { isActive } = useBudgetContext();

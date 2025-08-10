@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 import Button from "../features/Form/Button";
 import MenuIcon from "./MenuIcon";
-import DeleteTransactionForm from "../features/Form/DeleteTransactionForm";
+import DeleteDataForm from "../features/Form/DeleteTransactionForm";
 
 const MenuContext = createContext({});
 
@@ -17,7 +17,7 @@ const useMenuContext = () => {
     return menuCardContext;
 };
 
-const MenuCard = ({ children, transaction }) => {
+const MenuCard = ({ children, data, type }) => {
     const [openMenu, setOpenMenu] = useState(false);
 
     const handleOpenMenu = () => {
@@ -25,16 +25,16 @@ const MenuCard = ({ children, transaction }) => {
     };
 
     return (
-        <MenuContext.Provider value={{ openMenu, handleOpenMenu, setOpenMenu,
-        transaction }}>
+        <MenuContext.Provider
+            value={{ openMenu, handleOpenMenu, setOpenMenu, data, type }}
+        >
             {children}
         </MenuContext.Provider>
     );
 };
 
 const MenuLists = () => {
-    const { openMenu, transaction} = useMenuContext();
-
+    const { openMenu, data, type } = useMenuContext();
     const [openDeleteForm, setOpenDeleteForm] = useState(false);
 
     const handleOpenForm = () => {
@@ -46,8 +46,9 @@ const MenuLists = () => {
         bg-light-sectionBackground dark:bg-dark-sectionBackground p-2 rounded-md z-[1000] right-10`}
         >
             {openDeleteForm && (
-                <DeleteTransactionForm
-                    data={transaction}
+                <DeleteDataForm
+                    data={data}
+                    type={type}
                     onCloseForm={handleOpenForm}
                 />
             )}

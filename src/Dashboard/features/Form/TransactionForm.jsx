@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
+
+import Modal from "../../ui/Modal";
 
 import Button from "./Button";
 import DateInput from "./DateInput";
 import Input from "./Input";
 import SelectInput from "./SelectInput";
-import Modal from "../../ui/Modal";
 import Form from "./Form";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -28,34 +28,71 @@ function TransactionForm({ onHandleForm }) {
         formState: { errors }
     } = useForm();
 
+    const { today } = useToday();
+
+    const { addTransaction, isAddingTransaction } = useAddTransaction();
+
     const type = watch("type");
 
-    const {
-        addTransaction,
-        addedTransaction,
-        isAddingTransaction,
-        isAddingTransactionError,
-        isAddingTransactionSucces
-    } = useAddTransaction();
-
     function handleFormSubmit(datas) {
-        console.log(datas);
+        const { type, amount, category, date, description } = datas;
+
+        if (
+            type === "" ||
+            type === "select" ||
+            category === "" ||
+            category === "select" ||
+            amount === "" ||
+            date === "" ||
+            description === ""
+        ) {
+            toast.error("All inputs are required");
+            return;
+        }
+
+        const newTransaction = {
+            ...datas,
+            user_id: user?.id
+        };
+
+        addTransaction(newTransaction, {
+            onSuccess: ([data]) => {
+                onHandleForm();
+                if (data.type !== "income") return;
+
+                const categorySavings = savings.find(
+                    saving => saving.funded_by === data.category
+                );
+
+                const { id, percentage } = categorySavings;
+
+                const amountMade = data.amount;
+                const amountToSave = (percentage / 100) * amountMade;
+                const savingsId = id;
+
+                updateSavings({ amountToSave, savingsId });
+            }
+        });
     }
-    const { today } = useToday();
+
     return (
         <Modal>
             <div
-                className="bg-light-cardBackground rounded-md w-4/5 overflow-hidden
-            dark:bg-dark-cardBackground"
+                className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background dark:bg-dark-background"
             >
+                {/*className="bg-light-cardBackground rounded-md w-4/5
+                overflow-hidden dark:bg-dark-cardBackground"
+                */}
                 <h1
                     className="text-2xl font-bold text-light-text p-2 mb-2
                 dark:text-dark-text"
                 >
                     Add a new transaction
                 </h1>
-                <Form submit={() => handleSubmit(handleFormSubmit)}>
-                    {" "}
+                <Form
+                    submitFun={handleFormSubmit}
+                    handleSubmitFun={handleSubmit}
+                >
                     <div className="w-full flex justify-between gap-4">
                         <SelectInput
                             options={expenseTypes}
@@ -68,7 +105,7 @@ function TransactionForm({ onHandleForm }) {
 
                         <SelectInput
                             options={
-                                type === "Income"
+                                type === "income"
                                     ? incomeCategories
                                     : expenseCategories
                             }
@@ -136,54 +173,8 @@ function TransactionForm({ onHandleForm }) {
     );
 }
 export default TransactionForm;
+
 /*
-
-    function handleFormSubmit(datas) {
-        console.log(datas);
-        const { type, amount, category, date, description } = datas;
-
-        
-        if (
-            type === "" ||
-            type === "Select" ||
-            category === "" ||
-            category === "Select" ||
-            amount === "" ||
-            date === "" ||
-            description === ""
-        ) {
-            toast.error("All inputs are required");
-            return;
-        }
-
-        const newTransaction = {
-            ...datas,
-            type: datas.type.toLowerCase(),
-            user_id: user?.user?.id
-        };
-
-        addTransaction(newTransaction, {
-            onSuccess: ([data]) => {
-                onHandleForm();
-                if (data.type !== "income") return;
-
-                const categorySavings = savings.find(
-                    saving => saving.funded_by === data.category
-                );
-
-                const { id, percentage } = categorySavings;
-
-                const amountMade = data.amount;
-                const amountToSave = (percentage / 100) * amountMade;
-                const savingsId = id;
-
-                updateSavings({ amountToSave, savingsId });
-            }
-        });
-        
-        
-    }
-    
  <form
                     onSubmit={handleSubmit(handleFormSubmit)}
                     className="p-3 border-t-2 border-light-Background flex flex-col gap-3"

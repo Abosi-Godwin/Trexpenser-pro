@@ -1,9 +1,9 @@
 import { createContext, useContext, useState } from "react";
 
 import Button from "../features/Form/Button";
-import { useAuth } from "../contexts/AuthContext";
 import MenuIcon from "../ui/MenuIcon";
 import DeleteTransactionForm from "../features/Form/DeleteTransactionForm";
+
 const MenuContext = createContext({});
 
 const useMenuContext = () => {
@@ -21,7 +21,7 @@ const MenuCard = ({ children }) => {
     const handleOpenMenu = () => {
         setOpenMenu(prev => !prev);
     };
-
+   
     return (
         <MenuContext.Provider value={{ openMenu, handleOpenMenu, setOpenMenu }}>
             {children}

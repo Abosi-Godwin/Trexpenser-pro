@@ -53,9 +53,9 @@ const AddSavingsForm = ({ onCloseForm }) => {
     return (
         <Modal>
             <div
-                className="p-2 rounded-md
-            bg-light-background"
+                className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background"
             >
+                
                 <h3 className="text-2xl font-bold text-color-8 mb-2">
                     Add a new savings goal
                 </h3>

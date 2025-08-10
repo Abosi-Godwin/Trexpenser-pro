@@ -11,24 +11,11 @@ import TransactionForm from "../features/Form/TransactionForm";
 
 import { useTransactions } from "../Hooks/useTransactions";
 import Transaction from "../features/transactions/Transaction";
-
+import { transactionFilterOptions, transactionSortOptions } from "../data/data";
+import { sortingSwitchFunc } from "../Utils/SortSwitchFunc";
+import { filterSwitchFunc } from "../Utils/FilterSwitchFunc";
 const maxTransactionToShow = 10;
 
-const transactionSortOptions = [
-    { label: "Default (Newest)", value: "date_desc" },
-    { label: "Date (Oldest first)", value: "date_asc" },
-    { label: "Amount (Highest first)", value: "amount_desc" },
-    { label: "Amount (Lowest first)", value: "amount_asc" },
-    { label: "Category (A → Z)", value: "category_asc" },
-    { label: "Category (Z → A)", value: "category_desc" },
-    { label: "Type (Income first)", value: "type_income_first" },
-    { label: "Type (Expense first)", value: "type_expense_first" }
-];
-const transactionFilterOptions = [
-    { label: "All", value: "all" },
-    { label: "Income", value: "income" },
-    { label: "Expense", value: "expense" }
-];
 function Transactions() {
     const [openForm, setOpenForm] = useState(false);
 
@@ -38,67 +25,13 @@ function Transactions() {
 
     const { currentUserTransactions } = useTransactions();
 
-    let transactions;
+    let transactions = null;
 
-    switch (sortParams) {
-        case "date_desc":
-            transactions = currentUserTransactions.sort(
-                (a, b) => new Date(b.date) - new Date(a.date)
-            );
-            break;
-        case "date_asc":
-            transactions = currentUserTransactions.sort(
-                (a, b) => new Date(a.date) - new Date(b.date)
-            );
-            break;
-        case "amount_desc":
-            transactions = currentUserTransactions.sort(
-                (a, b) => +b.amount - +a.amount
-            );
-            break;
-        case "amount_asc":
-            transactions = currentUserTransactions.sort(
-                (a, b) => +a.amount - +b.amount
-            );
-            break;
-        case "category_desc":
-            transactions = currentUserTransactions.sort(
-                (a, b) => b.category - a.category
-            );
-            break;
-        case "category_asc":
-            transactions = currentUserTransactions.sort(
-                (a, b) => a.category - b.category
-            );
-            break;
-        case "type_income_first":
-            transactions = currentUserTransactions.sort(
-                (a, b) => new Date(b.date) - new Date(a.date)
-            );
-            break;
-        case "type_expense_first":
-            transactions = currentUserTransactions.sort(
-                (a, b) => new Date(a.date) - new Date(b.date)
-            );
-            break;
-        default:
-            transactions = currentUserTransactions;
-    }
 
-    switch (filterParams) {
-        case "income":
-            transactions = currentUserTransactions.filter(
-                item => item.type === "income"
-            );
-            break;
-        case "expense":
-            transactions = currentUserTransactions.filter(
-                item => item.type === "expense"
-            );
-            break;
-        default:
-            transactions = currentUserTransactions;
-    }
+    transactions = sortingSwitchFunc(sortParams, currentUserTransactions);
+
+    transactions = filterSwitchFunc(filterParams, currentUserTransactions);
+
 
     const totalTransaction = transactions.length;
 
@@ -140,9 +73,12 @@ function Transactions() {
                     />
                 </div>
                 <Table>
-                    {transactions.map(({ id, ...rest }) => {
+                    {transactions.map(transaction => {
                         return (
-                            <Transaction transaction={rest} key={id}>
+                            <Transaction
+                                transaction={transaction}
+                                key={transaction.id}
+                            >
                                 <Transaction.Icon />
                                 <Transaction.Description />
                                 <Transaction.Action />

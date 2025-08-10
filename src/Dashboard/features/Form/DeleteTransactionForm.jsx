@@ -6,20 +6,43 @@ import Button from "../Form/Button";
 import Modal from "../../ui/Modal";
 
 import { useDeleteTransaction } from "../../Hooks/useDeleteTransaction";
+import { useDeleteSavings } from "../../Hooks/useDeleteSavings";
+import { useDeleteBudget } from "../../Hooks/useDeleteBudget";
 import { formatCurrency } from "../../Utils/CustomMethods";
+import { formatDate } from "../../Utils/formatDate";
 
-function DeleteTransactionForm({ data, onCloseForm }) {
-    const transactionId = data.id;
+function DeleteDataForm({ data, onCloseForm, type }) {
+    const dataId = data.id;
 
     const { deleteTransaction, isdeletingTransaction } = useDeleteTransaction();
 
+    const { deleteSavings, isdeletingSavings } = useDeleteSavings();
+    const { deleteBudget, isdeletingBudget } = useDeleteBudget();
+
     const handleDataDelete = useCallback(() => {
-        deleteTransaction(transactionId, {
-            onSuccess: () => {
-                onCloseForm();
-            }
-        });
-    });
+        if (type === "transaction") {
+            deleteTransaction(dataId, {
+                onSuccess: () => {
+                    onCloseForm();
+                }
+            });
+        }
+        if (type === "savings") {
+            deleteSavings(dataId, {
+                onSuccess: () => {
+                    onCloseForm();
+                }
+            });
+        }
+        if (type === "budget") {
+            
+            deleteBudget(dataId, {
+                onSuccess: () => {
+                    onCloseForm();
+                }
+            });
+        }
+    }, [dataId]);
 
     return (
         <Modal>
@@ -27,12 +50,36 @@ function DeleteTransactionForm({ data, onCloseForm }) {
                 className="bg-light-background rounded-md overflow-hidden
             dark:bg-dark-background p-3 w-3/4 md:w-3/12"
             >
-                <h2 className="">
-                    Do you really want to delete your
-                    {" " + formatCurrency(data.amount)} {data.category}
-                    {" " + data.type} that occured on
-                    {" " + format(data.date, "MMM, dd, yyyy")}?
-                </h2>
+                {type === "transaction" ? (
+                    <h2 className="">
+                        Do you really want to delete your
+                        {" " + formatCurrency(data.amount)} {data.category}
+                        {" " + data.type} that occured on
+                        {" " + formatDate(data.date)}?
+                    </h2>
+                ) : (
+                    <h2>
+                        Do you really want to delete your{" "}
+                        {type === "savings" ? (
+                            <>
+                                {data.method}
+                                {" " + formatCurrency(data.target_amount)}{" "}
+                                {data.title + " "}
+                                savings that started on
+                                {" " + formatDate(data.start_date)}
+                                and ?
+                            </>
+                        ) : (
+                            <>
+                                {" " + formatCurrency(data.amount)}{" "}
+                                {data.category + " "}
+                                budget tracking goal that started on
+                                {" " + formatDate(data.start_date)} and will end
+                                on {" " + formatDate(data.end_date)}?
+                            </>
+                        )}
+                    </h2>
+                )}
 
                 <div className="flex justify-between items-center py-2">
                     <Button
@@ -45,7 +92,7 @@ function DeleteTransactionForm({ data, onCloseForm }) {
                         text="Delete"
                         className="bg-red-500 font-bold p-2 rounded
                             text-white hover:bg-red-800"
-                        loader={isdeletingTransaction}
+                        loader={isdeletingTransaction || isdeletingSavings}
                         onButtonClick={handleDataDelete}
                     />
                 </div>
@@ -53,4 +100,4 @@ function DeleteTransactionForm({ data, onCloseForm }) {
         </Modal>
     );
 }
-export default DeleteTransactionForm;
+export default DeleteDataForm;

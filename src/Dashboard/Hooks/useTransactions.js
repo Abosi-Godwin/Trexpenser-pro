@@ -6,11 +6,10 @@ import {
     roundDownPrice
 } from "../Utils/CustomMethods";
 
-import { useAuth } from "../contexts/AuthContext";
 import { useGetTransactions } from "./useGetTransactions";
 export const useTransactions = () => {
     const { transactions } = useGetTransactions();
-
+    
     const [currentUserTransactions, setCurrentUserTransactions] = useState([]);
 
     const [hasFetchedTransactions, setHasFetchedTransactions] = useState(false);
@@ -27,7 +26,7 @@ export const useTransactions = () => {
 
     const expenseCategories = [
         ...new Set(expenses.map(expense => expense.category))
-    ];
+    ].map(category => ({ label: category, value: category.toLowerCase() }));
 
     const incomePrices = useMemo(
         () => incomes.map(income => income.amount),

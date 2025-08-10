@@ -69,7 +69,7 @@ const Description = () => {
 const Action = () => {
     const { transaction } = useTransaction();
     return (
-        <MenuCard transaction={transaction}>
+        <MenuCard data={transaction}type="transaction">
             <MenuCard.Icon />
             <MenuCard.Options />
         </MenuCard>

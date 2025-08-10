@@ -1,15 +1,18 @@
 import { createContext, useContext, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
+import toast from "react-hot-toast";
 import ApexRadialChart from "../Charts/ApexRadialChart";
-import { formatCurrency, formatDate } from "../../Utils/CustomMethods";
 
+import MenuCard from "../../ui/MenuCard";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import MenuIcon from "../../ui/MenuIcon";
-import { RecentItemMenuCard } from "../../ui/RecentItemMenu";
+
+//import { RecentItemMenuCard } from "../../ui/RecentItemMenu";
+import { useAuth } from "../../contexts/AuthContext";
+import { formatCurrency, formatDate } from "../../Utils/CustomMethods";
+
 const SavingsContext = createContext();
 
 const useSavingsContext = () => {
@@ -52,9 +55,17 @@ const SavingsHeader = ({ children }) => {
 
 const SavingsAction = () => {
     const [openMenu, setOpenMenu] = useState(false);
+
+    const { savingsData } = useSavingsContext();
     const handleMenu = () => setOpenMenu(prev => !prev);
 
-    return <RecentItemMenuCard />;
+    return (
+        <MenuCard data={savingsData} type="savings">
+            <MenuCard.Icon />
+            <MenuCard.Options />
+        </MenuCard>
+    );
+    
 };
 
 const SavingsInfo = () => {
@@ -65,26 +76,26 @@ const SavingsInfo = () => {
     const saved = Math.floor((amount_saved / target_amount) * 100);
     return (
         <div className="grid grid-cols-[2fr_1fr] pt-2">
-            <ul className="">
+            <ul>
                 <li className="flex justify-centehr gap-3">
-                    <span className="font-bold">Target:</span>
-                    <span className="">{formatCurrency(target_amount)}</span>
+                    <span className="font-bold">Target: </span>
+                    <span>{formatCurrency(target_amount)}</span>
                 </li>
-                <li className="">
-                    <span className="font-bold">Saved</span>
-                    <span> {formatCurrency(amount_saved)}</span>
+                <li>
+                    <span className="font-bold">Saved: </span>
+                    <span>{formatCurrency(amount_saved)}</span>
                 </li>
-                <li className="">
+                <li>
                     <span className="font-bold">From:</span>
                     <span className=""> {formatDate(start_date)}</span>
                 </li>
-                <li className="">
+                <li>
                     <span className="font-bold">To:</span>
-                    <span className=""> {formatDate(end_date)}</span>
+                    <span> {formatDate(end_date)}</span>
                 </li>
-                <li className="">
+                <li>
                     <span className="font-bold">Method:</span>
-                    <span className=""> {method}</span>
+                    <span className="capitalize"> {method}</span>
                 </li>
             </ul>
             <div className="flex items-end justify-end">

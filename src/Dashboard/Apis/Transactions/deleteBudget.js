@@ -1,10 +1,10 @@
 import { supabase } from "../../Services/Supabase";
-export const deleteTransactionApi = async transactionId => {
+export const deleteBudgetApi = async budgetId => {
     
     const { error } = await supabase
-        .from("transactions")
+        .from("budgets")
         .delete()
-        .eq("id", transactionId);
+        .eq("id", budgetId);
     if (error) {
         console.error(error);
         throw new Error(error.message);
