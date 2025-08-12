@@ -7,9 +7,7 @@ import ApexRadialChart from "../Charts/ApexRadialChart";
 import MenuCard from "../../ui/MenuCard";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
-import MenuIcon from "../../ui/MenuIcon";
-
-//import { RecentItemMenuCard } from "../../ui/RecentItemMenu";
+ 
 import { useAuth } from "../../contexts/AuthContext";
 import { formatCurrency, formatDate } from "../../Utils/CustomMethods";
 
@@ -54,10 +52,10 @@ const SavingsHeader = ({ children }) => {
 };
 
 const SavingsAction = () => {
-    const [openMenu, setOpenMenu] = useState(false);
+    
 
     const { savingsData } = useSavingsContext();
-    const handleMenu = () => setOpenMenu(prev => !prev);
+     
 
     return (
         <MenuCard data={savingsData} type="savings">

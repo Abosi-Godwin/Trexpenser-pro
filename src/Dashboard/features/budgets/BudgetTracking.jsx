@@ -19,8 +19,10 @@ const BudgetTrackingChart = () => {
         return ` ${categories?.join(", ")} and ${last} `;
     });
     return (
-        <div className="bg-light-cardBackground rounded-md p-2
-        dark:bg-dark-cardBackground dark:text-dark-text">
+        <div
+            className="bg-light-cardBackground rounded-md p-2
+        dark:bg-dark-cardBackground dark:text-dark-text"
+        >
             <div className="border-b-2 border-b-light-divider">
                 <h1 className="text-xl font-extrabold">Budget Analytics</h1>
                 <p className="text-xs capitalize mb-2">
@@ -35,7 +37,7 @@ const BudgetTrackingChart = () => {
                     dated from {minMaxDate?.[0]} to {minMaxDate?.[1]}
                 </p>
             </div>
-            <Budgets />
+            <Budgets showAction={false}/>
         </div>
     );
 };

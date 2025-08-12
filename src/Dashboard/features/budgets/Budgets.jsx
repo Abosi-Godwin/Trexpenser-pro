@@ -1,9 +1,7 @@
-import { useAuth } from "../../contexts/AuthContext";
 import { useBudgets } from "../../Hooks/useBudgets";
 import Budget from "./Budget";
 
-
-const Budgets = () => {
+const Budgets = ({ showAction }) => {
     const { budgets } = useBudgets();
     return (
         <div className="mt-5 flex flex-col gap-2 divide-y-2 divide-light-divider rounded-md">
@@ -14,7 +12,10 @@ const Budgets = () => {
                             <Budget.Infos />
                             <div className="flex gap-3 h-fit">
                                 <Budget.Status />
-                                <Budget.Action />
+                              {showAction&&
+                              <Budget.Action />
+                              } 
+                                
                             </div>
                         </div>
 

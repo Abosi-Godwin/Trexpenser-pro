@@ -9,6 +9,7 @@ export const useBudgetsData = () => {
     const {
         user: { id }
     } = useUser();
+
     const userId = id;
     const { budgets } = useBudgets(userId);
     const { expenses } = useTransactions();
@@ -27,11 +28,7 @@ export const useBudgetsData = () => {
         .reverse()[0];
 
     const spendingLimit = roundDownPrice(budgets?.map(budget => budget.amount));
-
-    const spendingLmt = budgets
-        ?.map(budget => budget.amount)
-        ?.reduce((acc, ini) => acc + ini);
-
+ 
     const totalSpent = expenses
         .filter(
             expense =>
@@ -52,7 +49,7 @@ export const useBudgetsData = () => {
         .sort(compareAsc)
         .filter((_, index, arr) => index === 0 || index === arr.length - 1)
         ?.map(date => format(date, "MMM, dd, yyyy"));
-  
+
     return {
         budgets,
         startDate,

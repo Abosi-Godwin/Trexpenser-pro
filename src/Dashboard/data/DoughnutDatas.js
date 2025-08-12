@@ -1,4 +1,3 @@
-
 export default function expenesArray(datas, category) {
     const expenesArray = datas
         .filter(data => data.type === category)
@@ -10,11 +9,9 @@ export default function expenesArray(datas, category) {
             return acc;
         }, []);
 
-
     const dgn = Object.entries(expenesArray).flat();
 
-    const expenseDatas = dgn
-        .filter(item => typeof item === "object");
+    const expenseDatas = dgn.filter(item => typeof item === "object");
 
     return {
         amounts: expenseDatas.map(data =>

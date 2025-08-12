@@ -79,7 +79,7 @@ const Infos = () => {
 
     return (
         <div>
-            <h1 className="text-xl font-bold">{trackingCategory}</h1>
+            <h1 className="text-xl font-bold capitalize">{trackingCategory}</h1>
             <p>{notes}</p>
             <div className="py-2">
                 <h1>Max: {formatCurrency(spendingLimit)}</h1>

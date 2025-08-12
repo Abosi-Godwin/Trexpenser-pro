@@ -5,7 +5,7 @@ function BudgetPlanning() {
     return (
         <div className="bg-light-background dark:bg-dark-cardBackground dark:text-dark-text rounded-md p-4">
             <BudgetSummary />
-            <Budgets />
+            <Budgets showAction={true} />
         </div>
     );
 }

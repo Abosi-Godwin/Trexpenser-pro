@@ -1,17 +1,17 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+
 import { FaRightFromBracket } from "react-icons/fa6";
 
 import SidebarItem from "../ui/SidebarItem";
 import Avatar from "./Avatar";
 
 import { useLogOut } from "../Hooks/useLogOut";
-import { useAuth } from "../contexts/AuthContext";
+
 import { sideBarItems } from "../data/data";
 import { dropdownVariants } from "../Utils/AnimationVariants";
 
 const NavBar = ({ isMenuOpen, closeNavBar }) => {
-    const navigate = useNavigate();
+   
     const { logOut } = useLogOut();
 
     const handleLogOut = () => {
