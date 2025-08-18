@@ -1,7 +1,7 @@
 import { supabase } from "../../Services/Supabase";
 
 export const addTransactionApi = async transaction => {
-  console.log(transaction);
+  
     const { data, error } = await supabase
         .from("transactions")
         .insert([{ ...transaction }])

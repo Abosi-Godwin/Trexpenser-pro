@@ -11,7 +11,7 @@ export const useLoader = () => {
     //  const { isBudgetsLoading } = useBudgetsData();
     const { isSavingsLoading } = useGetSavings();
     const { istransactionsLoading } = useGetTransactions();
-   // console.log(isBudgetsLoading);
+  
     const somethingIsLoading =
         isUserLoading ||
         istransactionsLoading ||

@@ -28,7 +28,7 @@ export const useBudgetsData = () => {
         .reverse()[0];
 
     const spendingLimit = roundDownPrice(budgets?.map(budget => budget.amount));
- 
+
     const totalSpent = expenses
         .filter(
             expense =>
@@ -38,7 +38,18 @@ export const useBudgetsData = () => {
         )
         ?.map(expense => expense.amount)
         .reduce((acc, ini) => acc + ini, 0);
-
+    console.log(totalSpent);
+    /*const totalSpent1 = roundDownPrice(
+        expenses
+            .filter(
+                expense =>
+                    expense.category === category &&
+                    expense.date >= start_date &&
+                    expense.date <= end_date
+            )
+            .map(expense => expense.amount)
+    );
+*/
     const spentPercent = Math.floor((totalSpent / spendingLimit) * 100);
 
     const minMaxDate = budgets

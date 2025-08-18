@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import LineChart from "./features/Charts/LineChart";
 import BarChart from "./features/Charts/BarChart";
 import ApexLineChart from "./features/Charts/ApexLineChart";
+import HalfRadial from "./features/Charts/HalfRadial";
 import DoughnutChart from "./features/Charts/DoughnutChart";
 import RecentTransactions from "./features/transactions/RecentTransactions";
 
@@ -64,8 +65,11 @@ const DashboardHome = () => {
                                 </p>
                             </div>
                         </div>
-                        <ApexLineChart incomes={incomes} expenses={expenses} />
+                        <ApexLineChart incomes={incomes} expenses={expenses} />{" "}
                     </div>
+                    {/*
+                         <HalfRadial incomes={incomes} expenses={expenses} />
+                       */}
 
                     <div
                         className="flex flex-col items-start justify-center bg-white
@@ -98,14 +102,14 @@ const DashboardHome = () => {
             dark:bg-dark-cardBackground dark:text-dark-text"
                     >
                         <div className="flex items-center justify-between w-full">
-                          <div>
-                            <h1
-                                className="text-3xl font-bold text-gray-700
+                            <div>
+                                <h1
+                                    className="text-3xl font-bold text-gray-700
                         dark:text-dark-text"
-                            >
-                                {totalExpenses}
-                            </h1>
-                            <p className="text-sm">Expenses overview</p>
+                                >
+                                    {totalExpenses}
+                                </h1>
+                                <p className="text-sm">Expenses overview</p>
                             </div>
                         </div>
                         <div>

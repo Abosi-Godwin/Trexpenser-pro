@@ -7,9 +7,10 @@ import {
 } from "../Utils/CustomMethods";
 
 import { useGetTransactions } from "./useGetTransactions";
+
 export const useTransactions = () => {
     const { transactions } = useGetTransactions();
-    
+
     const [currentUserTransactions, setCurrentUserTransactions] = useState([]);
 
     const [hasFetchedTransactions, setHasFetchedTransactions] = useState(false);
@@ -23,10 +24,13 @@ export const useTransactions = () => {
     const expenses = currentUserTransactions?.filter(
         transaction => transaction.type === "expense"
     );
-
+ 
     const expenseCategories = [
-        ...new Set(expenses.map(expense => expense.category))
-    ].map(category => ({ label: category, value: category.toLowerCase() }));
+        ...new Set(expenses.map(expense => expense.category.toLowerCase()))
+    ].map(category => ({
+        label: category.at(0).toUpperCase() + category.slice(1),
+        value: category
+    }));
 
     const incomePrices = useMemo(
         () => incomes.map(income => income.amount),

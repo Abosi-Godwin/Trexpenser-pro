@@ -16,8 +16,8 @@ import { useAddBudget } from "../../Hooks/useAddBudget";
 
 function BudgetForm({ onClose }) {
     const { expenseCategories: budgetCategories } = useTransactions();
+
     const { user } = useUser();
-//console.log(budgetCategories);
     const userId = user.id;
 
     const { budgets } = useBudgets(userId);
@@ -66,7 +66,9 @@ function BudgetForm({ onClose }) {
             user_id: userId,
             notes: description || "No description added."
         };
-        addBudget(budgetData);
+        addBudget(budgetData, {
+            onSuccess: onClose()
+        });
     }
 
     function handleFormSave(infos) {
@@ -100,23 +102,21 @@ function BudgetForm({ onClose }) {
     useEffect(() => {
         const today = new Date().toISOString().split("T")[0];
         setCurrentDate(today);
-    }, [setCurrentDate]);
-
+    }, []);
+    /*
     useEffect(() => {
         if (isAddingBudgetSucces) {
-            onClose();
+            
         }
     }, [isAddingBudgetSucces]);
-
+*/
     return (
         <Modal>
             <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background">
-                
-                    <h1 className="text-2xl font-bold">Create new budget.</h1>
-                    <p className="text-sm font-extralight">
-                        Define your spending limit for different categories.
-                    </p>
-                
+                <h1 className="text-2xl font-bold">Create new budget.</h1>
+                <p className="text-sm font-extralight">
+                    Define your spending limit for different categories.
+                </p>
 
                 <div className="flex items-center justify-center">
                     <div className="h-0.5 w-full bg-light-dividers rounded-md"></div>

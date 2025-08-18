@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
-import { isFuture } from "date-fns";
 
+import { isFuture, isToday, isPast } from "date-fns";
 import MenuCard from "../../ui/MenuCard";
 
 import { useTransactions } from "../../Hooks/useTransactions";
@@ -24,28 +24,43 @@ const useBudgetContext = () => {
 
 function Budget({ budget, children }) {
     const { expenses } = useTransactions();
-
-    const startDate = budget.start_date;
-    const endDate = budget.end_date;
-    const notes = budget.notes;
-    const spendingLimit = budget.amount;
-    const trackingCategory = budget.category;
+    
+    const { category, amount, notes, end_date, start_date } = budget;
 
     const totalSpent = roundDownPrice(
         expenses
             .filter(
                 expense =>
-                    expense.category === trackingCategory &&
-                    expense.date >= startDate &&
-                    expense.date <= endDate
+                    expense.category === category &&
+                    expense.date >= start_date &&
+                    expense.date <= end_date
             )
             .map(expense => expense.amount)
     );
 
-    const spentPercent = Math.trunc((totalSpent / spendingLimit) * 100);
+    const spentPercent = Math.trunc((totalSpent / amount) * 100);
 
-    const remaining = budget.amount - totalSpent;
-    const isActive = isFuture(endDate) && totalSpent < spendingLimit;
+    const remaining = amount - totalSpent;
+
+    let isActive;
+
+    const notStarted = isFuture(new Date(start_date));
+    const haveStarted = isToday(new Date(start_date)) || isPast(start_date);
+    const havePassed = isPast(new Date(end_date));
+    const haveCompleted = totalSpent >= amount;
+
+    if (notStarted) {
+        isActive = "pending";
+    }
+    if (haveStarted) {
+        isActive = "active";
+    }
+    if (havePassed) {
+        isActive = "expired";
+    }
+    if (haveCompleted) {
+        isActive = "fullfiled";
+    }
 
     return (
         <BudgetContext.Provider
@@ -53,13 +68,13 @@ function Budget({ budget, children }) {
                 budget,
                 notes,
                 remaining,
-                startDate,
-                endDate,
+                start_date,
+                end_date,
                 spentPercent,
                 totalSpent,
                 isActive,
-                spendingLimit,
-                trackingCategory
+                amount,
+                category
             }}
         >
             <div className="p-2">{children}</div>
@@ -68,21 +83,15 @@ function Budget({ budget, children }) {
 }
 
 const Infos = () => {
-    const {
-        trackingCategory,
-        notes,
-        totalSpent,
-        spentPercent,
-        spendingLimit,
-        remaining
-    } = useBudgetContext();
+    const { category, notes, totalSpent, spentPercent, amount, remaining } =
+        useBudgetContext();
 
     return (
         <div>
-            <h1 className="text-xl font-bold capitalize">{trackingCategory}</h1>
+            <h1 className="text-xl font-bold capitalize">{category}</h1>
             <p>{notes}</p>
             <div className="py-2">
-                <h1>Max: {formatCurrency(spendingLimit)}</h1>
+                <h1>Max: {formatCurrency(amount)}</h1>
                 <h1>Spent: {formatCurrency(totalSpent)}</h1>
                 <h1>
                     {spentPercent <= 100 ? "Remaining" : "Over spent"}:{" "}
@@ -110,12 +119,12 @@ const Progress = () => {
 };
 
 const Duration = () => {
-    const { startDate, endDate } = useBudgetContext();
+    const { start_date, end_date } = useBudgetContext();
 
     return (
         <div className="pb-2">
-            <p>From: {formatDate(startDate)}</p>
-            <p>To: {formatDate(endDate)}</p>
+            <p>From: {formatDate(start_date)}</p>
+            <p>To: {formatDate(end_date)}</p>
         </div>
     );
 };
@@ -134,13 +143,14 @@ const Status = () => {
 
     return (
         <h1
-            className={`p-1 rounded-md flex items-center justify-center ${
-                isActive
-                    ? "text-green-500 bg-green-50"
-                    : "text-red-500 bg-red-50"
-            }`}
+            className={`capitalize ring-1 ring-light-mainBackground
+                    bg-light-sectionBackground
+                    dark:ring-dark-mainBackground
+                    dark:bg-dark-sectionBackground p-1
+                rounded-md text-sm ${isActive === "expired" && "bg-red-300"}
+                ${isActive === "active" && "bg-green-100 text-green-800"}`}
         >
-            {isActive ? "Active" : "Expired"}
+            {isActive}
         </h1>
     );
 };

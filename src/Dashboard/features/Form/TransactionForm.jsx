@@ -10,6 +10,8 @@ import SelectInput from "./SelectInput";
 import Form from "./Form";
 
 import { useAuth } from "../../contexts/AuthContext";
+import { useGetSavings } from "../../Hooks/useGetSavings";
+import { useUpdateSavings } from "../../Hooks/useUpdateSavings";
 import { useAddTransaction } from "../../Hooks/useAddTransaction";
 import { useToday } from "../../Hooks/useDate";
 import {
@@ -19,7 +21,9 @@ import {
 } from "../../data/data";
 
 function TransactionForm({ onHandleForm }) {
-    const { user, savings, updateSavings } = useAuth();
+    const { user } = useAuth();
+    const { savings } = useGetSavings();
+    const { updateSavings } = useUpdateSavings();
 
     const {
         register,
@@ -58,16 +62,17 @@ function TransactionForm({ onHandleForm }) {
         addTransaction(newTransaction, {
             onSuccess: ([data]) => {
                 onHandleForm();
-                if (data.type !== "income") return;
+
+                if (data.type === "expense") return;
 
                 const categorySavings = savings.find(
                     saving => saving.funded_by === data.category
                 );
 
-                const { id, percentage } = categorySavings;
+                const { id, percentage, amount_saved } = categorySavings;
 
                 const amountMade = data.amount;
-                const amountToSave = (percentage / 100) * amountMade;
+                const amountToSave = ((percentage / 100) * amountMade) + amount_saved;
                 const savingsId = id;
 
                 updateSavings({ amountToSave, savingsId });
@@ -77,12 +82,7 @@ function TransactionForm({ onHandleForm }) {
 
     return (
         <Modal>
-            <div
-                className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background dark:bg-dark-background"
-            >
-                {/*className="bg-light-cardBackground rounded-md w-4/5
-                overflow-hidden dark:bg-dark-cardBackground"
-                */}
+            <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background dark:bg-dark-background">
                 <h1
                     className="text-2xl font-bold text-light-text p-2 mb-2
                 dark:text-dark-text"

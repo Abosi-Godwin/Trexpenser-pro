@@ -1,10 +1,6 @@
-import RangeSlider from "./RangeSlider";
-import SelectInput from "./SelectInput";
-import { incomeCategories } from "../../data/data";
+
 
 function RadioButton({ register, error, watch, disable }) {
-    const savingMethod = watch("savingsType");
-
     return (
         <>
             <h3 className="font-bold"> Savings type?</h3>
@@ -15,7 +11,6 @@ function RadioButton({ register, error, watch, disable }) {
                         id="Manual"
                         name="savingsType"
                         value="Manual"
-                        className="hiddben pe6er"
                         {...register("savingsType")}
                     />
                     <label
@@ -57,23 +52,6 @@ function RadioButton({ register, error, watch, disable }) {
                     </label>
                 </div>
             </div>
-            {savingMethod === "Automatic" && (
-                <div className="">
-                    <RangeSlider
-                        register={register}
-                        watch={watch}
-                        show={savingMethod === "Automatic"}
-                    />
-                    <SelectInput
-                        options={incomeCategories}
-                        labelFor="funded_by"
-                        disable={disable}
-                        label="Source"
-                        register={register}
-                        error={error}
-                    />
-                </div>
-            )}
         </>
     );
 }

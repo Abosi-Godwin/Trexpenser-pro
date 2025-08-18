@@ -1,14 +1,9 @@
-import { motion } from "framer-motion";
 import { dropdownVariants } from "../../Utils/AnimationVariants";
 
 const RangeSlider = ({ show, register, watch }) => {
     const percent = watch("percentage") || 0;
     return (
-        <motion.div
-            variants={dropdownVariants}
-            initial="hidden"
-            animate={show ? "visible" : "hidden"}
-            exit="hidden"
+        <div
             className="w-full
   bg-light-sectionBackground p-2 rounded-md"
         >
@@ -19,13 +14,14 @@ const RangeSlider = ({ show, register, watch }) => {
                     type="range"
                     min="1"
                     max="50"
+                    disabled={show}
                     className="cursor-pointer"
                     {...register("percentage")}
                 />
             </div>
             <p className="text-sm italic">{`${percent}% of your income will be
              saved automatically`}</p>
-        </motion.div>
+        </div>
     );
 };
 export default RangeSlider;

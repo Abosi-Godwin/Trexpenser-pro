@@ -1,21 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
 import { motion } from "framer-motion";
 import { Toaster } from "react-hot-toast";
 
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 
-
 import { useLogIn } from "../../Hooks/useLogIn";
 import { slideUpVariant } from "../../Utils/AnimationVariants";
 
-
 const LoginPage = () => {
-    const { logIn, logInIsPending } =
-        useLogIn();
+    const { logIn, logInIsPending } = useLogIn();
 
     const {
         register,

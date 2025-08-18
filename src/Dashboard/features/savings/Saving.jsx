@@ -1,14 +1,16 @@
 import { createContext, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-
+import { isFuture, isToday, isPast } from "date-fns";
 import toast from "react-hot-toast";
-import ApexRadialChart from "../Charts/ApexRadialChart";
 
+
+import ApexRadialChart from "../Charts/ApexRadialChart";
 import MenuCard from "../../ui/MenuCard";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
- 
+
 import { useAuth } from "../../contexts/AuthContext";
+import { useUpdateSavings } from "../../Hooks/useUpdateSavings";
 import { formatCurrency, formatDate } from "../../Utils/CustomMethods";
 
 const SavingsContext = createContext();
@@ -22,28 +24,76 @@ const useSavingsContext = () => {
     return context;
 };
 const Saving = ({ savingsData, children }) => {
+    const {
+        title,
+        is_active,
+        start_date,
+        end_date,
+        target_amount,
+        amount_saved,
+        method,
+        percentage,
+        funded_by,
+        id
+    } = savingsData;
+
+    let isActive;
+
+    const notStarted = isFuture(new Date(start_date));
+    const haveStarted = isToday(new Date(start_date)) || isPast(start_date);
+    const havePassed = isPast(new Date(end_date));
+    const haveCompleted = amount_saved >= target_amount;
+
+    if (notStarted) {
+        isActive = "pending";
+    }
+    if (haveStarted) {
+        isActive = "active";
+    }
+    if (havePassed) {
+        isActive = "expired";
+    }
+    if (haveCompleted) {
+        isActive = "fullfiled";
+    }
+
     return (
-        <SavingsContext.Provider value={{ savingsData }}>
+        <SavingsContext.Provider
+            value={{
+                savingsData,
+                isActive,
+                title,
+                method,
+                percentage,
+                funded_by,
+                id,
+                start_date,
+                end_date,
+                amount_saved,
+                target_amount
+            }}
+        >
             <div className="py-3">{children}</div>
         </SavingsContext.Provider>
     );
 };
 
 const SavingsHeader = ({ children }) => {
-    const { savingsData } = useSavingsContext();
-    const { title, is_active } = savingsData;
+    const { title, isActive } = useSavingsContext();
+
     return (
         <div className="flex justify-between items-center gap-2 mb-1.5">
             <h1 className="text-xl font-bold whitespace-pre-wrap">{title}</h1>
             <div className="flex justify-between gap-2">
                 <span
-                    className="ring-1 ring-light-mainBackground
+                    className={`capitalize ring-1 ring-light-mainBackground
                     bg-light-sectionBackground
                     dark:ring-dark-mainBackground
                     dark:bg-dark-sectionBackground p-1
-                rounded-md text-sm"
+                rounded-md text-sm ${isActive === "expired" && "bg-red-300"}
+                ${isActive === "active" && "bg-green-100"}`}
                 >
-                    {is_active ? "Active" : "Not active"}
+                    {isActive}
                 </span>
                 {children}
             </div>
@@ -52,10 +102,7 @@ const SavingsHeader = ({ children }) => {
 };
 
 const SavingsAction = () => {
-    
-
     const { savingsData } = useSavingsContext();
-     
 
     return (
         <MenuCard data={savingsData} type="savings">
@@ -63,14 +110,18 @@ const SavingsAction = () => {
             <MenuCard.Options />
         </MenuCard>
     );
-    
 };
 
 const SavingsInfo = () => {
-    const { savingsData } = useSavingsContext();
+    const {
+        savingsData,
+        target_amount,
+        amount_saved,
+        start_date,
+        end_date,
+        method
+    } = useSavingsContext();
 
-    const { target_amount, amount_saved, start_date, end_date, method } =
-        savingsData;
     const saved = Math.floor((amount_saved / target_amount) * 100);
     return (
         <div className="grid grid-cols-[2fr_1fr] pt-2">
@@ -104,7 +155,7 @@ const SavingsInfo = () => {
 };
 
 const SavingsForm = () => {
-    const { updateSavings, isUpdatingSavings } = useAuth();
+    const { updateSavings, isUpdatingSavings } = useUpdateSavings();
 
     const {
         register,
@@ -113,9 +164,15 @@ const SavingsForm = () => {
         formState: { errors }
     } = useForm();
 
-    const { savingsData } = useSavingsContext();
-
-    const { method, percentage, funded_by, id, amount_saved } = savingsData;
+    const {
+        savingsData,
+        method,
+        percentage,
+        funded_by,
+        id,
+        amount_saved,
+        isActive
+    } = useSavingsContext();
 
     const handleSavings = savingsAmount => {
         const { amount } = savingsAmount;
@@ -143,7 +200,7 @@ const SavingsForm = () => {
                         inputType="number"
                         placeholder="Add to your savings..."
                         label="amount"
-                        disable={isUpdatingSavings}
+                        disable={isUpdatingSavings || isActive !== "active"}
                         register={register}
                         error={errors}
                         noLabel={true}

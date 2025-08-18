@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import RangeSlider from "../Form/RangeSlider";
+import SelectInput from "../Form/SelectInput";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import RadioButton from "../Form/RadioButton";
 import DateInput from "../Form/DateInput";
 import Modal from "../../ui/Modal";
 
+import { incomeCategories } from "../../data/data";
 import { useAuth } from "../../contexts/AuthContext";
 import { useAddSavings } from "../../Hooks/useAddSavings";
 import { useToday } from "../../Hooks/useDate";
@@ -16,21 +18,20 @@ const AddSavingsForm = ({ onCloseForm }) => {
         watch,
         handleSubmit,
         formState: { errors }
-    } = useForm();
+    } = useForm({
+        defaultValues: {
+            savingsType: "Manual"
+        }
+    });
 
     const { user } = useAuth();
     const { today } = useToday();
-    const { addSavings, isAddingSavings, isSuccessful } = useAddSavings();
+    const { addSavings, isAddingSavings } = useAddSavings();
 
     const userId = user?.id;
 
-    const [savingsType, setSavingsType] = useState("manual");
-
     const startDate = watch("Start date");
-
-    function handleInputChange(value) {
-        setSavingsType(value);
-    }
+    const savingMethod = watch("savingsType");
 
     function handleFormSubmit(datas) {
         const newSavings = {
@@ -45,17 +46,15 @@ const AddSavingsForm = ({ onCloseForm }) => {
             is_active: true
         };
 
-        addSavings(newSavings,{
-          onSucess:    onCloseForm()
+        addSavings(newSavings, {
+            onSuccess: () => onCloseForm()
+            
         });
     }
-    
+
     return (
         <Modal>
-            <div
-                className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background"
-            >
-                
+            <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background">
                 <h3 className="text-2xl font-bold text-color-8 mb-2">
                     Add a new savings goal
                 </h3>
@@ -65,42 +64,49 @@ const AddSavingsForm = ({ onCloseForm }) => {
                     onSubmit={handleSubmit(handleFormSubmit)}
                 >
                     <RadioButton
-                        onHandleInputChange={handleInputChange}
                         disable={isAddingSavings}
-                        defaultOption={savingsType}
                         register={register}
                         error={errors}
                         watch={watch}
                     />
-
+                    <Input
+                        label="Goal name"
+                        inputType="string"
+                        placeholder="Name your savings goal..."
+                        disable={isAddingSavings}
+                        register={register}
+                        error={errors}
+                    />
+                    <RangeSlider
+                        register={register}
+                        watch={watch}
+                        show={savingMethod === "Manual"}
+                    />
                     <div
                         className="text-color-8 grid w-full gap-3
-                        md:grid-cols-2"
+                        grid-cols-2"
                     >
-                        <Input
-                            label="Goal name"
-                            inputType="string"
-                            placeholder="Name your savings goal..."
-                            disable={isAddingSavings}
+                        <SelectInput
+                            options={incomeCategories}
+                            labelFor="funded_by"
+                            disable={
+                                isAddingSavings || savingMethod === "Manual"
+                            }
+                            label="Source"
                             register={register}
                             error={errors}
                         />
+                        <div className="overflow-hidden">
+                            <Input
+                                label="Target amount"
+                                inputType="number"
+                                placeholder="Target amount..."
+                                disable={isAddingSavings}
+                                register={register}
+                                error={errors}
+                            />
+                        </div>
 
-                        <Input
-                            label="Target amount"
-                            inputType="number"
-                            placeholder="Enter the target amount..."
-                            disable={isAddingSavings}
-                            register={register}
-                            error={errors}
-                            onHandleInputChange={handleInputChange}
-                        />
-                    </div>
-
-                    <div
-                        className="grid grid-cols-2 w-full gap-3
-                        md:grid-cols-2"
-                    >
                         <DateInput
                             label="Start date"
                             maxDate=""
@@ -108,7 +114,6 @@ const AddSavingsForm = ({ onCloseForm }) => {
                             register={register}
                             disable={isAddingSavings}
                             className="w-full outline-none rounded-md p-2"
-                            onHandleInputChange={handleInputChange}
                         />
 
                         <DateInput
@@ -118,14 +123,8 @@ const AddSavingsForm = ({ onCloseForm }) => {
                             disable={isAddingSavings}
                             register={register}
                             className="w-full outline-none rounded-md p-2"
-                            onHandleInputChange={handleInputChange}
                         />
-                    </div>
 
-                    <div
-                        className="grid w-full gap-3 grid-cols-2
-                        md:grid-cols-2"
-                    >
                         <Button
                             className="bg-light-sectionBackground rounded "
                             text="Cancel"

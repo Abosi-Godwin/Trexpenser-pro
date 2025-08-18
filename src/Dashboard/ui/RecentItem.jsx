@@ -1,8 +1,7 @@
 import { format } from "date-fns";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa6";
 import { formatCurrency } from "../Utils/CustomMethods";
-
-import { RecentItemMenuCard } from "./RecentItemMenu";
+ 
 
 const RecentItem = ({ transaction }) => {
     const isIncome = transaction.type === "income";

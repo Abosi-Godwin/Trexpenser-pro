@@ -1,7 +1,6 @@
 import { supabase } from "../../Services/Supabase";
 export const updateSavingsApi = async info => {
     const { savingsId, amountToSave } = info;
-
     const { data, error } = await supabase
         .from("savings")
         .update({ amount_saved: amountToSave })
