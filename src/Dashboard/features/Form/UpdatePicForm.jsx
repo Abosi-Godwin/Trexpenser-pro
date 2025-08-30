@@ -10,7 +10,6 @@ import Button from "./Button";
 import AvatarImg from "../../ui/AvatarImg";
 
 const UpdatePicForm = ({ onClose }) => {
-  
     const { user } = useUser();
     const { updatePic, updatedPic } = useUpdatePic();
     const { register, reset, handleSubmit } = useForm({ mode: "all" });
@@ -20,7 +19,7 @@ const UpdatePicForm = ({ onClose }) => {
     const canUpdate = isAfter(nextUpdate, updatedAt);
 
     const handleImageUpload = data => {
-        const { profileImg } = data;
+        /*const { profileImg } = data;
         const newImage = profileImg?.[0];
         if (!newImage) return;
 
@@ -28,9 +27,9 @@ const UpdatePicForm = ({ onClose }) => {
         const imageName = `${Math.random()}-${newImage.name}`;
 
         console.log(imagePath);
-         updatePic({ imagePath, imageName, newImage });
-        
-          reset();
+        updatePic({ imagePath, imageName, newImage });
+
+        reset();*/
     };
 
     return (
