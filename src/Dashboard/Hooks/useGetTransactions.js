@@ -5,8 +5,8 @@ export const useGetTransactions = () => {
     const { userId } = useUser();
     const {
         data: transactions,
-        error: transactionsError,
-        isError: istransactionsError,
+        /*   error: transactionsError,
+        isError: istransactionsError,*/
         isPending: istransactionsLoading
     } = useQuery({
         queryKey: ["transactions"],
@@ -15,5 +15,5 @@ export const useGetTransactions = () => {
         enabled: !!userId
     });
 
-    return { transactions };
+    return { transactions,istransactionsLoading };
 };

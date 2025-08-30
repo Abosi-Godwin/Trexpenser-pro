@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { getSavingsApi } from "../Apis/Transactions/getSavings";
 import { useUser } from "./useUser";
+
+import { roundDownPrice } from "../Utils/CustomMethods";
+
 export const useGetSavings = () => {
     const { userId } = useUser();
     const {
@@ -14,5 +17,9 @@ export const useGetSavings = () => {
         enabled: !!userId
     });
 
-    return { savings, savingsError, isSavingsLoading };
+    const totalSaved = roundDownPrice(
+        savings?.map(saving => saving.amount_saved)
+    );
+
+    return { savings, totalSaved, savingsError, isSavingsLoading };
 };

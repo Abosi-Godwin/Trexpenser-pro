@@ -14,7 +14,11 @@ import {
     FaChartBar,
     FaUserShield,
     FaChartSimple,
-    FaAccessibleIcon
+    FaAccessibleIcon,
+    FaSearchengin,
+    FaLightbulb,
+    FaArrowTrendUp,
+    FaRocket
 } from "react-icons/fa6";
 
 export const savingsGoals = [];
@@ -81,3 +85,31 @@ export const transactionFilterOptions = [
     { label: "Income", value: "income" },
     { label: "Expense", value: "expense" }
 ];
+
+export const previewCards = [
+    {
+        icon: FaChartBar ,
+        title: "Summary",
+        text: "See a breakdown of your total income, expenses, and net cash flow for this month."
+    },
+    {
+        icon: FaSearchengin ,
+        title: "Review",
+        text: "Understand your financial strengths and risks, like overspending categories or savings progress."
+    },
+    {
+        icon: FaLightbulb ,
+        title: "Suggestions",
+        text: "Get actionable tips on budgeting, saving, and reaching your financial goals faster."
+    },
+    {
+        icon: FaArrowTrendUp ,
+        title: "Advice",
+        text: "Receive practical guidance for both short-term wins and long-term financial growth."
+    }
+];
+export const encouragement = {
+    icon: FaRocket  ,
+    title: "Encouragement",
+    text: "Stay motivated on your financial journey with positive reminders and small wins along the way."
+};

@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { formatCurrency } from "../../Utils/CustomMethods";
-import expenesArray from "../../data/DoughnutDatas.js";
+
+import {getDoughnutDatas} from "../../Utils/getDoughnutDatas";
 import { useTheme } from "../../contexts/ThemeContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -13,11 +14,11 @@ function DoughnutChart({ allDatas: transactions, label }) {
     const textThemeColor = lightTheme ? "#272145" : "#ffffff";
 
     const titles = useMemo(
-        () => expenesArray(transactions, label).titles,
+        () => getDoughnutDatas(transactions, label).titles,
         [transactions, label]
     );
     const amounts = useMemo(
-        () => expenesArray(transactions, label).amounts,
+        () => getDoughnutDatas(transactions, label).amounts,
         [transactions, label]
     );
 

@@ -7,9 +7,11 @@ import {
 } from "../Utils/CustomMethods";
 
 import { useGetTransactions } from "./useGetTransactions";
+import { useGetSavings } from "./useGetSavings";
 
 export const useTransactions = () => {
-    const { transactions } = useGetTransactions();
+    const { transactions,istransactionsLoading } = useGetTransactions();
+    const { totalSaved } = useGetSavings();
 
     const [currentUserTransactions, setCurrentUserTransactions] = useState([]);
 
@@ -18,13 +20,13 @@ export const useTransactions = () => {
     const isEmpty = currentUserTransactions?.length <= 0;
 
     const incomes = currentUserTransactions.filter(
-        transaction => transaction.type === "income"
+        transaction => transaction.type.toLowerCase() === "income"
     );
 
     const expenses = currentUserTransactions?.filter(
-        transaction => transaction.type === "expense"
+        transaction => transaction.type.toLowerCase() === "expense"
     );
- 
+
     const expenseCategories = [
         ...new Set(expenses.map(expense => expense.category.toLowerCase()))
     ].map(category => ({
@@ -42,8 +44,11 @@ export const useTransactions = () => {
     );
 
     const totalBalance = useMemo(
-        () => formatCurrency(roundTotalPrice(currentUserTransactions)),
-        [currentUserTransactions]
+        () =>
+            formatCurrency(
+               ( roundTotalPrice(currentUserTransactions)) - totalSaved
+            ),
+        [currentUserTransactions, totalSaved]
     );
 
     const totalIncome = useMemo(
@@ -64,7 +69,7 @@ export const useTransactions = () => {
 
     return {
         currentUserTransactions,
-        hasFetchedTransactions,
+        hasFetchedTransactions,istransactionsLoading,
         isEmpty,
         incomes,
         expenses,

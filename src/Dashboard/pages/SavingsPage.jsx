@@ -4,11 +4,14 @@ import SavingGoals from "../features/savings/SavingGoals";
 import AddSavingsForm from "../features/savings/AddSavings";
 import Button from "../features/Form/Button";
 
+import { useGetSavings } from "../Hooks/useGetSavings";
+import { formatCurrency } from "../Utils/CustomMethods";
+
 const SavingsPage = () => {
     const [openForm, setOpenForm] = useState(false);
 
     const handleForm = () => setOpenForm(prev => !prev);
-    
+    const { totalSaved } = useGetSavings();
     return (
         <>
             <div
@@ -17,8 +20,11 @@ const SavingsPage = () => {
             dark:bg-dark-cardBackground dark:border-b-dark-divider"
             >
                 <div className="flex justify-between items-center">
-                    <h1 className="uppercase text-2xl font-extrabold text-color-5">
-                        Your saving {<br />} Goals
+                    <h1
+                        className="uppercase text-2xl font-extrabold
+                    text-color-5"
+                    >
+                        {formatCurrency(totalSaved)}
                     </h1>
                     <Button
                         text="Add savings"
@@ -28,7 +34,7 @@ const SavingsPage = () => {
                     />
                 </div>
                 <p className="text-color-7 font-bold mb-2 text-sm">
-                    Achieve your financial dreams with tailored savings goals.
+                    In your savings balance.
                 </p>
             </div>
             {openForm && <AddSavingsForm onCloseForm={handleForm} />}

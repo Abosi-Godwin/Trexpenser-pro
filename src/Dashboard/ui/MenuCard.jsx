@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from "react";
- 
+
 import Button from "../features/Form/Button";
 import MenuIcon from "./MenuIcon";
 import DeleteDataForm from "../features/Form/DeleteTransactionForm";
+import EditTransaction from "../features/Form/EditTransaction";
 
 const MenuContext = createContext({});
 
@@ -34,9 +35,14 @@ const MenuCard = ({ children, data, type }) => {
 const MenuLists = () => {
     const { openMenu, data, type } = useMenuContext();
     const [openDeleteForm, setOpenDeleteForm] = useState(false);
+    const [openEditForm, setOpenEditForm] = useState(false);
 
-    const handleOpenForm = () => {
+    const handleDelForm = () => {
         setOpenDeleteForm(prev => !prev);
+    };
+
+    const handleEditForm = () => {
+        setOpenEditForm(prev => !prev);
     };
     return (
         <div
@@ -47,19 +53,27 @@ const MenuLists = () => {
                 <DeleteDataForm
                     data={data}
                     type={type}
-                    onCloseForm={handleOpenForm}
+                    onCloseForm={handleDelForm}
+                />
+            )}
+            {openEditForm && (
+                <EditTransaction
+                    data={data}
+                    type={type}
+                    onCloseForm={handleEditForm}
                 />
             )}
             <Button
                 className="bg-light-iconColor text-white  p-1 rounded-md
                 text-center font-bold mb-1"
                 text="Edit"
+                onButtonClick={handleEditForm}
             />
             <Button
                 className="bg-red-700 text-white  p-1 rounded-md text-center
                 font-bold ml-3"
                 text="Delete"
-                onButtonClick={handleOpenForm}
+                onButtonClick={handleDelForm}
             />
         </div>
     );

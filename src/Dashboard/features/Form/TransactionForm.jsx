@@ -25,16 +25,16 @@ function TransactionForm({ onHandleForm }) {
     const { savings } = useGetSavings();
     const { updateSavings } = useUpdateSavings();
 
+    const { today } = useToday();
+
+    const { addTransaction, isAddingTransaction } = useAddTransaction();
+
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors }
     } = useForm();
-
-    const { today } = useToday();
-
-    const { addTransaction, isAddingTransaction } = useAddTransaction();
 
     const type = watch("type");
 
@@ -69,10 +69,13 @@ function TransactionForm({ onHandleForm }) {
                     saving => saving.funded_by === data.category
                 );
 
+                if (!categorySavings) return;
+
                 const { id, percentage, amount_saved } = categorySavings;
 
                 const amountMade = data.amount;
-                const amountToSave = ((percentage / 100) * amountMade) + amount_saved;
+                const amountToSave =
+                    (percentage / 100) * amountMade + amount_saved;
                 const savingsId = id;
 
                 updateSavings({ amountToSave, savingsId });
@@ -116,6 +119,7 @@ function TransactionForm({ onHandleForm }) {
                             error={errors}
                         />
                     </div>
+
                     <div className="flex flex-col gap-3">
                         <Input
                             label="description"
@@ -147,6 +151,7 @@ function TransactionForm({ onHandleForm }) {
                    bg-light-sectionBackground  dark:bg-dark-sectionBackground dark:text-dark-text p-2 w-full"
                         disable={isAddingTransaction}
                     />
+
                     <div className="flex justify-between items-center gap-2">
                         <Button
                             text="Cancel"

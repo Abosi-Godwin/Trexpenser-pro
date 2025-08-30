@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { format, addDays, isAfter } from "date-fns";
 
-import { supabaseUrl } from "../../Services/Supabase";
+//import { supabaseUrl } from "../../Services/Supabase";
 import { useUser } from "../../Hooks/useUser";
 import { useUpdatePic } from "../../Hooks/useUpdateProfilePic";
 
@@ -10,6 +10,7 @@ import Button from "./Button";
 import AvatarImg from "../../ui/AvatarImg";
 
 const UpdatePicForm = ({ onClose }) => {
+  
     const { user } = useUser();
     const { updatePic, updatedPic } = useUpdatePic();
     const { register, reset, handleSubmit } = useForm({ mode: "all" });
@@ -21,15 +22,15 @@ const UpdatePicForm = ({ onClose }) => {
     const handleImageUpload = data => {
         const { profileImg } = data;
         const newImage = profileImg?.[0];
-
         if (!newImage) return;
 
-        const imagePath = `${supabaseUrl}`;
+        //const imagePath = `${supabaseUrl}`;
         const imageName = `${Math.random()}-${newImage.name}`;
 
-        updatePic({ imagePath, imageName, newImage });
-        console.log(updatedPic)
-        reset();
+        console.log(newImage, imagePath);
+        /* updatePic({ imagePath, imageName, newImage });
+        console.log(updatedPic);*/
+        //  reset();
     };
 
     return (

@@ -8,14 +8,12 @@ const Budgets = ({ showAction }) => {
             {budgets?.map(budget => {
                 return (
                     <Budget budget={budget} key={budget.id}>
+                  
                         <div className="flex justify-between items-cent6er">
                             <Budget.Infos />
                             <div className="flex gap-3 h-fit">
                                 <Budget.Status />
-                              {showAction&&
-                              <Budget.Action />
-                              } 
-                                
+                                {showAction && <Budget.Action />}
                             </div>
                         </div>
 

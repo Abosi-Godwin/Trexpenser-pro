@@ -50,7 +50,7 @@ const Icon = () => {
 
 const Description = () => {
     const { transaction } = useTransaction();
-
+   
     return (
         <div className="grid grid-cols-transactions items-center gap-3 justify-between w-[90%] px-2">
             <div>
@@ -69,7 +69,7 @@ const Description = () => {
 const Action = () => {
     const { transaction } = useTransaction();
     return (
-        <MenuCard data={transaction}type="transaction">
+        <MenuCard data={transaction} type="transaction">
             <MenuCard.Icon />
             <MenuCard.Options />
         </MenuCard>

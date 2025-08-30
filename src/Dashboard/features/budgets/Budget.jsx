@@ -24,7 +24,7 @@ const useBudgetContext = () => {
 
 function Budget({ budget, children }) {
     const { expenses } = useTransactions();
-    
+
     const { category, amount, notes, end_date, start_date } = budget;
 
     const totalSpent = roundDownPrice(
@@ -88,13 +88,16 @@ const Infos = () => {
 
     return (
         <div>
-            <h1 className="text-xl font-bold capitalize">{category}</h1>
+            <div className="pb-5">
+                <h1 className="text-xl font-bold capitalize">{category}</h1>
+                <h1 className="font-bold"> {formatCurrency(amount)}</h1>
+            </div>
+
             <p>{notes}</p>
             <div className="py-2">
-                <h1>Max: {formatCurrency(amount)}</h1>
                 <h1>Spent: {formatCurrency(totalSpent)}</h1>
                 <h1>
-                    {spentPercent <= 100 ? "Remaining" : "Over spent"}:{" "}
+                    {spentPercent < 100 ? "Remaining" : "Over spent"}:{" "}
                     {formatCurrency(remaining)}
                 </h1>
             </div>
@@ -103,12 +106,12 @@ const Infos = () => {
 };
 
 const Progress = () => {
-    const { totalSpent, spentPercent, spendingLimit } = useBudgetContext();
+    const { totalSpent, spentPercent, amount } = useBudgetContext();
 
     return (
         <ProgressBar
             completed={totalSpent}
-            maxCompleted={spendingLimit}
+            maxCompleted={amount}
             bgColor="#9190e9"
             baseBgColor="#f0f2fd"
             customLabel={`${Math.min(100, Math.trunc(spentPercent))}%`}

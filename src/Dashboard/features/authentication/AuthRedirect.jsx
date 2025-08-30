@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../Hooks/useUser";
+import { useAuth } from "../../contexts/AuthContext";
 
 const AuthRedirect = ({ children }) => {
     const navigate = useNavigate();
-    const { user } = useUser();
+    const { user } = useAuth();
 
     const isAuthenticated = user?.role === "authenticated";
-    
+
     useEffect(() => {
         if (isAuthenticated) {
             navigate("/dashboard");

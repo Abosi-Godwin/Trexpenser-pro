@@ -1,24 +1,25 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useLogIn } from "./useLogIn";
 import { useLogOut } from "./useLogOut";
-import { useBudgetsData } from "./useBudgetsData";
+import { useBudgets } from "./useBudgets";
+import { useTransactions } from "./useTransactions";
 import { useGetSavings } from "./useGetSavings";
-import { useGetTransactions } from "./useGetTransactions";
+
 export const useLoader = () => {
     const { isUserLoading } = useAuth();
     const { loginIsPending } = useLogIn();
     const { isLoggingOut } = useLogOut();
-    //  const { isBudgetsLoading } = useBudgetsData();
+    const { isBudgetsLoading } = useBudgets();
     const { isSavingsLoading } = useGetSavings();
-    const { istransactionsLoading } = useGetTransactions();
-  
+    const { istransactionsLoading } = useTransactions();
+
     const somethingIsLoading =
         isUserLoading ||
-        istransactionsLoading ||
         isSavingsLoading ||
-        //  isBudgetsLoading ||
+        istransactionsLoading ||
+        isBudgetsLoading ||
         loginIsPending ||
         isLoggingOut;
 
-    return { somethingIsLoading };
+    return { somethingIsLoading,isUserLoading };
 };

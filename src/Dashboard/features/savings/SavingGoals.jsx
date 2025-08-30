@@ -1,8 +1,8 @@
 import { useGetSavings } from "../../Hooks/useGetSavings";
 import Saving from "./Saving";
-
+import { formatCurrency, formatDate } from "../../Utils/CustomMethods";
 function SavingGoals({ showTitle, showAction }) {
-    const { savings } = useGetSavings();
+    const { savings, totalSaved } = useGetSavings();
 
     return (
         <div
@@ -12,7 +12,13 @@ function SavingGoals({ showTitle, showAction }) {
             {showTitle && (
                 <>
                     <h1 className="text-2xl font-bold">Savings goals</h1>
-                    <p>Your active savings goals.</p>
+
+                    <div className="py-3">
+                        <h1 className="text-2xl font-bold">
+                            {formatCurrency(totalSaved)}
+                        </h1>
+                        <p>Saved from your goals .</p>
+                    </div>
                 </>
             )}
             <div
