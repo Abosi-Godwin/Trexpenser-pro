@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-
+import { Link } from "react-router-dom";
 import Budget from "./Budget";
 import Budgets from "./Budgets";
-
+import EmptyDashboard from "../../ui/EmptyDashboard";
 import { useBudgets } from "../../Hooks/useBudgets";
 import { formatCurrency } from "../../Utils/formatCurrency";
 
@@ -42,13 +42,13 @@ const BudgetTrackingChart = () => {
             {budgets.length >= 1 ? (
                 <Budgets showAction={false} />
             ) : (
-                <div className="p-5 flex items-center justify-center">
-                    <img
-                        src="/undraw_add-notes_9xls.svg"
-                        className="w-48
-                   p-4"
-                    />
-                </div>
+                <EmptyDashboard
+                    link="Set a budget"
+                    imgSrc="/undraw_wallet_diag.svg"
+                    destination="budgets"
+                    description=" No budget set. Create one to track your
+                    spending flow."
+                />
             )}
         </div>
     );

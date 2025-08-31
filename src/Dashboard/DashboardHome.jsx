@@ -40,128 +40,118 @@ const DashboardHome = () => {
     }, [userName, somethingIsLoading]);
 
     return (
-        <>
-            {!somethingIsLoading && hasFetchedTransactions && isEmpty ? (
-                <EmptyDashboard />
-            ) : (
-                <section
-                    className="grid grid-cols-1 md:grid-cols-3 gap-4
+        <section
+            className="grid grid-cols-1 md:grid-cols-3 gap-4
                     overflow-scroll"
-                >
-                    <div
-                        className="flex flex-col items-start justify-center bg-light-cardBackground rounded-md p-3 gap-4
+        >
+            <div
+                className="flex flex-col items-start justify-center bg-light-cardBackground rounded-md p-3 gap-4
             dark:bg-dark-cardBackground dark:text-dark-text overflow-auto"
-                    >
-                        <div className="flex items-center justify-between w-full">
-                            <div>
-                                <h1
-                                    className="text-3xl font-bold text-gray-700
+            >
+                <div className="flex items-center justify-between w-full">
+                    <div>
+                        <h1
+                            className="text-3xl font-bold text-gray-700
                         dark:text-dark-text"
-                                >
-                                    {totalBalance}
-                                </h1>
-                                <p className="text-sm">
-                                    Income and expenses overview
-                                </p>
-                            </div>
-                        </div>
-                        <ApexLineChart incomes={incomes} expenses={expenses} />{" "}
+                        >
+                            {totalBalance}
+                        </h1>
+                        <p className="text-sm">Income and expenses overview</p>
                     </div>
-                    {/*
-                         <HalfRadial incomes={incomes} expenses={expenses} />
-                       */}
+                </div>
+                <ApexLineChart incomes={incomes} expenses={expenses} />{" "}
+            </div>
+          
 
-                    <div
-                        className="flex flex-col items-start justify-center bg-white
+            <div
+                className="flex flex-col items-start justify-center bg-white
             rounded-md p-3 gap-4
             dark:bg-dark-cardBackground dark:text-dark-text"
-                    >
-                        <div className="flex items-center justify-between w-full">
-                            <div>
-                                <h1
-                                    className="text-3xl font-bold text-gray-700
+            >
+                <div className="flex items-center justify-between w-full">
+                    <div>
+                        <h1
+                            className="text-3xl font-bold text-gray-700
                         dark:text-dark-text"
-                                >
-                                    {totalIncome}
-                                </h1>
-                                <p className="text-sm">Incomes overview </p>
-                            </div>
-                        </div>
-                        <div>
-                            <LineChart
-                                allDatas={currentUserTransactions}
-                                incomes={incomes}
-                                expenses={expenses}
-                                label="Income"
-                            />
-                        </div>
+                        >
+                            {totalIncome}
+                        </h1>
+                        <p className="text-sm">Incomes overview </p>
                     </div>
+                </div>
+                <div>
+                    <LineChart
+                        allDatas={currentUserTransactions}
+                        incomes={incomes}
+                        expenses={expenses}
+                        label="Income"
+                    />
+                </div>
+            </div>
 
-                    <div
-                        className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4
+            <div
+                className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4
             dark:bg-dark-cardBackground dark:text-dark-text"
-                    >
-                        <div className="flex items-center justify-between w-full">
-                            <div>
-                                <h1
-                                    className="text-3xl font-bold text-gray-700
+            >
+                <div className="flex items-center justify-between w-full">
+                    <div>
+                        <h1
+                            className="text-3xl font-bold text-gray-700
                         dark:text-dark-text"
-                                >
-                                    {totalExpenses}
-                                </h1>
-                                <p className="text-sm">Expenses overview</p>
-                            </div>
-                        </div>
-                        <div>
-                            <LineChart
-                                allDatas={currentUserTransactions}
-                                incomes={incomes}
-                                expenses={expenses}
-                                label="Expenses"
-                            />
-                        </div>
+                        >
+                            {totalExpenses}
+                        </h1>
+                        <p className="text-sm">Expenses overview</p>
                     </div>
-                    <div
-                        className="flex flex-col items-start justify-center bg-white
+                </div>
+                <div>
+                    <LineChart
+                        allDatas={currentUserTransactions}
+                        incomes={incomes}
+                        expenses={expenses}
+                        label="Expenses"
+                    />
+                </div>
+            </div>
+            <div
+                className="flex flex-col items-start justify-center bg-white
             rounded-md p-3 gap-4
             dark:bg-dark-cardBackground dark:text-dark-text"
-                    >
-                        <BarChart
-                            allDatas={currentUserTransactions}
-                            showTitle={false}
-                            type="x"
-                        />
-                    </div>
+            >
+                <BarChart
+                    allDatas={currentUserTransactions}
+                    showTitle={false}
+                    type="x"
+                />
+            </div>
 
-                    <div className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4 dark:bg-dark-cardBackground dark:text-dark-text">
-                        <div>
-                            <DoughnutChart
-                                allDatas={currentUserTransactions}
-                                label="income"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4   dark:bg-dark-cardBackground dark:text-dark-text">
-                        <div>
-                            <DoughnutChart
-                                allDatas={currentUserTransactions}
-                                label="expense"
-                            />
-                        </div>
-                    </div>
-                    <div
-                        className="md:col-span-3 grid grid-cols-1 gap-4
+            <div className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4 dark:bg-dark-cardBackground dark:text-dark-text">
+                <div>
+                    <DoughnutChart
+                        allDatas={currentUserTransactions}
+                        label="income"
+                    />
+                </div>
+            </div>
+            <div className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4   dark:bg-dark-cardBackground dark:text-dark-text">
+                <div>
+                    <DoughnutChart
+                        allDatas={currentUserTransactions}
+                        label="expense"
+                    />
+                </div>
+            </div>
+            <div
+                className="md:col-span-3 grid grid-cols-1 gap-4
                         md:grid-cols-2
              rounded-md shadow-md shadow-color-2"
-                    >
-                        <RecentTransactions />
+            >
+                <RecentTransactions />
 
-                        <SavingGoals showTitle={true} />
-                        <BudgetTrackingChart />
-                    </div>
-                </section>
-            )}
-        </>
+                <SavingGoals showTitle={true} />
+                <BudgetTrackingChart />
+            </div>
+        </section>
     );
 };
 export default DashboardHome;
