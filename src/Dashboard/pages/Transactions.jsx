@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useSearchParams, useParams } from "react-router-dom";
 
-
 import Button from "../features/Form/Button";
 import SelectInput from "../features/Form/SelectInput";
 import Table from "../ui/Table";
@@ -45,8 +44,7 @@ function Transactions() {
 
     return (
         <div
-            className="bg-light-cardBackground overflow-hidden rounded-md
-         dark:bg-dark-cardBackground dark:text-dark-text"
+            className="bg-light-cardBackground overflow-hidden rounded-md dark:bg-dark-cardBackground dark:text-dark-text"
         >
             <div className="flex justify-between items-center py-5 px-2">
                 <h1 className="text-2xl font-bold">All transactions </h1>
@@ -90,8 +88,10 @@ function Transactions() {
                     );
                 })}
             </Table>
-            <TableFooter maxTransactionToShow={maxTransactionToShow}
-            totalTransaction={totalTransaction} />
+            <TableFooter
+                maxTransactionToShow={maxTransactionToShow}
+                totalTransaction={totalTransaction}
+            />
         </div>
     );
 }

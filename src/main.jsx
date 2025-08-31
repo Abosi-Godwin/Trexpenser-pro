@@ -10,12 +10,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </React.StrictMode>
 );
 
-
-/*
-Use this to replace the above after working 
-ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-       <App />
-    </React.StrictMode>
-);
-*/
+ 

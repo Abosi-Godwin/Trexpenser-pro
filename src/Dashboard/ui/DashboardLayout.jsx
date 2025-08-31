@@ -2,8 +2,8 @@ import { Outlet } from "react-router-dom";
 import SideBar from "../components/Sidebar";
 import HeaderBar from "../components/HeaderBar";
 import MainSection from "../components/MainComponent";
+import ScrollToTop from "../components/ScrollToTop";
 import { useTheme } from "../contexts/ThemeContext";
-
 import { Toaster } from "react-hot-toast";
 
 const DashboardLayout = () => {
@@ -11,16 +11,17 @@ const DashboardLayout = () => {
 
     return (
         <main
-            className={`md:grid grid-cols-1 md:grid-cols-[9rem_1fr]
-            grid-rows-[auto_1fr] h-screen w-screen bg-light-mainBackground
-            dark:bg-dark-mainBackground  ${!lightTheme && "dark"}`}
+            className={`md:grid md:grid-cols-[9rem_1fr] grid-rows-[auto_1fr] ${
+                !lightTheme && "dark"
+            }`}
         >
             <SideBar />
             <HeaderBar />
             <MainSection>
-                <Toaster />
                 <Outlet />
             </MainSection>
+            <ScrollToTop />
+            <Toaster position="top-right" />
         </main>
     );
 };

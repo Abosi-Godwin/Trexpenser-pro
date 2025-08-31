@@ -1,16 +1,10 @@
-import ScrollToTop from "./ScrollToTop";
-
-
 const MainSection = ({ children }) => {
     return (
         <section
-            className="col-start-2 bg-light-mainBackground
-        text-light-text dark:bg-dark-mainBackground dark:text-dark-text p-4
-        pt-20"
+            className="pt-20 md:pt-5 col-start-2 min-h-screen p-3
+         bg-light-mainBackground dark:bg-dark-mainBackground"
         >
-            <ScrollToTop />
             {children}
-            
         </section>
     );
 };

@@ -2,7 +2,7 @@
 
 const Table = ({ children }) => {
     return (
-        <div className="overflow-scroll p-3 rounded-md">
+        <div className="overflow-scroll p-3 rounded-md min-h-full">
             <div
                 className="p-2 w-[480px] rounded-md divide-y-2
             divide-light-sectionBackground dark:divide-dark-sectionBackground

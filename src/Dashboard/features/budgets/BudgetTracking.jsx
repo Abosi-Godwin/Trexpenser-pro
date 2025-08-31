@@ -28,17 +28,28 @@ const BudgetTrackingChart = () => {
                 <p className="text-xs capitalize mb-2">
                     Track your spending flow.
                 </p>
-
-                <p className="whitespace-break-spaces">
-                    Maximum of <strong>{formatCurrency(spendingLimit)}</strong>{" "}
-                    in{" "}
-                    {categories?.length > 2
-                        ? getCategories(categories)
-                        : " the " + categories.join(" and ") + " category "}
-                    dated from {minMaxDate?.[0]} to {minMaxDate?.[1]}
-                </p>
+                {budgets.length >= 1 && (
+                    <p className="whitespace-break-spaces">
+                        Maximum of{" "}
+                        <strong>{formatCurrency(spendingLimit)}</strong> in{" "}
+                        {categories?.length > 2
+                            ? getCategories(categories)
+                            : " the " + categories.join(" and ") + " category "}
+                        dated from {minMaxDate?.[0]} to {minMaxDate?.[1]}
+                    </p>
+                )}
             </div>
-            <Budgets showAction={false} />
+            {budgets.length >= 1 ? (
+                <Budgets showAction={false} />
+            ) : (
+                <div className="p-5 flex items-center justify-center">
+                    <img
+                        src="/undraw_add-notes_9xls.svg"
+                        className="w-48
+                   p-4"
+                    />
+                </div>
+            )}
         </div>
     );
 };

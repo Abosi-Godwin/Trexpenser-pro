@@ -31,6 +31,7 @@ defaults.maintainAspectRatio = false;
 defaults.responsive = true;
 
 function BarChart({ allDatas, showTitle, type }) {
+  console.log(allDatas);
     const { lightTheme } = useTheme();
 
     const bgThemeColor = lightTheme ? "#f0f2fd" : "#12141c";

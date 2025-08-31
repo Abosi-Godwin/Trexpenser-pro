@@ -20,10 +20,10 @@ import ProtectedRoutes from "./Dashboard/features/authentication/ProtectedRoutes
 import AuthRedirect from "./Dashboard/features/authentication/AuthRedirect";
 import DashboardLayout from "./Dashboard/ui/DashboardLayout";
 import Loader from "./Dashboard/ui/Loader";
+
 //Provideers
 import { AuthProvider } from "./Dashboard/contexts/AuthContext";
 import { ThemeProvider } from "./Dashboard/contexts/ThemeContext";
-
 import { loader as imgLoader } from "./Landing/Services/ImgLoader";
 import { queryClient } from "./Dashboard/Services/queryClient";
 
