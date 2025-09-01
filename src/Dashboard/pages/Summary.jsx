@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 import useAI from "../Apis/Ai/getInsights";
 
 import MiniLoader from "../ui/MiniLoader";
@@ -39,6 +40,19 @@ const Summary = () => {
     } = useTransactions();
 
     const handleClick = () => {
+        const emptySlate =
+            currentUserTransactions.length < 1 &&
+            savings.length < 1 &&
+            budgets.length < 1;
+
+        if (emptySlate) {
+            toast.error(
+                "Nothing to summarize yet. Add transactions, set goals, or create budgets to generate a summary."
+            );
+            //  setShowEmptySummary(true); // <- state to trigger empty state UI
+            return;
+        }
+
         const userData = {
             userName,
             transactions: {
@@ -67,7 +81,7 @@ const Summary = () => {
         const prompt = buildTrexpenserPrompt(userData);
         getInsight(prompt);
     };
-    
+
     const RocketIcon = encouragement.icon;
     return (
         <div className="bg-light-background dark:bg-dark-cardBackground dark:text-dark-text rounded-md p-4">

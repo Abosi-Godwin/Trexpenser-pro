@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import Table from "../../ui/Table";
 import Transaction from "./Transaction";
-
+import EmptyDashboard from "../../ui/EmptyDashboard";
 import { useTransactions } from "../../Hooks/useTransactions";
 
 const RecentTransactions = () => {
@@ -28,16 +28,28 @@ const RecentTransactions = () => {
                     View all
                 </Link>
             </div>
-            <Table>
-                {firstTen.map((transaction, index) => {
-                    return (
-                        <Transaction transaction={transaction} key={index}>
-                            <Transaction.Icon />
-                            <Transaction.Description />
-                        </Transaction>
-                    );
-                })}
-            </Table>
+
+            {firstTen.length >= 1 ? (
+                <Table>
+                    {firstTen.map((transaction, index) => {
+                        return (
+                            <Transaction transaction={transaction} key={index}>
+                                <Transaction.Icon />
+                                <Transaction.Description />
+                            </Transaction>
+                        );
+                    })}
+                </Table>
+            ) : (
+                <EmptyDashboard
+                    link="Log an entry"
+                    imgSrc="/undraw_credit-card_t6qm.svg"
+                    destination="transactions"
+                    description="No transaction log yet. add one or more to
+                    track your income and expense."
+                    showBtn={true}
+                />
+            )}
         </div>
     );
 };

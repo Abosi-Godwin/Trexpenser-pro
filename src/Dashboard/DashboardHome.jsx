@@ -59,9 +59,8 @@ const DashboardHome = () => {
                         <p className="text-sm">Income and expenses overview</p>
                     </div>
                 </div>
-                <ApexLineChart incomes={incomes} expenses={expenses} />{" "}
+                <ApexLineChart incomes={incomes} expenses={expenses} />
             </div>
-          
 
             <div
                 className="flex flex-col items-start justify-center bg-white
@@ -147,7 +146,6 @@ const DashboardHome = () => {
              rounded-md shadow-md shadow-color-2"
             >
                 <RecentTransactions />
-
                 <SavingGoals showTitle={true} />
                 <BudgetTrackingChart />
             </div>

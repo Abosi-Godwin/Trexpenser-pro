@@ -41,6 +41,7 @@ function SavingGoals({ showTitle, showAction }) {
                     imgSrc="/undraw_saving-notes_wp71.svg"
                     destination="savings"
                     description="Start saving towards your goals."
+                    showBtn={true}
                 />
             )}
         </div>

@@ -47,13 +47,7 @@ const BudgetSummary = () => {
                 </h1>
                 <h1 className="font-bold">Percentage: {spentPercent}%</h1>
             </div>
-
-            <div className="flex items-center justify-center w-full py-3">
-                <div
-                    className="h-0.5 w-full rounded-md
-                bg-light-sectionBackground"
-                ></div>
-            </div>
+ 
         </>
     );
 };

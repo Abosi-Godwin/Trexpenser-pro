@@ -48,6 +48,7 @@ const BudgetTrackingChart = () => {
                     destination="budgets"
                     description=" No budget set. Create one to track your
                     spending flow."
+                    showBtn={true}
                 />
             )}
         </div>
