@@ -16,7 +16,8 @@ export const useBudgets = () => {
         data: budgets,
         error: budgetsError,
         isError: isBudgetsError,
-        isPending: isBudgetsLoading
+        isPending: isBudgetsLoading,
+        isSuccess: isBudgetsLoaded
     } = useQuery({
         queryKey: ["budgets"],
         queryFn: () => getUserBudgetsApi(userId),
@@ -65,7 +66,7 @@ export const useBudgets = () => {
     return {
         budgets,
         budgetsError,
-        isBudgetsLoading,
+        isBudgetsLoading,isBudgetsLoaded,
         isBudgetsError,
         startDate,
         endDate,

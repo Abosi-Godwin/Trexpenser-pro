@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { useAuth } from "../contexts/AuthContext";
 import { useLogIn } from "./useLogIn";
 import { useLogOut } from "./useLogOut";
@@ -6,12 +8,13 @@ import { useTransactions } from "./useTransactions";
 import { useGetSavings } from "./useGetSavings";
 
 export const useLoader = () => {
-    const { isUserLoading } = useAuth();
     const { loginIsPending } = useLogIn();
     const { isLoggingOut } = useLogOut();
-    const { isBudgetsLoading } = useBudgets();
-    const { isSavingsLoading } = useGetSavings();
-    const { istransactionsLoading } = useTransactions();
+    
+    const { isUserLoading } = useAuth();
+    const { isBudgetsLoading, isBudgetsLoaded } = useBudgets();
+    const { isSavingsLoading, isSavingsLoaded } = useGetSavings();
+    const { istransactionsLoading, hasFetchedTransactions } = useTransactions();
 
     const somethingIsLoading =
         isUserLoading ||
@@ -21,5 +24,11 @@ export const useLoader = () => {
         loginIsPending ||
         isLoggingOut;
 
-    return { somethingIsLoading,isUserLoading };
+    const allDatasLoaded =
+        !somethingIsLoading &&
+        hasFetchedTransactions &&
+        isBudgetsLoaded &&
+        isSavingsLoaded;
+
+    return { somethingIsLoading,  allDatasLoaded };
 };

@@ -8,19 +8,21 @@ import { useLoader } from "../../Hooks/useLoader";
 
 const ProtectedRoutes = ({ children }) => {
     const navigate = useNavigate();
-    const { user } = useAuth();
-    const { somethingIsLoading, isUserLoading } = useLoader();
+    const { user,isUserLoading } = useAuth();
+
+    const { somethingIsLoading, allDatasLoaded } = useLoader();
+
     const isAuthenticated = user?.role === "authenticated";
 
     useEffect(() => {
-        if (!isAuthenticated && !isUserLoading) {
+        if (!isUserLoading && !isAuthenticated) {
             navigate("/login", {
                 replace: true
             });
         }
-    }, [isAuthenticated, isUserLoading, navigate]);
+    }, [isAuthenticated,isUserLoading, navigate]);
 
-    if (somethingIsLoading) return <Loader />;
+    if (somethingIsLoading || !allDatasLoaded) return <Loader />;
 
     return isAuthenticated && children;
 };

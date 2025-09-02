@@ -1,7 +1,9 @@
 import "chartjs-adapter-moment";
 import ChartDeferred from "chartjs-plugin-deferred";
+
+import EmptyChart from "../../ui/EmptyChart";
+
 import { formatCurrency } from "../../Utils/CustomMethods.js";
-//import { useTransactions } from "../../contexts/TransactionsContext";
 
 import { Line } from "react-chartjs-2";
 
@@ -30,9 +32,8 @@ ChartJS.defaults.backgroundColor = "#ffffff";
 ChartJS.defaults.borderColor = "#ffffff";
 ChartJS.defaults.color = "#000000";
 ChartJS.defaults.responsive = true;
-const LineChart = ({ allDatas,incomes, expenses, label, type = "single" }) => {
-    // const {  transactions } = useTransactions();
-
+const LineChart = ({ allDatas, incomes, expenses, label, type = "single" }) => {
+    const emptyState = allDatas.length >= 1;
     const data = {
         labels: [...allDatas.map(data => data.date)],
 
@@ -107,32 +108,39 @@ const LineChart = ({ allDatas,incomes, expenses, label, type = "single" }) => {
         scales: {
             x: {
                 grid: {
-                    drawBorder: false, // Shows the bottom border
-                    display: false // Hides X-axis gridlines except the border
+                    drawBorder: false,
+                    display: false
                 },
                 ticks: {
-                    display: false // Hides X-axis labels
+                    display: false
                 }
             },
             y: {
                 grid: {
-                    drawBorder: true, // Removes the outer Y-axis border
+                    drawBorder: true,
                     color: context =>
-                        context.tick.value === 0 ? "black" : "rgba(0,0,0,0)" // Displays only the left line
+                        context.tick.value === 0 ? "black" : "rgba(0,0,0,0)"
                 },
                 ticks: {
-                    display: false // Hides Y-axis labels
+                    display: false
                 }
             }
         }
     };
 
     return (
-        <div className="h-60">
-            <Line
-                data={type === "double" ? data : singleData}
-                options={options}
-            />
+        <div className="h-60 w-full">
+            {emptyState ? (
+                <Line
+                    data={type === "double" ? data : singleData}
+                    options={options}
+                />
+            ) : (
+                <EmptyChart
+                    src="/undraw_blank-canvas_a6x5.svg"
+                    desc={`Your ${label.toLowerCase()} chart will show here.`}
+                />
+            )}
         </div>
     );
 };

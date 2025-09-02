@@ -2,15 +2,16 @@ import { useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { formatCurrency } from "../../Utils/CustomMethods";
-
-import {getDoughnutDatas} from "../../Utils/getDoughnutDatas";
+import EmptyChart from "../../ui/EmptyChart";
+import { getDoughnutDatas } from "../../Utils/getDoughnutDatas";
 import { useTheme } from "../../contexts/ThemeContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function DoughnutChart({ allDatas: transactions, label }) {
+  
     const { lightTheme } = useTheme();
-
+    const emptyState = transactions.length >= 1;
     const textThemeColor = lightTheme ? "#272145" : "#ffffff";
 
     const titles = useMemo(
@@ -87,8 +88,15 @@ function DoughnutChart({ allDatas: transactions, label }) {
     };
 
     return (
-        <div className="h-80">
-            <Doughnut data={data} options={options} />
+        <div className="h-80 w-full">
+            {emptyState ? (
+                <Doughnut data={data} options={options} />
+            ) : (
+                <EmptyChart
+                    src="/undraw_pie-chart_eo9h.svg"
+                    desc={`Your ${label} chart will show here.`}
+                />
+            )}
         </div>
     );
 }

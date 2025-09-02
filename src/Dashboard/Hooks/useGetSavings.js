@@ -10,7 +10,8 @@ export const useGetSavings = () => {
         data: savings,
         error: savingsError,
         isError: isSavingsError,
-        isPending: isSavingsLoading
+        isPending: isSavingsLoading,
+        isSuccess: isSavingsLoaded
     } = useQuery({
         queryKey: ["savings"],
         queryFn: () => getSavingsApi(userId),
@@ -21,5 +22,5 @@ export const useGetSavings = () => {
         savings?.map(saving => saving.amount_saved)
     );
 
-    return { savings, totalSaved, savingsError, isSavingsLoading };
+    return { savings, totalSaved, savingsError, isSavingsLoading ,isSavingsLoaded};
 };

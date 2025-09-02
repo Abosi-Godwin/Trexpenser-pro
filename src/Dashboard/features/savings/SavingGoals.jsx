@@ -17,7 +17,7 @@ function SavingGoals({ showTitle, showAction }) {
                     <div className="py-3"></div>
                 </>
             )}
-            {savings.length >= 1 ? (
+            {savings?.length >= 1 ? (
                 <div
                     className="grid grid-cols-1 gap-4 divide-y-2
             divide-light-divider"

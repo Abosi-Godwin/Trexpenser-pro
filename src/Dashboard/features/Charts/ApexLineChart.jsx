@@ -11,8 +11,7 @@ const ApexLineChart = ({ incomes, expenses }) => {
         y: item.amount
     }));
 
-    const emptyState = incomeDatas.length >= 1 && expenseDatas.length >= 1;
-    
+    const emptyState = incomeDatas.length >= 1 || expenseDatas.length >= 1;
 
     const options = {
         chart: {
@@ -76,7 +75,10 @@ const ApexLineChart = ({ incomes, expenses }) => {
     return emptyState ? (
         <Chart options={options} series={series} type="area" height={260} />
     ) : (
-        <EmptyChart />
+        <EmptyChart
+            src="/undraw_visual-data_3ghp.svg"
+            desc="Your income and expense charts will show here."
+        />
     );
 };
 

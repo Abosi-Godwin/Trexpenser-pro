@@ -13,7 +13,8 @@ export const AuthProvider = ({ children }) => {
         data: user,
         error: userError,
         isError: isUserError,
-        isPending: isUserLoading
+        isPending: isUserLoading,
+  
     } = useQuery({
         queryKey: ["user"],
         queryFn: getCurrentUser
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
             queryClient.removeQueries();
         }
     });
-  
+
     return (
         <AuthContext.Provider
             value={{

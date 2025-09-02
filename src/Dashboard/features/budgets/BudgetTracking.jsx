@@ -28,7 +28,7 @@ const BudgetTrackingChart = () => {
                 <p className="text-xs capitalize mb-2">
                     Track your spending flow.
                 </p>
-                {budgets.length >= 1 && (
+                {budgets?.length >= 1 && (
                     <p className="whitespace-break-spaces">
                         Maximum of{" "}
                         <strong>{formatCurrency(spendingLimit)}</strong> in{" "}
@@ -39,7 +39,7 @@ const BudgetTrackingChart = () => {
                     </p>
                 )}
             </div>
-            {budgets.length >= 1 ? (
+            {budgets?.length >= 1 ? (
                 <Budgets showAction={false} />
             ) : (
                 <EmptyDashboard

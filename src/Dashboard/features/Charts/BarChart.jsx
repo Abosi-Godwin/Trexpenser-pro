@@ -1,4 +1,7 @@
 import "chartjs-adapter-moment";
+
+import EmptyChart from "../../ui/EmptyChart";
+
 import { formatCurrency } from "../../Utils/CustomMethods";
 import { useTheme } from "../../contexts/ThemeContext";
 import { savingsGoals } from "../../data/data";
@@ -31,7 +34,8 @@ defaults.maintainAspectRatio = false;
 defaults.responsive = true;
 
 function BarChart({ allDatas, showTitle, type }) {
-  console.log(allDatas);
+
+    const emptyState = allDatas.length >= 1;
     const { lightTheme } = useTheme();
 
     const bgThemeColor = lightTheme ? "#f0f2fd" : "#12141c";
@@ -198,11 +202,18 @@ function BarChart({ allDatas, showTitle, type }) {
     };
 
     return (
-        <div className="h-80">
-            <Bar
-                data={type === "x" ? data : config.data}
-                options={type === "x" ? options : config.options}
-            />
+        <div className="h-80 w-full">
+            {emptyState ? (
+                <Bar
+                    data={type === "x" ? data : config.data}
+                    options={type === "x" ? options : config.options}
+                />
+            ) : (
+                <EmptyChart
+                    src="/undraw_percentages_wi9e.svg"
+                    desc={`Your chart will show here.`}
+                />
+            )}
         </div>
     );
 }
