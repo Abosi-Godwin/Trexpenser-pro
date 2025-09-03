@@ -5,7 +5,8 @@ export const useGetTransactions = () => {
     const { userId } = useUser();
     const {
         data: transactions,
-        isPending: istransactionsLoading
+        isPending: istransactionsLoading,
+        isSuccess: transactionLoaded
     } = useQuery({
         queryKey: ["transactions"],
         queryFn: () => getUserTransactions(userId),
@@ -13,5 +14,5 @@ export const useGetTransactions = () => {
         enabled: !!userId
     });
 
-    return { transactions, istransactionsLoading };
+    return { transactions,transactionLoaded, istransactionsLoading };
 };

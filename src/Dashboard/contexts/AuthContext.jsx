@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
         error: userError,
         isError: isUserError,
         isPending: isUserLoading,
-  
     } = useQuery({
         queryKey: ["user"],
         queryFn: getCurrentUser

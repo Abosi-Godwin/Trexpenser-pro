@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-
+import { differenceInHours } from "date-fns";
+import { getCurrentDate } from "./Utils/currentDate";
+import { formatDate } from "./Utils/formatDate";
 import LineChart from "./features/Charts/LineChart";
 import BarChart from "./features/Charts/BarChart";
 import ApexLineChart from "./features/Charts/ApexLineChart";
@@ -17,7 +19,7 @@ import { useUser } from "./Hooks/useUser";
 import { useLoader } from "./Hooks/useLoader";
 
 const DashboardHome = () => {
-    const { userName } = useUser();
+    const { userName, lastSeen } = useUser();
     const { somethingIsLoading } = useLoader();
 
     const {
@@ -32,11 +34,14 @@ const DashboardHome = () => {
     } = useTransactions();
 
     useEffect(() => {
-        if (userName && !somethingIsLoading) {
+        const hoursAgo = differenceInHours(getCurrentDate(), lastSeen) >= 12;
+
+        if (userName && !somethingIsLoading && hoursAgo) {
             toast.success(`Welcome, ${userName}`);
         }
-    
-    }, [userName, somethingIsLoading]);
+        console.log(hoursAgo);
+        console.log(lastSeen);
+    }, [userName, lastSeen, somethingIsLoading]);
 
     return (
         <section

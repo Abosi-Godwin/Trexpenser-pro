@@ -10,11 +10,11 @@ import { useGetSavings } from "./useGetSavings";
 export const useLoader = () => {
     const { loginIsPending } = useLogIn();
     const { isLoggingOut } = useLogOut();
-    
+
     const { isUserLoading } = useAuth();
     const { isBudgetsLoading, isBudgetsLoaded } = useBudgets();
     const { isSavingsLoading, isSavingsLoaded } = useGetSavings();
-    const { istransactionsLoading, hasFetchedTransactions } = useTransactions();
+    const { istransactionsLoading, transactionLoaded } = useTransactions();
 
     const somethingIsLoading =
         isUserLoading ||
@@ -24,11 +24,7 @@ export const useLoader = () => {
         loginIsPending ||
         isLoggingOut;
 
-    const allDatasLoaded =
-        !somethingIsLoading &&
-        hasFetchedTransactions &&
-        isBudgetsLoaded &&
-        isSavingsLoaded;
+    const allDatasLoaded =transactionLoaded && isBudgetsLoaded && isSavingsLoaded;
 
-    return { somethingIsLoading,  allDatasLoaded };
+    return { somethingIsLoading, allDatasLoaded };
 };

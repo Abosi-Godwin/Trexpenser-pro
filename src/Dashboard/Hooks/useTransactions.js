@@ -10,12 +10,11 @@ import { useGetTransactions } from "./useGetTransactions";
 import { useGetSavings } from "./useGetSavings";
 
 export const useTransactions = () => {
-    const { transactions,istransactionsLoading } = useGetTransactions();
+    const { transactions, transactionLoaded, istransactionsLoading } =
+        useGetTransactions();
     const { totalSaved } = useGetSavings();
 
     const [currentUserTransactions, setCurrentUserTransactions] = useState([]);
-
-    const [hasFetchedTransactions, setHasFetchedTransactions] = useState(false);
 
     const isEmpty = currentUserTransactions?.length <= 0;
 
@@ -46,7 +45,7 @@ export const useTransactions = () => {
     const totalBalance = useMemo(
         () =>
             formatCurrency(
-               ( roundTotalPrice(currentUserTransactions)) - totalSaved
+                roundTotalPrice(currentUserTransactions) - totalSaved
             ),
         [currentUserTransactions, totalSaved]
     );
@@ -63,13 +62,13 @@ export const useTransactions = () => {
     useEffect(() => {
         if (transactions) {
             setCurrentUserTransactions(transactions);
-            setHasFetchedTransactions(true);
         }
     }, [transactions]);
 
     return {
         currentUserTransactions,
-        hasFetchedTransactions,istransactionsLoading,
+      transactionLoaded,
+        istransactionsLoading,
         isEmpty,
         incomes,
         expenses,
