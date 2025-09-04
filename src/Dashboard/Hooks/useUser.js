@@ -2,7 +2,6 @@ import { useAuth } from "../contexts/AuthContext";
 
 export const useUser = () => {
     const { user, userError, isUserError, isUserLoading } = useAuth();
-console.log(user);
     const userId = user?.id;
     const lastSeen = user?.last_sign_in_at;
     const newUser =
@@ -13,7 +12,7 @@ console.log(user);
     const userEmail = user?.user_metadata?.email;
     const userImage =
         user?.user_metadata?.picture || user?.user_metadata?.avatar_url;
-    console.log("new user", newUser);
+
     return {
         user,
         userId,

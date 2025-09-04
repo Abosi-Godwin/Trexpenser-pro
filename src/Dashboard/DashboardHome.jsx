@@ -39,8 +39,7 @@ const DashboardHome = () => {
         if (userName && !somethingIsLoading && hoursAgo) {
             toast.success(`Welcome, ${userName}`);
         }
-        console.log(hoursAgo);
-        console.log(lastSeen);
+       
     }, [userName, lastSeen, somethingIsLoading]);
 
     return (
