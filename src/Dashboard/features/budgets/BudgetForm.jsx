@@ -103,13 +103,7 @@ function BudgetForm({ onClose }) {
         const today = new Date().toISOString().split("T")[0];
         setCurrentDate(today);
     }, []);
-    /*
-    useEffect(() => {
-        if (isAddingBudgetSucces) {
-            
-        }
-    }, [isAddingBudgetSucces]);
-*/
+    
     return (
         <Modal>
             <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background">

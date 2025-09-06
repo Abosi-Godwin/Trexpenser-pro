@@ -2,8 +2,7 @@ const Form = ({ children, submitFun, handleSubmitFun }) => {
     return (
         <form
             onSubmit={handleSubmitFun(submitFun)}
-            className="p-3 border-t-2
-    border-light-Background flex flex-col gap-3"
+            className="flex flex-col gap-1.5"
         >
             {children}
         </form>
@@ -11,3 +10,4 @@ const Form = ({ children, submitFun, handleSubmitFun }) => {
 };
 
 export default Form;
+ 

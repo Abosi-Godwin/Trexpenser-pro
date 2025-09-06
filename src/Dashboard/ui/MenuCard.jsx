@@ -4,6 +4,8 @@ import Button from "../features/Form/Button";
 import MenuIcon from "./MenuIcon";
 import DeleteDataForm from "../features/Form/DeleteTransactionForm";
 import EditTransaction from "../features/Form/EditTransaction";
+import EditSavings from "../features/Form/EditSavings";
+import EditBudgetForm from "../features/budgets/EditBudgetForm";
 
 const MenuContext = createContext({});
 
@@ -35,14 +37,26 @@ const MenuCard = ({ children, data, type }) => {
 const MenuLists = () => {
     const { openMenu, data, type } = useMenuContext();
     const [openDeleteForm, setOpenDeleteForm] = useState(false);
-    const [openEditForm, setOpenEditForm] = useState(false);
+    const [openEditTransForm, setOpenEditTransForm] = useState(false);
+
+    const [openEditSaviForm, setOpenEditSaviForm] = useState(false);
+    const [openEditBudgetForm, setOpenEditBudgetForm] = useState(false);
 
     const handleDelForm = () => {
         setOpenDeleteForm(prev => !prev);
     };
 
     const handleEditForm = () => {
-        setOpenEditForm(prev => !prev);
+        if (type === "savings") {
+            setOpenEditSaviForm(prev => !prev);
+        }
+        if (type === "transaction") {
+            setOpenEditTransForm(prev => !prev);
+        }
+        if (type === "budget") {
+          
+            setOpenEditBudgetForm(prev => !prev);
+        }
     };
     return (
         <div
@@ -56,8 +70,22 @@ const MenuLists = () => {
                     onCloseForm={handleDelForm}
                 />
             )}
-            {openEditForm && (
+            {openEditTransForm && (
                 <EditTransaction
+                    data={data}
+                    type={type}
+                    onCloseForm={handleEditForm}
+                />
+            )}
+            {openEditSaviForm && (
+                <EditSavings
+                    data={data}
+                    type={type}
+                    onCloseForm={handleEditForm}
+                />
+            )}
+            {openEditBudgetForm && (
+                <EditBudgetForm
                     data={data}
                     type={type}
                     onCloseForm={handleEditForm}

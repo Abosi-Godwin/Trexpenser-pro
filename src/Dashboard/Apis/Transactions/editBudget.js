@@ -1,11 +1,9 @@
 import { supabase } from "../../Services/Supabase";
 
-export const editTransactionApi = async ({ entries, id }) => {
-    
-
+export const editBudgetApi = async ({ newBudget, id }) => {
     const { data, error } = await supabase
-        .from("transactions")
-        .update({ ...entries })
+        .from("budgets")
+        .update({ ...newBudget })
         .eq("id", id)
         .select();
 
@@ -13,5 +11,6 @@ export const editTransactionApi = async ({ entries, id }) => {
         console.error(error);
         throw new Error(error.message);
     }
+
     return data;
 };
