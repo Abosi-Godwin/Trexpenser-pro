@@ -1,6 +1,7 @@
 export const sortingSwitchFunc = (sortParams, currentUserTransactions) => {
+    console.log(sortParams);
     let transaction = [];
-    
+
     switch (sortParams) {
         case "date_desc":
             transaction = currentUserTransactions.sort(
@@ -29,7 +30,6 @@ export const sortingSwitchFunc = (sortParams, currentUserTransactions) => {
             break;
         case "category_desc":
             transaction = currentUserTransactions.sort((a, b) => a - b);
-            //console.log(transaction);
             break;
         case "type_income_first":
             transaction = currentUserTransactions.sort(

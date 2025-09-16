@@ -16,7 +16,7 @@ import { useAddBudget } from "../../Hooks/useAddBudget";
 
 function BudgetForm({ onClose }) {
     const { expenseCategories: budgetCategories } = useTransactions();
-
+console.log(budgetCategories);
     const { user } = useUser();
     const userId = user.id;
 
@@ -103,7 +103,7 @@ function BudgetForm({ onClose }) {
         const today = new Date().toISOString().split("T")[0];
         setCurrentDate(today);
     }, []);
-    
+
     return (
         <Modal>
             <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background">

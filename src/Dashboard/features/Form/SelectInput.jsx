@@ -8,8 +8,10 @@ const SelectInput = ({
     errors,
     selected = ""
 }) => {
-  
-    const name = label.split(" ").at(-1);
+    const name = label.split(" ").at(-1).toLowerCase();
+
+   
+
     return (
         <div>
             <label htmlFor={labelFor} className="font-bold capitalize">
@@ -17,11 +19,10 @@ const SelectInput = ({
             </label>
             <br />
             <select
-                name={label.toLowerCase()}
-                id={label.toLowerCase()}
+                name={name}
+                id={name}
                 disabled={disable}
                 onChange={onHandleChange}
-                defaultValue={selected || options[0]}
                 className="bg-light-sectionBackground border-none outline-none
                 p-2 rounded w-full
                   dark:bg-dark-sectionBackground dark:text-dark-text"

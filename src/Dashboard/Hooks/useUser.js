@@ -2,6 +2,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 export const useUser = () => {
     const { user, userError, isUserError, isUserLoading } = useAuth();
+ 
     const userId = user?.id;
     const lastSeen = user?.last_sign_in_at;
     const newUser =
@@ -11,7 +12,7 @@ export const useUser = () => {
         user?.user_metadata?.full_name || user?.user_metadata?.userName;
     const userEmail = user?.user_metadata?.email;
     const userImage =
-        user?.user_metadata?.picture || user?.user_metadata?.avatar_url;
+        user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
 
     return {
         user,

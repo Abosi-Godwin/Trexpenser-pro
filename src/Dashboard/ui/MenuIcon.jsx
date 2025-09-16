@@ -1,5 +1,4 @@
-import { FaEllipsisVertical, FaXmark } from "react-icons/fa6";
-
+/*import { FaEllipsisVertical, FaXmark } from "react-icons/fa6";
 
 const MenuIcon = ({ open, menuHandle }) => {
     return (
@@ -11,5 +10,5 @@ const MenuIcon = ({ open, menuHandle }) => {
             {!open ? <FaEllipsisVertical /> : <FaXmark />}
         </div>
     );
-};
-export default MenuIcon;
+};*/
+//export default MenuIcon;

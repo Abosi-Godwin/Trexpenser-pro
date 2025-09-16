@@ -1,11 +1,12 @@
 import { createContext, useContext, useState } from "react";
-
+import { createPortal } from "react-dom";
+import { FaEllipsisVertical, FaXmark } from "react-icons/fa6";
 import Button from "../features/Form/Button";
-import MenuIcon from "./MenuIcon";
 import DeleteDataForm from "../features/Form/DeleteTransactionForm";
 import EditTransaction from "../features/Form/EditTransaction";
 import EditSavings from "../features/Form/EditSavings";
 import EditBudgetForm from "../features/budgets/EditBudgetForm";
+import AddSavingsForm from "../features/savings/AddSavings";
 
 const MenuContext = createContext({});
 
@@ -18,24 +19,77 @@ const useMenuContext = () => {
     return menuCardContext;
 };
 
-const MenuCard = ({ children, data, type }) => {
-    const [openMenu, setOpenMenu] = useState(false);
-
-    const handleOpenMenu = () => {
-        setOpenMenu(prev => !prev);
+const MenuCard = ({ children, data, type, portalRef }) => {
+    const [position, setPosition] = useState({});
+    const [openId, setOpenId] = useState("");
+    const open = id => setOpenId(id);
+    const close = () => {
+        setOpenId("");
     };
 
     return (
         <MenuContext.Provider
-            value={{ openMenu, handleOpenMenu, setOpenMenu, data, type }}
+            value={{
+                openId,
+                open,
+                setOpenId,
+                data,
+                type,
+                close,
+                position,
+                setPosition,
+                portalRef
+            }}
         >
             {children}
         </MenuContext.Provider>
     );
 };
 
-const MenuLists = () => {
-    const { openMenu, data, type } = useMenuContext();
+const MenuIcons = ({ id, type }) => {
+    const { openId, open, close, setPosition, portalRef } = useMenuContext();
+
+    const handleIconClick = event => {
+        const iconRect = event.target.closest("div").getBoundingClientRect();
+
+        const containerRect = portalRef.current.getBoundingClientRect();
+
+        setPosition({
+            x:
+                iconRect.x -
+                containerRect.x -
+                containerRect.width +
+                iconRect.width +
+                10,
+            y:
+                type === "transaction"
+                    ? iconRect.bottom - containerRect.y
+                    : iconRect.bottom - iconRect.heigth
+        });
+
+        const emptyId = openId === "";
+        const anotherId = openId !== id;
+
+        emptyId || anotherId ? open(id) : close();
+    };
+
+    return (
+        <div
+            className="p-2 bg-light-sectionBackground
+            dark:bg-dark-sectionBackground rounded-md w-fit"
+            onClick={handleIconClick}
+        >
+            {!openId ? <FaEllipsisVertical /> : <FaXmark />}
+        </div>
+    );
+};
+
+const MenuLists = ({ id }) => {
+    const { openId, data, type, position, portalRef } = useMenuContext();
+
+    const xPosition = Math.round(position.x);
+    const yPosition = Math.round(position.y);
+
     const [openDeleteForm, setOpenDeleteForm] = useState(false);
     const [openEditTransForm, setOpenEditTransForm] = useState(false);
 
@@ -54,14 +108,18 @@ const MenuLists = () => {
             setOpenEditTransForm(prev => !prev);
         }
         if (type === "budget") {
-          
             setOpenEditBudgetForm(prev => !prev);
         }
     };
-    return (
+
+    if (!portalRef.current) return;
+    
+    return createPortal(
         <div
-            className={`${openMenu ? "block" : "hidden"} absolute
-        bg-light-sectionBackground dark:bg-dark-sectionBackground p-2 rounded-md z-[1000] right-10`}
+            className={`${openId ? "block" : "hidden"} absolute 
+        bg-light-sectionBackground dark:bg-dark-sectionBackground p-2 rounded-md
+        right-[${xPosition}px]
+       top-[${yPosition}px]`}
         >
             {openDeleteForm && (
                 <DeleteDataForm
@@ -78,12 +136,13 @@ const MenuLists = () => {
                 />
             )}
             {openEditSaviForm && (
-                <EditSavings
+                <AddSavingsForm
                     data={data}
-                    type={type}
+                    isEdit={true}
                     onCloseForm={handleEditForm}
                 />
             )}
+
             {openEditBudgetForm && (
                 <EditBudgetForm
                     data={data}
@@ -91,6 +150,7 @@ const MenuLists = () => {
                     onCloseForm={handleEditForm}
                 />
             )}
+
             <Button
                 className="bg-light-iconColor text-white  p-1 rounded-md
                 text-center font-bold mb-1"
@@ -103,16 +163,12 @@ const MenuLists = () => {
                 text="Delete"
                 onButtonClick={handleDelForm}
             />
-        </div>
+        </div>,
+        portalRef.current
     );
 };
-const MenuIcons = () => {
-    const { openMenu, handleOpenMenu } = useMenuContext();
 
-    return <MenuIcon open={openMenu} menuHandle={handleOpenMenu} />;
-};
-
-MenuCard.Icon = MenuIcons;
+MenuCard.Toggle = MenuIcons;
 MenuCard.Options = MenuLists;
 
 export default MenuCard;

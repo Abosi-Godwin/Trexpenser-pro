@@ -33,6 +33,8 @@ export const useTransactions = () => {
         value: category
     }));
 
+    expenseCategories.unshift({ label: "Select", value: "select" });
+
     const incomePrices = useMemo(
         () => incomes.map(income => income.amount),
         [incomes]
@@ -67,7 +69,7 @@ export const useTransactions = () => {
 
     return {
         currentUserTransactions,
-      transactionLoaded,
+        transactionLoaded,
         istransactionsLoading,
         isEmpty,
         incomes,

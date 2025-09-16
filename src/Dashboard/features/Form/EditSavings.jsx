@@ -49,7 +49,7 @@ const EditSavings = ({ data, onCloseForm }) => {
     const savingMethod = watch("savingsType");
 
     function handleFormSubmit(datas) {
-        //   console.log(datas);
+    
         const newSavings = {
             title: datas.name,
             target_amount: +datas.amount,

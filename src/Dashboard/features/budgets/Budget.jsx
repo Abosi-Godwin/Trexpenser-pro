@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useRef } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
 
 import { isFuture, isToday, isPast } from "date-fns";
@@ -61,7 +61,7 @@ function Budget({ budget, children }) {
     if (haveCompleted) {
         isActive = "fullfiled";
     }
-
+    const portalRef = useRef(null);
     return (
         <BudgetContext.Provider
             value={{
@@ -74,7 +74,8 @@ function Budget({ budget, children }) {
                 totalSpent,
                 isActive,
                 amount,
-                category
+                category,
+                portalRef
             }}
         >
             <div className="p-2">{children}</div>
@@ -83,8 +84,15 @@ function Budget({ budget, children }) {
 }
 
 const Infos = () => {
-    const { category, notes, totalSpent, spentPercent, amount, remaining } =
-        useBudgetContext();
+    const {
+        category,
+        notes,
+        totalSpent,
+        spentPercent,
+        amount,
+        remaining,
+        portalRef
+    } = useBudgetContext();
 
     return (
         <div>
@@ -133,12 +141,15 @@ const Duration = () => {
 };
 
 const Action = () => {
-    const { budget } = useBudgetContext();
+    const { budget, portalRef } = useBudgetContext();
     return (
-        <MenuCard data={budget} type="budget">
-            <MenuCard.Icon />
-            <MenuCard.Options />
+      <div  ref={portalRef}>
+        
+        <MenuCard data={budget} type="budget" portalRef={portalRef}>
+            <MenuCard.Toggle id={budget.id} />
+            <MenuCard.Options id={budget.id} />
         </MenuCard>
+      </div>
     );
 };
 const Status = () => {

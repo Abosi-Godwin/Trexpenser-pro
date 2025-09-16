@@ -2,10 +2,10 @@ import { useSearchParams } from "react-router-dom";
 import SelectInput from "../features/Form/SelectInput";
 
 const Filtering = ({ options = [], label, labelFor }) => {
+    
     const [searchParams, setSearchParams] = useSearchParams();
     const filterValue = searchParams.get("filterBy");
-    
-    
+
     const handleFilter = e => {
         const filterMethod = e.target.value;
         const newParams = new URLSearchParams(searchParams);

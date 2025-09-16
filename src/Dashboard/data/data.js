@@ -85,31 +85,35 @@ export const transactionFilterOptions = [
     { label: "Income", value: "income" },
     { label: "Expense", value: "expense" }
 ];
+export const savingMethods = [
+    { label: "Manual (default)", value: "manual" },
+    { label: "Automatic", value: "automatic" }
+];
 
 export const previewCards = [
     {
-        icon: FaChartBar ,
+        icon: FaChartBar,
         title: "Summary",
         text: "See a breakdown of your total income, expenses, and net cash flow for this month."
     },
     {
-        icon: FaSearchengin ,
+        icon: FaSearchengin,
         title: "Review",
         text: "Understand your financial strengths and risks, like overspending categories or savings progress."
     },
     {
-        icon: FaLightbulb ,
+        icon: FaLightbulb,
         title: "Suggestions",
         text: "Get actionable tips on budgeting, saving, and reaching your financial goals faster."
     },
     {
-        icon: FaArrowTrendUp ,
+        icon: FaArrowTrendUp,
         title: "Advice",
         text: "Receive practical guidance for both short-term wins and long-term financial growth."
     }
 ];
 export const encouragement = {
-    icon: FaRocket  ,
+    icon: FaRocket,
     title: "Encouragement",
     text: "Stay motivated on your financial journey with positive reminders and small wins along the way."
 };

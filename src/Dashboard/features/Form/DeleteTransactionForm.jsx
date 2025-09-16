@@ -65,17 +65,13 @@ function DeleteDataForm({ data, onCloseForm, type }) {
                                 {data.method}
                                 {" " + formatCurrency(data.target_amount)}{" "}
                                 {data.title + " "}
-                                savings that started on
-                                {" " + formatDate(data.start_date)}
-                                and ?
+                                savings?
                             </>
                         ) : (
                             <>
                                 {" " + formatCurrency(data.amount)}{" "}
                                 {data.category + " "}
-                                budget tracking goal that started on
-                                {" " + formatDate(data.start_date)} and will end
-                                on {" " + formatDate(data.end_date)}?
+                                budget tracking goal?
                             </>
                         )}
                     </h2>

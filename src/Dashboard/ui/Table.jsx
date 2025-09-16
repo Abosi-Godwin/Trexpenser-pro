@@ -1,4 +1,4 @@
-
+import MenuCard from "./MenuCard";
 
 const Table = ({ children }) => {
     return (
@@ -21,7 +21,7 @@ const Table = ({ children }) => {
                         </div>
                     </div>
                 </div>
-                {children}
+                <div className="grid grid-cols-1 gap-0.5">{children}</div>
             </div>
         </div>
     );

@@ -4,112 +4,150 @@ import RangeSlider from "../Form/RangeSlider";
 import SelectInput from "../Form/SelectInput";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
-import RadioButton from "../Form/RadioButton";
 import DateInput from "../Form/DateInput";
 import Modal from "../../ui/Modal";
 
 import { incomeCategories } from "../../data/data";
-import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../Hooks/useUser";
 import { useAddSavings } from "../../Hooks/useAddSavings";
+import { useEditSavings } from "../../Hooks/useEditSavings";
 import { useToday } from "../../Hooks/useDate";
-const AddSavingsForm = ({ onCloseForm }) => {
+import { savingMethods } from "../../data/data";
+const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
+    let minDate;
+
     const {
         register,
         watch,
         handleSubmit,
         formState: { errors }
     } = useForm({
-        defaultValues: {
-            savingsType: "Manual"
-        }
+        defaultValues: isEdit
+            ? (() => {
+                  const {
+                      id,
+                      method,
+                      title,
+                      funded_by,
+                      target_amount,
+                      start_date,
+                      end_date,
+                      percentage
+                  } = data;
+                  minDate = start_date;
+                  return {
+                      method: method || savingMethods[0].value,
+                      name: title,
+                      source: funded_by,
+                      amount: target_amount,
+                      ["Start date"]: start_date,
+                      ["Target date"]: end_date,
+                      percentage,
+                      id
+                  };
+              })()
+            : { method: savingMethods[0].value }
     });
 
-    const { user } = useAuth();
+    const { userId } = useUser();
     const { today } = useToday();
-    const { addSavings, isAddingSavings } = useAddSavings();
 
-    const userId = user?.id;
+    const { addSavings, isAddingSavings } = useAddSavings();
+    const { editSavings, isEditingSavings } = useEditSavings();
 
     const startDate = watch("Start date");
-    const savingMethod = watch("savingsType");
+    const savingMethod = watch("method");
 
     function handleFormSubmit(datas) {
+        const id = datas.id;
         const newSavings = {
             title: datas.name,
             target_amount: +datas.amount,
             user_id: userId,
-            method: datas.savingsType.toLowerCase(),
+            method: datas.method,
             percentage: +datas.percentage || null,
-            funded_by: datas.Source,
+            funded_by: datas.source || null,
             start_date: datas["Start date"],
             end_date: datas["Target date"],
             is_active: true
         };
-
-        addSavings(newSavings, {
-            onSuccess: () => onCloseForm()
-        });
+        if (isEdit) {
+            editSavings(
+                { newSavings, id },
+                {
+                    onSuccess: () => onCloseForm()
+                }
+            );
+        } else {
+            addSavings(newSavings, {
+                onSuccess: () => onCloseForm()
+            });
+        }
     }
-
+    const savingsNameRule = {
+        required: "Name is required "
+    };
+    const amountRule = {
+        required: "Amount is required.",
+        min: { value: 1, message: "Can't be less than 1" }
+    };
     return (
         <Modal>
             <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background">
                 <h3 className="text-xl font-bold mb-2">
-                    Add a new goal
+                    {isEdit ? "Edit your savings goal." : "Add a new goal"}
                 </h3>
 
                 <form
                     className="flex flex-col gap-1.5"
                     onSubmit={handleSubmit(handleFormSubmit)}
+                    noValidate
                 >
-                    <RadioButton
-                        disable={isAddingSavings}
-                        register={register}
-                        error={errors}
-                        watch={watch}
-                    />
                     <Input
-                        label="Goal name"
+                        label="savings name"
                         inputType="string"
                         placeholder="Name your savings goal..."
                         disable={isAddingSavings}
                         register={register}
+                        rules={savingsNameRule}
                         error={errors}
                     />
-                    <RangeSlider
+                    <Input
+                        label="Target amount"
+                        inputType="number"
+                        placeholder="Target amount..."
+                        rules={amountRule}
+                        disable={isAddingSavings}
                         register={register}
-                        watch={watch}
-                        show={savingMethod === "Manual"}
+                        error={errors}
                     />
-                    <div
-                        className="text-color-8 grid w-full gap-3
-                        grid-cols-2"
-                    >
-                        <SelectInput
-                            options={incomeCategories}
-                            labelFor="funded_by"
-                            disable={
-                                isAddingSavings || savingMethod === "Manual"
-                            }
-                            label="Source"
-                            register={register}
-                            error={errors}
-                        />
-                        <div className="overflow-hidden">
-                            <Input
-                                label="Target amount"
-                                inputType="number"
-                                placeholder="Target amount..."
+                    <SelectInput
+                        options={savingMethods}
+                        labelFor="funded_by"
+                        disable={false}
+                        label="method"
+                        register={register}
+                        error={errors}
+                    />
+                    {savingMethod === "automatic" && (
+                        <div className="">
+                            <RangeSlider register={register} watch={watch} />
+                            <SelectInput
+                                options={incomeCategories}
+                                labelFor="funded_by"
                                 disable={isAddingSavings}
+                                label="Source"
                                 register={register}
                                 error={errors}
                             />
                         </div>
+                    )}
 
+                    <div className="grid grid-cols-2 gap-4 py-4">
                         <DateInput
                             label="Start date"
                             maxDate=""
-                            minDate={today}
+                            minDate={isEdit ? minDate : today}
                             register={register}
                             disable={isAddingSavings}
                             className="w-full outline-none rounded-md p-2"

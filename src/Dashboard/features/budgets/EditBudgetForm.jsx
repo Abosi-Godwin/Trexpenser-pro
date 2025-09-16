@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
@@ -10,6 +9,10 @@ import SelectInput from "../Form/SelectInput";
 import TextArea from "../Form/TextArea";
 
 import { useTransactions } from "../../Hooks/useTransactions";
+import { getCurrentDate } from "../../Utils/currentDate";
+//import { getCurrentDate } from "../../Utils/currentDate";
+import { useToday } from "../../Hooks/useDate";
+
 function EditBudgetForm({ data, type, onCloseForm }) {
     const { amount, category, start_date, end_date, notes } = data;
 
@@ -32,9 +35,9 @@ function EditBudgetForm({ data, type, onCloseForm }) {
 
     const startDate = watch("start");
 
-    function handleFormCancel() {
-        onCloseForm();
-    }
+    const { today } = useToday();
+
+    const handleFormCancel = () => onCloseForm();
 
     function handleFormSave(infos) {
         const { amount, category, start, end, description } = infos;
@@ -43,20 +46,12 @@ function EditBudgetForm({ data, type, onCloseForm }) {
             toast.error("Check your input fields.");
             return;
         }
-
-        console.log(
-            category,
-            +amount,
-            start,
-            end,
-            description
-        );
     }
 
     return (
         <Modal>
             <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background">
-                <h1 className="text-2xl font-bold">Edit budget.</h1>
+                <h1 className="text-2xl font-bold">Edit {category} budget.</h1>
                 <p className="text-sm font-extralight">
                     Update your spending limit for different categories.
                 </p>
@@ -67,7 +62,7 @@ function EditBudgetForm({ data, type, onCloseForm }) {
 
                 <form onSubmit={handleSubmit(handleFormSave)}>
                     <div className="grid grid-cols-2 items-center gap-2 py-3">
-                        <div className="">
+                        <div>
                             <SelectInput
                                 options={budgetCategories}
                                 labelFor="budgetType"
@@ -96,7 +91,7 @@ function EditBudgetForm({ data, type, onCloseForm }) {
                             <DateInput
                                 label="start"
                                 maxDate=""
-                                minDate={start_date}
+                                minDate={today}
                                 className="w-full outline-none border-none rounded-md  p-2 bg-light-sectionBackground"
                                 register={register}
                             />

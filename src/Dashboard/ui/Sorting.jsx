@@ -3,7 +3,7 @@ import SelectInput from "../features/Form/SelectInput";
 
 const Sorting = ({ options = [], label, labelFor }) => {
     const [searchParams, setSearchParams] = useSearchParams();
-        const sortValue = searchParams.get("sortBy");
+    const sortValue = searchParams.get("sortBy");
 
     const handleSort = e => {
         const sortMethod = e.target.value;

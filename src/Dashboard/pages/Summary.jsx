@@ -1,6 +1,8 @@
-import { toast } from "react-hot-toast";
+import { useState } from "react";
+
 import useAI from "../Apis/Ai/getInsights";
 
+import EmptySummary from "../ui/EmptySummaryModal";
 import MiniLoader from "../ui/MiniLoader";
 
 import { useUser } from "../Hooks/useUser";
@@ -13,6 +15,7 @@ import { previewCards, encouragement } from "../data/data";
 const Summary = () => {
     const { getInsight, insight, gettingInsights } = useAI();
     const { userName } = useUser();
+    const [openEmptyModal, setOpenEmptyModal] = useState(false);
 
     const {
         budgets,
@@ -39,6 +42,8 @@ const Summary = () => {
         expenseCategories
     } = useTransactions();
 
+    const handleCloseModal = () => setOpenEmptyModal(prev => !prev);
+
     const handleClick = () => {
         const emptySlate =
             currentUserTransactions.length < 1 &&
@@ -46,10 +51,8 @@ const Summary = () => {
             budgets.length < 1;
 
         if (emptySlate) {
-            toast.error(
-                "Nothing to summarize yet. Add transactions, set goals, or create budgets to generate a summary."
-            );
-            //  setShowEmptySummary(true); // <- state to trigger empty state UI
+            
+            setOpenEmptyModal(true);
             return;
         }
 
@@ -85,6 +88,7 @@ const Summary = () => {
     const RocketIcon = encouragement.icon;
     return (
         <div className="bg-light-background dark:bg-dark-cardBackground dark:text-dark-text rounded-md p-4">
+            {openEmptyModal && <EmptySummary onCloseModal={handleCloseModal} />}
             <h1 className="text-2xl font-bold mb-2">Your Financial Insights</h1>
             <p className="text-gray-600 mb-6">
                 Get a clear overview of your income, expenses, budgets, and
@@ -143,14 +147,22 @@ const Summary = () => {
                                         {insight[card.title.toLowerCase()].map(
                                             (item, index) => {
                                                 const itsHeading =
-                                                    !item.includes(" ");
+                                                    !item.includes(" ") ||
+                                                    item
+                                                        .split("")
+                                                        .filter(
+                                                            text => text === " "
+                                                        ).length < 2;
 
                                                 return itsHeading ? (
                                                     <h1
                                                         key={index}
                                                         className="font-bold"
                                                     >
-                                                        {item}
+                                                        {item.replaceAll(
+                                                            "*",
+                                                            ""
+                                                        )}
                                                     </h1>
                                                 ) : (
                                                     <li key={index}>{item}</li>

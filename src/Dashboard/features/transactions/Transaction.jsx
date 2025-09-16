@@ -1,9 +1,7 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useRef } from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa6";
-
 import { formatDate } from "../../Utils/formatDate";
 import { formatCurrency } from "../../Utils/formatCurrency";
-
 import MenuCard from "../../ui/MenuCard";
 
 const TransactionContext = createContext();
@@ -18,11 +16,14 @@ const useTransaction = () => {
 };
 
 const Transaction = ({ children, transaction }) => {
+    const portalRef = useRef(null);
     return (
-        <TransactionContext.Provider value={{ transaction }}>
+        <TransactionContext.Provider value={{ transaction, portalRef }}>
             <div
+                ref={portalRef}
                 className="w-full px-2 rounded flex justify-between gap-2
             items-center py-5 relative"
+                id="portalDiv"
             >
                 {children}
             </div>
@@ -50,7 +51,7 @@ const Icon = () => {
 
 const Description = () => {
     const { transaction } = useTransaction();
-   
+
     return (
         <div className="grid grid-cols-transactions items-center gap-3 justify-between w-[90%] px-2">
             <div>
@@ -67,11 +68,13 @@ const Description = () => {
 };
 
 const Action = () => {
-    const { transaction } = useTransaction();
+    const { transaction, portalRef } = useTransaction();
+
+    const theId = transaction?.id;
     return (
-        <MenuCard data={transaction} type="transaction">
-            <MenuCard.Icon />
-            <MenuCard.Options />
+        <MenuCard type="transaction" data={transaction} portalRef={portalRef} >
+            <MenuCard.Toggle id={theId} />
+            <MenuCard.Options id={theId}  />
         </MenuCard>
     );
 };

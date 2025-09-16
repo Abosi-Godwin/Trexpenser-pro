@@ -1,8 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { isFuture, isToday, isPast } from "date-fns";
 import toast from "react-hot-toast";
-
 
 import ApexRadialChart from "../Charts/ApexRadialChart";
 import MenuCard from "../../ui/MenuCard";
@@ -56,7 +55,7 @@ const Saving = ({ savingsData, children }) => {
     if (haveCompleted) {
         isActive = "fullfiled";
     }
-
+    const portalRef = useRef(null);
     return (
         <SavingsContext.Provider
             value={{
@@ -70,10 +69,11 @@ const Saving = ({ savingsData, children }) => {
                 start_date,
                 end_date,
                 amount_saved,
-                target_amount
+                target_amount,
+                portalRef
             }}
         >
-            <div className="py-3">{children}</div>
+            <div className="py-3 bg-yellgow-700">{children}</div>
         </SavingsContext.Provider>
     );
 };
@@ -102,12 +102,12 @@ const SavingsHeader = ({ children }) => {
 };
 
 const SavingsAction = () => {
-    const { savingsData } = useSavingsContext();
+    const { savingsData, id, portalRef } = useSavingsContext();
 
     return (
-        <MenuCard data={savingsData} type="savings">
-            <MenuCard.Icon />
-            <MenuCard.Options />
+        <MenuCard data={savingsData} type="savings" portalRef={portalRef}>
+            <MenuCard.Toggle id={id} />
+            <MenuCard.Options id={id} />
         </MenuCard>
     );
 };
@@ -119,12 +119,16 @@ const SavingsInfo = () => {
         amount_saved,
         start_date,
         end_date,
-        method
+        method,
+        portalRef
     } = useSavingsContext();
 
     const saved = Math.floor((amount_saved / target_amount) * 100);
     return (
-        <div className="grid grid-cols-[2fr_1fr] pt-2">
+        <div
+            className="grid grid-cols-[2fr_1fr] pt-2"
+            ref={portalRef}
+        >
             <ul>
                 <li className="flex justify-centehr gap-3">
                     <span className="font-bold">Target: </span>
@@ -188,7 +192,9 @@ const SavingsForm = () => {
         updateSavings({ amountToSave, savingsId });
         reset();
     };
-
+    const notActive = isActive !== "active";
+    const getPlaceholderText = state =>
+        state === "pending" ? "Wait until the start date..." : "Completed!!!";
     return (
         <div className="pt-4">
             {method === "manual" ? (
@@ -198,9 +204,13 @@ const SavingsForm = () => {
                 >
                     <Input
                         inputType="number"
-                        placeholder="Add to your savings..."
+                        placeholder={
+                            isActive === "active"
+                                ? "Add to your savings..."
+                                : getPlaceholderText(isActive)
+                        }
                         label="amount"
-                        disable={isUpdatingSavings || isActive !== "active"}
+                        disable={isUpdatingSavings || notActive}
                         register={register}
                         error={errors}
                         noLabel={true}
@@ -212,7 +222,7 @@ const SavingsForm = () => {
                         text="Save"
                         onButtonClick={handleSubmit}
                         loader={isUpdatingSavings}
-                        disable={isUpdatingSavings}
+                        disable={isUpdatingSavings || notActive}
                         className="rounded-r-md
                         font-bold bg-light-primaryCTA text-white p-2
                         dark:bg-dark-primaryCTA"
@@ -228,6 +238,15 @@ const SavingsForm = () => {
                         to this savings goal.
                     </p>
                 </>
+            )}
+
+            {isActive === "fullfiled" && (
+                <p
+                    className="p-2 mt-3 text-center rounded-md bg-light-sectionBackground rounded-md
+                        dark:bg-dark-sectionBackground"
+                >
+                    Congratulations on completing this.
+                </p>
             )}
         </div>
     );

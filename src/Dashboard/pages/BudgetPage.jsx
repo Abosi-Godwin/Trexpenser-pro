@@ -31,7 +31,7 @@ function BudgetPlanning() {
                     Budget {<br />} Planning
                 </h2>
                 <Button
-                    text="Cteate budget"
+                    text="Create budget"
                     className="flex justify-start items-center p-2
                      text-md gap-2 inline font-bold bg-light-primaryCTA
                      text-white

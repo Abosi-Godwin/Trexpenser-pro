@@ -13,9 +13,8 @@ import { dropdownVariants } from "../Utils/AnimationVariants";
 const NavBar = ({ isMenuOpen, closeNavBar }) => {
     const { logOut } = useAuth();
 
-    const handleLogOut = () => {
-        logOut();
-    };
+    const handleLogOut = () => logOut();
+
 
     return (
         <motion.nav
