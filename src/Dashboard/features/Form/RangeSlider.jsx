@@ -1,12 +1,8 @@
-import { dropdownVariants } from "../../Utils/AnimationVariants";
-
 const RangeSlider = ({ show, register, watch }) => {
     const percent = watch("percentage") || 0;
     return (
         <div
-            className="w-full
-  bg-light-sectionBackground p-2 rounded-md"
-        >
+            className="w-full bg-light-sectionBackground p-2 rounded-md">
             <div className="grid grid-cols-[1fr_2fr] items-center">
                 <label htmlFor="savingPercent">Percentage:</label>
                 <input

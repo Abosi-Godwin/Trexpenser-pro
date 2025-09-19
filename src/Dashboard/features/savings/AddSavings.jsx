@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { motion, AnimatePresence } from "framer-motion";
 
 import RangeSlider from "../Form/RangeSlider";
 import SelectInput from "../Form/SelectInput";
@@ -6,7 +7,7 @@ import Input from "../Form/Input";
 import Button from "../Form/Button";
 import DateInput from "../Form/DateInput";
 import Modal from "../../ui/Modal";
-
+import { dropdownVariants } from "../../Utils/AnimationVariants";
 import { incomeCategories } from "../../data/data";
 import { useUser } from "../../Hooks/useUser";
 import { useAddSavings } from "../../Hooks/useAddSavings";
@@ -78,11 +79,11 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
                     onSuccess: () => onCloseForm()
                 }
             );
-        } else {
-            addSavings(newSavings, {
-                onSuccess: () => onCloseForm()
-            });
+            return;
         }
+        addSavings(newSavings, {
+            onSuccess: () => onCloseForm()
+        });
     }
     const savingsNameRule = {
         required: "Name is required "
@@ -91,6 +92,7 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
         required: "Amount is required.",
         min: { value: 1, message: "Can't be less than 1" }
     };
+
     return (
         <Modal>
             <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background">
@@ -129,19 +131,31 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
                         register={register}
                         error={errors}
                     />
-                    {savingMethod === "automatic" && (
-                        <div className="">
-                            <RangeSlider register={register} watch={watch} />
-                            <SelectInput
-                                options={incomeCategories}
-                                labelFor="funded_by"
-                                disable={isAddingSavings}
-                                label="Source"
-                                register={register}
-                                error={errors}
-                            />
-                        </div>
-                    )}
+                    <AnimatePresence mode="wait">
+                        {savingMethod === "automatic" && (
+                            <motion.div
+                                key="automatic-section"
+                                variants={dropdownVariants}
+                                initial="hidden"
+                                animate="visible"
+                                viewport={{ once: true, amount: 0.1 }}
+                                exit="hidden"
+                            >
+                                <RangeSlider
+                                    register={register}
+                                    watch={watch}
+                                />
+                                <SelectInput
+                                    options={incomeCategories}
+                                    labelFor="funded_by"
+                                    disable={isAddingSavings}
+                                    label="Source"
+                                    register={register}
+                                    error={errors}
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
                     <div className="grid grid-cols-2 gap-4 py-4">
                         <DateInput
@@ -168,12 +182,12 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
                             onButtonClick={onCloseForm}
                         />
                         <Button
-                            loader={isAddingSavings}
+                            loader={isAddingSavings || isEditingSavings}
                             className="bg-light-primaryCTA flex items-center
                             justify-center uppercase p-2 rounded
                             text-white
         hover:bg-color-5 hover:text-color-2 font-bold text-xl"
-                            text="Save"
+                            text={isEdit ? "Edit" : "Save"}
                             onButtonClick={handleSubmit}
                         />
                     </div>

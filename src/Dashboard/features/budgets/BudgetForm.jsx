@@ -13,14 +13,20 @@ import { useTransactions } from "../../Hooks/useTransactions";
 import { useUser } from "../../Hooks/useUser";
 import { useBudgets } from "../../Hooks/useBudgets";
 import { useAddBudget } from "../../Hooks/useAddBudget";
+import { useToday } from "../../Hooks/useDate";
+import { useEditBudget } from "../../Hooks/useEditBudget";
 
-function BudgetForm({ onClose }) {
+function BudgetForm({ onCloseForm, isEdit, data }) {
+    const [currentDate, setCurrentDate] = useState("");
+    let budgetId;
+
     const { expenseCategories: budgetCategories } = useTransactions();
-console.log(budgetCategories);
+
     const { user } = useUser();
     const userId = user.id;
 
     const { budgets } = useBudgets(userId);
+    const { today } = useToday();
     const {
         addBudget,
         addedBudget,
@@ -29,24 +35,37 @@ console.log(budgetCategories);
         isAddingBudgetSucces
     } = useAddBudget();
 
+    const { editBudget, isEditingBudget } = useEditBudget();
+
     const {
         register,
         watch,
         handleSubmit,
         formState: { errors }
-    } = useForm();
+    } = useForm({
+        defaultValues: isEdit
+            ? (() => {
+                  const { amount, category, start_date, end_date, notes, id } =
+                      data;
+
+                  budgetId = id;
+
+                  return {
+                      amount,
+                      category,
+                      description: notes,
+                      start: start_date,
+                      end: end_date
+                  };
+              })()
+            : null
+    });
 
     const startDate = watch("start");
 
-    const [currentDate, setCurrentDate] = useState("");
-
     function handleFormCancel() {
-        onClose();
+        onCloseForm();
     }
-
-    const doNothing = () => {
-        console.log("Existing category");
-    };
 
     function submitBudget(
         category,
@@ -67,7 +86,7 @@ console.log(budgetCategories);
             notes: description || "No description added."
         };
         addBudget(budgetData, {
-            onSuccess: onClose()
+            onSuccess: ()=> onCloseForm()
         });
     }
 
@@ -76,6 +95,24 @@ console.log(budgetCategories);
 
         if (category === "" || +amount === 0 || start === "" || end === "") {
             toast.error("Check your input fields.");
+            return;
+        }
+
+        if (isEdit) {
+            const newBudget = {
+                category,
+                amount,
+                start_date: start,
+                end_date: end,
+                notes: description || "No description added."
+            };
+
+            editBudget(
+                { newBudget, id: budgetId },
+                {
+                    onSuccess: () => onCloseForm()
+                }
+            );
             return;
         }
 
@@ -147,7 +184,7 @@ console.log(budgetCategories);
                             <DateInput
                                 label="start"
                                 maxDate=""
-                                minDate={currentDate}
+                                minDate={isEdit ? "" : today}
                                 className="w-full outline-none border-none rounded-md  p-2 bg-light-sectionBackground"
                                 register={register}
                             />
@@ -177,6 +214,7 @@ console.log(budgetCategories);
 
                         <Button
                             text="Save"
+                            loader={isAddingBudget || isEditingBudget}
                             className="w-36 bg-light-primaryCTA uppercase p-2
                             flex items-center justify-center
                             rounded text-white

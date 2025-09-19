@@ -1,5 +1,6 @@
 export const sortingSwitchFunc = (sortParams, currentUserTransactions) => {
-    console.log(sortParams);
+    //console.log(currentUserTransactions);
+    // console.log(sortParams);
     let transaction = [];
 
     switch (sortParams) {
@@ -25,11 +26,15 @@ export const sortingSwitchFunc = (sortParams, currentUserTransactions) => {
             break;
         case "category_asc":
             transaction = currentUserTransactions.sort(
-                (a, b) => a.category.toLowerCase() - b.category.toLowerCase()
+                (a, b) =>
+                    a.category[0].toLowerCase() > b.category[0].toLowerCase()
             );
+            console.log(transaction);
             break;
         case "category_desc":
             transaction = currentUserTransactions.sort((a, b) => a - b);
+            //console.log(transaction);
+
             break;
         case "type_income_first":
             transaction = currentUserTransactions.sort(

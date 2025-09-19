@@ -5,10 +5,12 @@ import Loader from "../../ui/Loader";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useLoader } from "../../Hooks/useLoader";
+//import { useGoogleSignUp } from "../../Hooks/useGoogleSignUp";
 
 const ProtectedRoutes = ({ children }) => {
     const navigate = useNavigate();
-    const { user,isUserLoading } = useAuth();
+
+    const { user, isUserLoading } = useAuth();
 
     const { somethingIsLoading, allDatasLoaded } = useLoader();
 
@@ -20,10 +22,12 @@ const ProtectedRoutes = ({ children }) => {
                 replace: true
             });
         }
-    }, [isAuthenticated,isUserLoading, navigate]);
+    }, [isAuthenticated, isUserLoading, navigate]);
 
-    if (somethingIsLoading || !allDatasLoaded) return <Loader />;
+    if (isUserLoading || somethingIsLoading || !allDatasLoaded)
+        return <Loader />;
 
     return isAuthenticated && children;
 };
 export default ProtectedRoutes;
+ 

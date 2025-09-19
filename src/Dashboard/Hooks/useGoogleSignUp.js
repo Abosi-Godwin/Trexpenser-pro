@@ -12,9 +12,10 @@ export const useGoogleSignUp = () => {
         useMutation({
             mutationFn: googleSignUp,
             onSuccess: data => {
+              //console.log(data);
                 //  queryClient.setQueryData(data);
                 //  queryClient.invalidateQueries();
-                navigate("/dashboard", { replace: true });
+              //  navigate("/dashboard", { replace: true });
             },
             onError: err => {
                 toast.error(err.message);

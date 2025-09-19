@@ -7,6 +7,7 @@ const Sorting = ({ options = [], label, labelFor }) => {
 
     const handleSort = e => {
         const sortMethod = e.target.value;
+        
         const newParams = new URLSearchParams(searchParams);
         newParams.set("sortBy", sortMethod);
         setSearchParams(newParams);

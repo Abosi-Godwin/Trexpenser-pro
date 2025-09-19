@@ -31,7 +31,7 @@ function Transactions() {
     let transactions = null;
 
     transactions = sortingSwitchFunc(sortParams, currentUserTransactions);
-
+    
     transactions = filterSwitchFunc(filterParams, currentUserTransactions);
 
     const firstItem = 1;
@@ -54,7 +54,7 @@ function Transactions() {
                     model="normal"
                     onButtonClick={handleOpenForm}
                 />
-                {openForm && <TransactionForm onHandleForm={handleOpenForm} />}
+                {openForm && <TransactionForm onCloseForm={handleOpenForm} />}
             </div>
             {totalTransaction >= 1 ? (
                 <>

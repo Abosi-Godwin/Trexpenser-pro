@@ -38,7 +38,7 @@ function BudgetPlanning() {
                      rounded-md"
                     onButtonClick={handleOpenForm}
                 />
-                {openForm && <BudgetForm onClose={handleOpenForm} />}
+                {openForm && <BudgetForm onCloseForm={handleOpenForm} />}
             </div>
             {budgets.length >= 1 ? (
                 <>

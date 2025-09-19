@@ -1,8 +1,7 @@
 import { supabase } from "../../Services/Supabase";
 
 export const editTransactionApi = async ({ entries, id }) => {
-    
-
+  
     const { data, error } = await supabase
         .from("transactions")
         .update({ ...entries })

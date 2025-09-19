@@ -3,10 +3,10 @@ import { createPortal } from "react-dom";
 import { FaEllipsisVertical, FaXmark } from "react-icons/fa6";
 import Button from "../features/Form/Button";
 import DeleteDataForm from "../features/Form/DeleteTransactionForm";
-import EditTransaction from "../features/Form/EditTransaction";
-import EditSavings from "../features/Form/EditSavings";
-import EditBudgetForm from "../features/budgets/EditBudgetForm";
+
 import AddSavingsForm from "../features/savings/AddSavings";
+import BudgetForm from "../features/budgets/BudgetForm";
+import TransactionForm from "../features/Form/TransactionForm";
 
 const MenuContext = createContext({});
 
@@ -113,7 +113,7 @@ const MenuLists = ({ id }) => {
     };
 
     if (!portalRef.current) return;
-    
+
     return createPortal(
         <div
             className={`${openId ? "block" : "hidden"} absolute 
@@ -129,9 +129,9 @@ const MenuLists = ({ id }) => {
                 />
             )}
             {openEditTransForm && (
-                <EditTransaction
+                <TransactionForm
                     data={data}
-                    type={type}
+                    isEdit={true}
                     onCloseForm={handleEditForm}
                 />
             )}
@@ -144,9 +144,10 @@ const MenuLists = ({ id }) => {
             )}
 
             {openEditBudgetForm && (
-                <EditBudgetForm
+                <BudgetForm
                     data={data}
                     type={type}
+                    isEdit={true}
                     onCloseForm={handleEditForm}
                 />
             )}

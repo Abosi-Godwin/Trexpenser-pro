@@ -3,8 +3,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-//import { FaGoogle } from "react-icons/fa6";
-import { Toaster } from "react-hot-toast";
 
 import { slideUpVariant } from "../../Utils/AnimationVariants";
 import { useSignUp } from "../../Hooks/useSignUp";
@@ -14,10 +12,6 @@ import Button from "../Form/Button";
 import GoogleBtn from "../Form/GoogleBtn";
 import Input from "../Form/Input";
 
-/*
- Component starts
-*/
-
 const SignupPage = () => {
     const { signUp, isSigningUp } = useSignUp();
 
@@ -25,7 +19,7 @@ const SignupPage = () => {
 
     const {
         register,
-      
+
         handleSubmit,
         formState: { errors }
     } = useForm({ mode: "all" });
@@ -43,13 +37,12 @@ const SignupPage = () => {
     const handleGoogleAut = () => {
         signUpWithGoogle();
     };
-
+    
     return (
         <div
             className="bg-light-sectionBackground flex items-center justify-center h-screen
             max-h-dvh w-screen text-light-text overflow-hidden"
         >
-            <Toaster />
             <motion.div
                 variants={slideUpVariant}
                 initial="hidden"
