@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import useAI from "../Apis/Ai/getInsights";
+import { useAI } from "../hooks/useAi";
 
 import EmptySummary from "../ui/EmptySummaryModal";
 import MiniLoader from "../ui/MiniLoader";
@@ -51,11 +51,10 @@ const Summary = () => {
             budgets.length < 1;
 
         if (emptySlate) {
-            
             setOpenEmptyModal(true);
             return;
         }
-
+       
         const userData = {
             userName,
             transactions: {

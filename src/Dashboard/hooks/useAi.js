@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { getSummary } from "./getSummary";
+import { getSummary } from "../apis/ai/getSummary";
 
-const useAI = () => {
+export const useAI = () => {
     const {
         mutate: getInsight,
         data: insight,
@@ -12,17 +12,15 @@ const useAI = () => {
     } = useMutation({
         mutationFn: getSummary
     });
-    
-const introduction = insight?.introduction
-const encouragement = insight?.encouragement
+
+    const introduction = insight?.introduction;
+    const encouragement = insight?.encouragement;
 
     return {
         getInsight,
         insight,
         insightError,
         isInsightError,
-        gettingInsights
+        gettingInsights,introduction, encouragement
     };
 };
-
-export default useAI;

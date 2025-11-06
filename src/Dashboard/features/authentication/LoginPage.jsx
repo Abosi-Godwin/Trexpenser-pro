@@ -6,7 +6,8 @@ import { Toaster } from "react-hot-toast";
 
 import Input from "../Form/Input";
 import Button from "../Form/Button";
-
+import GoogleBtn from "../Form/GoogleBtn";
+//import UpdatePassword from "./updatedPassword";
 import { useLogIn } from "../../Hooks/useLogIn";
 import { slideUpVariant } from "../../Utils/AnimationVariants";
 
@@ -20,6 +21,7 @@ const LoginPage = () => {
     } = useForm();
 
     const [hidePassword, setHidePassword] = useState(true);
+    const [remember, setRemember] = useState(true);
 
     const handleLogin = enteredInfos => {
         logIn(enteredInfos);
@@ -86,29 +88,46 @@ const LoginPage = () => {
                             onButtonClick={handleSubmit}
                         />
                     </div>
-
-                    <div className="py-2">
-                        <div className="flex justify-between font-bold py-2">
-                            <div className="flex gap-2">
-                                <input type="checkbox" />
-                                <p>Remember me</p>
-                            </div>
-                            <div>
-                                <h1 className="text-color-8">Lost password?</h1>
-                            </div>
+                    <div className="flex justify-between py-2">
+                        <div className="flex gap-2 font-bold">
+                            <input
+                                type="checkbox"
+                                name="remember"
+                              
+                            />
+                            <p>Remember me</p>
                         </div>
-
-                        <div>
-                            <p>Not intentional about your budget yet?</p>
-                            <Link
-                                to="/signup"
-                                className="text-light-primaryCTA font-bold"
-                            >
-                                Join us
-                            </Link>
-                        </div>
+                        <Link to="/forgotPassword">
+                            <h1 className="">Lost password?</h1>
+                        </Link>
                     </div>
                 </form>
+                <div className="py-4 flex flex-col gap-3">
+                    <div
+                        className="flex gap-3 items-center justify-between
+                        "
+                    >
+                        <div
+                            className="h-0.5 rounded-md w-20
+                            bg-light-dividers"
+                        ></div>
+                        <h1>OR</h1>{" "}
+                        <div
+                            className="h-0.5 rounded-md w-20
+                            bg-light-dividers"
+                        ></div>
+                    </div>
+                    <GoogleBtn />
+                    <div className="flex gap-5 items-center">
+                        <p>Not a member yet?</p>
+                        <Link
+                            to="/signup"
+                            className="text-light-primaryCTA font-bold"
+                        >
+                            Join us
+                        </Link>
+                    </div>
+                </div>
             </motion.div>
         </div>
     );

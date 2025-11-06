@@ -14,7 +14,6 @@ export default function Input({
     className = "bg-light-sectionBackground text-light-text dark:bg-dark-sectionBackground dark:text-dark-text border-none outline-none p-2 rounded"
 }) {
     const name = label.split(" ").at(-1);
-
     return (
         <>
             {!noLabel && (

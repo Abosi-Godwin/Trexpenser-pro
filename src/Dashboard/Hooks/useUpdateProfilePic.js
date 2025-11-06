@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-import { updateProfilePic } from "../Apis/Authentication/updateProfilePic";
+import { updateProfilePic } from "../apis/authentication/updateProfilePic";
 
 export const useUpdatePic = () => {
     const queryClient = useQueryClient();

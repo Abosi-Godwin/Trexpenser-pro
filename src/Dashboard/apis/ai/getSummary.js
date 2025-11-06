@@ -9,6 +9,6 @@ export const getSummary = async prompt => {
         model: "gemini-2.0-flash-001",
         contents: prompt
     });
- 
+
     return JSON.parse(response.text.replace(/```json\s*|```/g, "").trim());
 };

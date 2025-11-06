@@ -18,7 +18,7 @@ import { useEditBudget } from "../../Hooks/useEditBudget";
 
 function BudgetForm({ onCloseForm, isEdit, data }) {
     const [currentDate, setCurrentDate] = useState("");
-    let budgetId;
+    let budgetInfos;
 
     const { expenseCategories: budgetCategories } = useTransactions();
 
@@ -48,7 +48,7 @@ function BudgetForm({ onCloseForm, isEdit, data }) {
                   const { amount, category, start_date, end_date, notes, id } =
                       data;
 
-                  budgetId = id;
+                  budgetInfos = { ...data };
 
                   return {
                       amount,
@@ -86,7 +86,7 @@ function BudgetForm({ onCloseForm, isEdit, data }) {
             notes: description || "No description added."
         };
         addBudget(budgetData, {
-            onSuccess: ()=> onCloseForm()
+            onSuccess: () => onCloseForm()
         });
     }
 
@@ -106,13 +106,13 @@ function BudgetForm({ onCloseForm, isEdit, data }) {
                 end_date: end,
                 notes: description || "No description added."
             };
-
-            editBudget(
-                { newBudget, id: budgetId },
+            console.log(budgetInfos);
+        /*    editBudget(
+                { newBudget, id: budgetInfos.id },
                 {
                     onSuccess: () => onCloseForm()
                 }
-            );
+            );*/
             return;
         }
 

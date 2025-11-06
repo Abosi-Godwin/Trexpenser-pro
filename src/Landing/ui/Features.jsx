@@ -10,8 +10,8 @@ const FeaturesSection = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="bg-light-sectionBackground flex flex-col gap-4 py-10
-        px-5 text-light-text"
+            id="features"
+            className="bg-light-sectionBackground flex flex-col gap-4 py-10 pt-24 px-5 text-light-text"
         >
             <div>
                 <h1 className="text-2xl font-bold mb-2">

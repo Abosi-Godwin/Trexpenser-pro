@@ -1,24 +1,22 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getItem, setItem } from "../Services/localStorage";
+import { getItem, setItem } from "../services/localStorage";
 
 const ThemeContext = createContext();
 const useTheme = () => useContext(ThemeContext);
 
 const ThemeProvider = ({ children }) => {
-    const [lightTheme, setLightTheme] = useState(() => getItem("theme"));
- 
-    const updateTheme = () => {
-        setLightTheme(prev => !prev);
-    };
+  const [lightTheme, setLightTheme] = useState(() => getItem("theme"));
 
-    useEffect(() => {
-        setItem("theme", lightTheme);
-    }, [lightTheme]);
+  const updateTheme = () => {
+    setLightTheme((prev) => !prev);
+  };
 
-    return (
-        <ThemeContext.Provider value={{ lightTheme, updateTheme }}>
-            {children}
-        </ThemeContext.Provider>
-    );
+  useEffect(() => {
+    setItem("theme", lightTheme);
+  }, [lightTheme]);
+
+  return (
+    <ThemeContext.Provider value={{ lightTheme, updateTheme }}>{children}</ThemeContext.Provider>
+  );
 };
 export { ThemeProvider, useTheme };

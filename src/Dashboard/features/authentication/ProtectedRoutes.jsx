@@ -5,29 +5,26 @@ import Loader from "../../ui/Loader";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useLoader } from "../../Hooks/useLoader";
-//import { useGoogleSignUp } from "../../Hooks/useGoogleSignUp";
 
 const ProtectedRoutes = ({ children }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const { user, isUserLoading } = useAuth();
+  const { user, isUserLoading } = useAuth();
 
-    const { somethingIsLoading, allDatasLoaded } = useLoader();
+  const { somethingIsLoading, allDatasLoaded } = useLoader();
 
-    const isAuthenticated = user?.role === "authenticated";
+  const isAuthenticated = user?.role === "authenticated";
 
-    useEffect(() => {
-        if (!isUserLoading && !isAuthenticated) {
-            navigate("/login", {
-                replace: true
-            });
-        }
-    }, [isAuthenticated, isUserLoading, navigate]);
+  useEffect(() => {
+    if (!isUserLoading && !isAuthenticated) {
+      navigate("/login", {
+        replace: true,
+      });
+    }
+  }, [isAuthenticated, isUserLoading, navigate]);
 
-    if (isUserLoading || somethingIsLoading || !allDatasLoaded)
-        return <Loader />;
+  if (isUserLoading || somethingIsLoading || !allDatasLoaded) return <Loader />;
 
-    return isAuthenticated && children;
+  return isAuthenticated && children;
 };
 export default ProtectedRoutes;
- 

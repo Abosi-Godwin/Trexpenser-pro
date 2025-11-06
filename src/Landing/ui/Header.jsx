@@ -1,6 +1,8 @@
 import { useTheme } from "../../Dashboard/contexts/ThemeContext";
-import NavHome from "./NavHome.jsx";
-import HeroSection from "./Hero.jsx";
+
+import NavHome from "./NavHome";
+import HeroSection from "./Hero";
+
 function Header() {
     const { lightTheme } = useTheme();
     return (

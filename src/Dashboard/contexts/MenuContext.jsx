@@ -1,5 +1,31 @@
 import { createContext, useContext, useState } from "react";
 
+const MenuContext = createContext({});
+
+const useMenuContext = () => {
+  const menuCardContext = useContext(MenuContext);
+
+  if (!menuCardContext) {
+    throw new Error("Context is used outside the parent");
+  }
+  return menuCardContext;
+};
+
+const MenuProvider = ({ children }) => {
+  const [openMenu, setOpenMenu] = useState(false);
+
+  const handleOpenMenu = () => {
+    setOpenMenu((prev) => !prev);
+  };
+
+  return <MenuContext.Provider value={{ menuCardContext }}>{children}</MenuContext.Provider>;
+};
+
+export default MenuProvider;
+
+/*
+import { createContext, useContext, useState } from "react";
+
 import Button from "../features/Form/Button";
 import MenuIcon from "../ui/MenuIcon";
 import DeleteTransactionForm from "../features/Form/DeleteTransactionForm";
@@ -71,3 +97,4 @@ const MenuIcons = () => {
 
 MenuCard.Icon = MenuIcons;
 MenuCard.Options = MenuLists;
+*/

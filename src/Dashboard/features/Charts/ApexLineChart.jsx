@@ -2,6 +2,7 @@ import Chart from "react-apexcharts";
 import { useTheme } from "../../contexts/ThemeContext";
 
 import EmptyChart from "../../ui/EmptyChart";
+
 const ApexLineChart = ({ incomes, expenses }) => {
     const { lightTheme } = useTheme();
     const incomeDatas = incomes.map(item => ({ x: item.date, y: item.amount }));

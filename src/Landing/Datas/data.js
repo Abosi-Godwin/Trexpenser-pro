@@ -173,3 +173,22 @@ export const faqs = [
         answer: "You can edit or delete a savings goal by navigating to your dashboard, selecting the goal, and choosing the edit or delete option."
     }
 ];
+
+export const dropdownVariants = {
+    hidden: {
+        opacity: 0,
+        y: -20,
+        transition: {
+            duration: 0.25,
+            ease: "easeInOut"
+        }
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.3,
+            ease: "easeInOut"
+        }
+    }
+};

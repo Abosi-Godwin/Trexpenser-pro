@@ -1,10 +1,13 @@
-const GoogleBtn = ({ handleSignUp }) => {
+import { useGoogleSignUp } from "../../Hooks/useGoogleSignUp";
+
+const GoogleBtn = () => {
+    const { signUpWithGoogle } = useGoogleSignUp();
+    const handleSignUp = () => signUpWithGoogle();
     return (
         <button
             className="flex items-center bg-white border border-light-dividers
             rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium
-            text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2
-            focus:ring-offset-2 focus:ring-gray-500"
+            text-gray-800 hover:bg-gray-200 focus:outline-none"
             onClick={handleSignUp}
         >
             <svg

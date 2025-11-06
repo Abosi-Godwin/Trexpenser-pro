@@ -1,12 +1,11 @@
-import { useMutation} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-import { userSignUp } from "../Apis/Authentication/signUp";
+import { userSignUp } from "../apis/authentication/signUp";
 
 export const useSignUp = () => {
     const navigate = useNavigate();
-    // const queryClient = useQueryClient();
 
     const {
         mutate: signUp,
@@ -20,7 +19,6 @@ export const useSignUp = () => {
             console.error("Error signing up", err);
         },
         onSuccess: data => {
-            console.log("success", data);
             navigate("/login", { replace: true });
         }
     });

@@ -61,7 +61,9 @@ function Budget({ budget, children }) {
     if (haveCompleted) {
         isActive = "fullfiled";
     }
+
     const portalRef = useRef(null);
+
     return (
         <BudgetContext.Provider
             value={{
@@ -84,15 +86,8 @@ function Budget({ budget, children }) {
 }
 
 const Infos = () => {
-    const {
-        category,
-        notes,
-        totalSpent,
-        spentPercent,
-        amount,
-        remaining,
-        portalRef
-    } = useBudgetContext();
+    const { category, notes, totalSpent, spentPercent, amount, remaining } =
+        useBudgetContext();
 
     return (
         <div>
@@ -143,13 +138,12 @@ const Duration = () => {
 const Action = () => {
     const { budget, portalRef } = useBudgetContext();
     return (
-      <div  ref={portalRef}>
-        
-        <MenuCard data={budget} type="budget" portalRef={portalRef}>
-            <MenuCard.Toggle id={budget.id} />
-            <MenuCard.Options id={budget.id} />
-        </MenuCard>
-      </div>
+        <div ref={portalRef}>
+            <MenuCard data={budget} type="budget" portalRef={portalRef}>
+                <MenuCard.Toggle id={budget.id} />
+                <MenuCard.Options id={budget.id} />
+            </MenuCard>
+        </div>
     );
 };
 const Status = () => {

@@ -1,10 +1,6 @@
 //Modules
 import { lazy, Suspense } from "react";
-import {
-    createBrowserRouter,
-    RouterProvider,
-    Navigate
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
@@ -13,6 +9,8 @@ import HomePage from "./Landing/HomePage";
 
 import LoginPage from "./Dashboard/features/authentication/LoginPage";
 import SignupPage from "./Dashboard/features/authentication/SignupPage";
+import ForgotPassword from "./Dashboard/features/authentication/forgotPassword";
+import UpdatePassword from "./Dashboard/features/authentication/updatedPassword";
 import SubscriptionPage from "./Dashboard/features/ai/Subscription";
 
 //Components
@@ -24,8 +22,8 @@ import Loader from "./Dashboard/ui/Loader";
 //Provideers
 import { AuthProvider } from "./Dashboard/contexts/AuthContext";
 import { ThemeProvider } from "./Dashboard/contexts/ThemeContext";
-import { loader as imgLoader } from "./Landing/Services/ImgLoader";
-import { queryClient } from "./Dashboard/Services/queryClient";
+import { queryClient } from "./Dashboard/services/queryClient";
+import { Toaster } from "react-hot-toast";
 
 //Dashboard pages
 const DashboardHome = lazy(() => import("./Dashboard/DashboardHome"));
@@ -36,108 +34,120 @@ const Summary = lazy(() => import("./Dashboard/pages/Summary"));
 const Profile = lazy(() => import("./Dashboard/pages/Profile"));
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <HomePage />,
-        loader: imgLoader
-    },
-    {
-        path: "/signup",
-        element: (
-            <AuthRedirect>
-                <SignupPage />
-            </AuthRedirect>
-        )
-    },
-    {
-        path: "/login",
-        element: (
-            <AuthRedirect>
-                <LoginPage />
-            </AuthRedirect>
-        )
-    },
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/signup",
+    element: (
+      <AuthRedirect>
+        <SignupPage />
+      </AuthRedirect>
+    ),
+  },
+  {
+    path: "/login",
+    element: (
+      <AuthRedirect>
+        <LoginPage />
+      </AuthRedirect>
+    ),
+  },
 
-    {
-        path: "subscribe",
-        element: <SubscriptionPage />
-    },
-    {
-        path: "*",
-        element: <Navigate to="/dashboard" replace />
-    },
-    {
-        path: "/dashboard",
+  {
+    path: "subscribe",
+    element: <SubscriptionPage />,
+  },
+  {
+    path: "forgotPassword",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "changePassword",
+    element: <UpdatePassword />,
+  },
+  {
+    path: "*",
+    element: (
+      <Navigate
+        to="/dashboard"
+        replace
+      />
+    ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoutes>
+        <DashboardLayout />
+      </ProtectedRoutes>
+    ),
+    children: [
+      {
+        index: true,
         element: (
-            <ProtectedRoutes>
-                <DashboardLayout />
-            </ProtectedRoutes>
+          <Suspense fallback={<Loader />}>
+            <DashboardHome />
+          </Suspense>
         ),
-        children: [
-            {
-                index: true,
-                element: (
-                    <Suspense fallback={<Loader />}>
-                        <DashboardHome />
-                    </Suspense>
-                )
-            },
-            {
-                path: "/dashboard/transactions",
-                element: (
-                    <Suspense fallback={<Loader />}>
-                        <Transactions />
-                    </Suspense>
-                )
-            },
-            {
-                path: "/dashboard/savings",
-                element: (
-                    <Suspense fallback={<Loader />}>
-                        <Savings />
-                    </Suspense>
-                )
-            },
-            {
-                path: "/dashboard/budgets",
-                element: (
-                    <Suspense fallback={<Loader />}>
-                        <Budgets />
-                    </Suspense>
-                )
-            },
-            {
-                path: "/dashboard/summary",
-                element: (
-                    <Suspense fallback={<Loader />}>
-                        <Summary />
-                    </Suspense>
-                )
-            },
-            {
-                path: "/dashboard/profile",
-                element: (
-                    <Suspense fallback={<Loader />}>
-                        <Profile />
-                    </Suspense>
-                )
-            }
-        ]
-    }
+      },
+      {
+        path: "/dashboard/transactions",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Transactions />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/dashboard/savings",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Savings />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/dashboard/budgets",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Budgets />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/dashboard/summary",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Summary />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/dashboard/profile",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Profile />
+          </Suspense>
+        ),
+      },
+    ],
+  },
 ]);
 
 const App = () => {
-    return (
-        <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-                <ThemeProvider>
-                    <Analytics />
-                    <RouterProvider router={router} />
-                    <ReactQueryDevtools />
-                </ThemeProvider>
-            </AuthProvider>
-        </QueryClientProvider>
-    );
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider>
+          <RouterProvider router={router} /> <Toaster position="top-right" />
+          <Analytics />
+          <ReactQueryDevtools />
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
 };
 
 export default App;

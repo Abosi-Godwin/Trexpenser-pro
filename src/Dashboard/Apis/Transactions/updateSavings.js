@@ -1,4 +1,4 @@
-import { supabase } from "../../Services/Supabase";
+import { supabase } from "../../services/Supabase";
 export const updateSavingsApi = async info => {
     const { savingsId, amountToSave } = info;
     const { data, error } = await supabase

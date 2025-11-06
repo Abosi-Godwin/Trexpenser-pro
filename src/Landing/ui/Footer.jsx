@@ -73,8 +73,6 @@ function Footer() {
                     </h1>
                     <ul className="divide-y divide-color-6 py-2 font-bold">
                         <li className="pt-2">Home</li>
-                        <li className="pt-2">Savings goal</li>
-                        <li className="pt-2">Budget planning</li>
                         <li className="pt-2">FAQ</li>
                         <li className="pt-2">Help center</li>
                         <li className="pt-2">Terms of service</li>

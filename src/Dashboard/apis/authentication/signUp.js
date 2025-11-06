@@ -1,4 +1,4 @@
-import { supabase, supabaseUrl } from "../../Services/Supabase";
+import { supabase, supabaseUrl } from "../../services/Supabase";
 
 const profileImage = `${supabaseUrl}/storage/v1/object/public/avatars//avatar.png`;
 

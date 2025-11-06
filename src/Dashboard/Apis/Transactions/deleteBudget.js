@@ -1,4 +1,4 @@
-import { supabase } from "../../Services/Supabase";
+import { supabase } from "../../services/Supabase";
 export const deleteBudgetApi = async budgetId => {
     
     const { error } = await supabase

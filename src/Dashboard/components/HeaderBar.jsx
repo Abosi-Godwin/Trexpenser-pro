@@ -14,6 +14,7 @@ const HeaderBar = () => {
     const navHandler = () => setShowNav(prev => !prev);
 
     const getPage = useLocation();
+    
     const currentPage = getPage.pathname.split("/").pop();
 
     return (

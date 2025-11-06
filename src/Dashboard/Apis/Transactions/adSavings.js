@@ -1,4 +1,4 @@
-import { supabase } from "../../Services/Supabase";
+import { supabase } from "../../services/Supabase";
 export const addSavingsApi = async savingsObj => {
     const { data, error } = await supabase
         .from("savings")

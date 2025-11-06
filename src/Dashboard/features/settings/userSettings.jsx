@@ -4,6 +4,7 @@ import { useState } from "react";
 import AvaterImg from "../../ui/AvatarImg";
 import Button from "../Form/Button";
 import Input from "../Form/Input";
+
 import UpdatePicForm from "../Form/UpdatePicForm";
 import UpdatePasswordForm from "../Form/UpdatePasswordForm";
 

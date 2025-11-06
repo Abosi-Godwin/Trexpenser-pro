@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { format, addDays, isAfter } from "date-fns";
 
-import { supabaseUrl } from "../../Services/Supabase";
+import { supabaseUrl } from "../../services/Supabase";
 import { useUser } from "../../Hooks/useUser";
 import { useUpdatePic } from "../../Hooks/useUpdateProfilePic";
 
@@ -19,17 +19,17 @@ const UpdatePicForm = ({ onClose }) => {
     const canUpdate = isAfter(nextUpdate, updatedAt);
 
     const handleImageUpload = data => {
-        /*const { profileImg } = data;
+        const { profileImg } = data;
         const newImage = profileImg?.[0];
         if (!newImage) return;
 
         const imagePath = `${supabaseUrl}`;
         const imageName = `${Math.random()}-${newImage.name}`;
 
-        console.log(imagePath);
+        //console.log(imagePath);
         updatePic({ imagePath, imageName, newImage });
 
-        reset();*/
+        reset();
     };
 
     return (

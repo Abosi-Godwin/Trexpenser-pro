@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { getCurrentUser } from "../Apis/Authentication/getUser";
-import { userLogOut } from "../Apis/Authentication/LogOut";
+import { getCurrentUser } from "../apis/authentication/getUser";
+import { userLogOut } from "../apis/authentication/LogOut";
 
 const AuthContext = createContext();
 
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
         data: user,
         error: userError,
         isError: isUserError,
-        isPending: isUserLoading,
+        isPending: isUserLoading
     } = useQuery({
         queryKey: ["user"],
         queryFn: getCurrentUser

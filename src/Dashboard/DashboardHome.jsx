@@ -2,17 +2,15 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { differenceInHours } from "date-fns";
 import { getCurrentDate } from "./Utils/currentDate";
-import { formatDate } from "./Utils/formatDate";
+
 import LineChart from "./features/Charts/LineChart";
 import BarChart from "./features/Charts/BarChart";
 import ApexLineChart from "./features/Charts/ApexLineChart";
-import HalfRadial from "./features/Charts/HalfRadial";
 import DoughnutChart from "./features/Charts/DoughnutChart";
 import RecentTransactions from "./features/transactions/RecentTransactions";
 
 import SavingGoals from "./features/savings/SavingGoals";
 import BudgetTrackingChart from "./features/budgets/BudgetTracking";
-import EmptyDashboard from "./ui/EmptyDashboard";
 
 import { useTransactions } from "./Hooks/useTransactions";
 import { useUser } from "./Hooks/useUser";
@@ -24,8 +22,6 @@ const DashboardHome = () => {
 
     const {
         currentUserTransactions,
-        hasFetchedTransactions,
-        isEmpty,
         incomes,
         expenses,
         totalIncome,
@@ -39,7 +35,6 @@ const DashboardHome = () => {
         if (userName && !somethingIsLoading && hoursAgo) {
             toast.success(`Welcome, ${userName}`);
         }
-       
     }, [userName, lastSeen, somethingIsLoading]);
 
     return (

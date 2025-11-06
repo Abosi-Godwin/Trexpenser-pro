@@ -1,22 +1,12 @@
 import { useState } from "react";
-import ProgressBar from "@ramonak/react-progress-bar";
 
 import BudgetForm from "./BudgetForm";
 import Button from "../../features/Form/Button";
-import SimpleRadialBarChart from "../Charts/SimpleRadialBarChart";
 import { useBudgets } from "../../Hooks/useBudgets";
 import { formatCurrency } from "../../Utils/formatCurrency";
-
+ 
 const BudgetSummary = () => {
-    const {
-        budgets,
-        startDate,
-        endDate,
-        categories,
-        spendingLimit,
-        spentPercent,
-        totalSpent
-    } = useBudgets();
+    const { spendingLimit, spentPercent, totalSpent } = useBudgets();
 
     const [openForm, setOpenForm] = useState(false);
 
@@ -47,7 +37,6 @@ const BudgetSummary = () => {
                 </h1>
                 <h1 className="font-bold">Percentage: {spentPercent}%</h1>
             </div>
- 
         </>
     );
 };

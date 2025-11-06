@@ -1,24 +1,15 @@
-import BudgetSummary from "../features/budgets/BudgetSummary";
+import { useState } from "react";
+
 import Budgets from "../features/budgets/Budgets";
 import EmptyDashboard from "../ui/EmptyDashboard";
 import { useBudgets } from "../Hooks/useBudgets";
-import { useState } from "react";
-import ProgressBar from "@ramonak/react-progress-bar";
 
 import BudgetForm from "../features/budgets/BudgetForm";
 import Button from "../features/Form/Button";
 import { formatCurrency } from "../Utils/formatCurrency";
 
 function BudgetPlanning() {
-    const {
-        budgets,
-        startDate,
-        endDate,
-        categories,
-        spendingLimit,
-        spentPercent,
-        totalSpent
-    } = useBudgets();
+    const { budgets, spendingLimit, spentPercent, totalSpent } = useBudgets();
 
     const [openForm, setOpenForm] = useState(false);
 

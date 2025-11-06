@@ -1,15 +1,4 @@
-const SelectInput = ({
-  options,
-  labelFor,
-  disable,
-  label,
-  register = () => {},
-  errors,
-  onHandleChange,
-  selected = "",
-}) => {
-  const name = label.split(" ").at(-1).toLowerCase();
-
+const SortFiltInput = ({ options, labelFor, label, onHandleChange, selected = "" }) => {
   return (
     <div>
       <label
@@ -20,15 +9,12 @@ const SelectInput = ({
       </label>
       <br />
       <select
-        name={name}
-        id={name}
-        disabled={disable}
+        name="filter"
+        id="filter"
+        onChange={onHandleChange}
         className="bg-light-sectionBackground border-none outline-none
                 p-2 rounded w-full
                   dark:bg-dark-sectionBackground dark:text-dark-text"
-        {...register(name )}
-        error={errors}
-      
       >
         {options.map((option, index) => (
           <option
@@ -42,5 +28,4 @@ const SelectInput = ({
     </div>
   );
 };
-
-export default SelectInput;
+export default SortFiltInput;

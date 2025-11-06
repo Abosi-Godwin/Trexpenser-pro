@@ -1,4 +1,4 @@
-import { supabase } from "../../Services/Supabase";
+import { supabase } from "../../services/Supabase";
 
 export const getCurrentUser = async () => {
     const {
@@ -7,8 +7,10 @@ export const getCurrentUser = async () => {
 
     if (!session) return null;
 
-    const { data: {user}, error } = await supabase.auth.getUser();
-    
+    const {
+        data: { user },
+        error
+    } = await supabase.auth.getUser();
 
     if (error) {
         console.error(error.message);

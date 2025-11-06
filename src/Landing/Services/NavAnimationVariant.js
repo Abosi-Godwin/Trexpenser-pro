@@ -1,22 +1,44 @@
 export const dropdownVariants = {
-  hidden: {
-    opacity: 0,
-    y: -20,
-    transition: {
-      duration: 0.25,
-      ease: "easeInOut"
+    hidden: {
+        opacity: 0,
+        scale: 0,
+        transition: {
+            duration: 0.25,
+            ease: "easeInOut"
+        }
+    },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            duration: 0.3,
+            ease: "easeInOut"
+        }
     }
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.3,
-      ease: "easeInOut"
-    }
-  }
 };
 
+/*
+
+export const dropdownVariants = {
+    hidden: {
+        opacity: 0,
+        y: -10,
+        transition: {
+            duration: 0.25,
+            ease: "easeInOut"
+        }
+    },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.3,
+            ease: "easeInOut"
+        }
+    }
+};
+
+*/
 
 export const slideUpVariant = {
     hidden: { y: 50, opacity: 0 },
@@ -25,5 +47,4 @@ export const slideUpVariant = {
         opacity: 1,
         transition: { duration: 1, ease: "easeOut" }
     }
-    
 };
