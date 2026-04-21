@@ -6,10 +6,9 @@ export const userSignUp = async ({ name, email, password }) => {
     let { data, error } = await supabase.auth.signUp({
         email,
         password,
-
         options: {
             emailRedirectTo:
-                "/auth/callback",
+                "https://trexpenser-dashboard.vercel.app/auth/callback",
             data: {
                 picture: profileImage,
                 userName: name
