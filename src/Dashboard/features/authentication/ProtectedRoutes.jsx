@@ -7,24 +7,30 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useLoader } from "../../Hooks/useLoader";
 
 const ProtectedRoutes = ({ children }) => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const { user, isUserLoading } = useAuth();
+    const { user, isUserLoading } = useAuth();
 
-  const { somethingIsLoading, allDatasLoaded } = useLoader();
+    const { somethingIsLoading, allDatasLoaded } = useLoader();
 
-  const isAuthenticated = user?.role === "authenticated";
+    const isAuthenticated = user?.role === "authenticated";
 
-  useEffect(() => {
-    if (!isUserLoading && !isAuthenticated) {
-      navigate("/login", {
-        replace: true,
-      });
+    useEffect(() => {
+        if (!isUserLoading && !isAuthenticated) {
+            navigate("/login", {
+                replace: true
+            });
+        }
+    }, [isAuthenticated, isUserLoading, navigate]);
+
+    if (isUserLoading || somethingIsLoading || !allDatasLoaded)
+        return <Loader />;
+
+    // Block unverified users
+    if (!user.email_confirmed_at) {
+      navigate("/verify-email", {replace: true });
     }
-  }, [isAuthenticated, isUserLoading, navigate]);
 
-  if (isUserLoading || somethingIsLoading || !allDatasLoaded) return <Loader />;
-
-  return isAuthenticated && children;
+    return isAuthenticated && children;
 };
 export default ProtectedRoutes;

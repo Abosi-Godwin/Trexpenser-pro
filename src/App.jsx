@@ -12,6 +12,8 @@ import { Analytics } from "@vercel/analytics/react";
 //Pages
 import LoginPage from "./Dashboard/features/authentication/LoginPage";
 import SignupPage from "./Dashboard/features/authentication/SignupPage";
+import AuthCallback from "./Dashboard/features/authentication/AuthCallback";
+import VerifyEmail from "./Dashboard/features/authentication/VerifyEmail";
 import ForgotPassword from "./Dashboard/features/authentication/forgotPassword";
 import UpdatePassword from "./Dashboard/features/authentication/updatedPassword";
 import SubscriptionPage from "./Dashboard/features/ai/Subscription";
@@ -42,6 +44,22 @@ const router = createBrowserRouter([
         element: (
             <AuthRedirect>
                 <SignupPage />
+            </AuthRedirect>
+        )
+    },
+    {
+        path: "/auth/callback",
+        element: (
+            <AuthRedirect>
+                <AuthCallback />
+            </AuthRedirect>
+        )
+    },
+    {
+        path: "/auth/callback",
+        element: (
+            <AuthRedirect>
+                <VerifyEmail />
             </AuthRedirect>
         )
     },

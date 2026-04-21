@@ -6,7 +6,10 @@ export const userSignUp = async ({ name, email, password }) => {
     let { data, error } = await supabase.auth.signUp({
         email,
         password,
+
         options: {
+            emailRedirectTo:
+                "/auth/callback",
             data: {
                 picture: profileImage,
                 userName: name

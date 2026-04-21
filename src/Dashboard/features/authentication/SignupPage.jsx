@@ -1,4 +1,4 @@
- import { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -11,7 +11,9 @@ import GoogleBtn from "../Form/GoogleBtn";
 import Input from "../Form/Input";
 
 const SignupPage = () => {
-    const { signUp, isSigningUp } = useSignUp();
+    const { signUp, isSigningUp, emailSent } = useSignUp();
+
+    let email = "";
 
     const {
         register,
@@ -33,9 +35,21 @@ const SignupPage = () => {
     };
 
     const submitFunc = data => {
+        email = data.email;
         signUp(data);
     };
 
+    if (emailSent) {
+        return (
+            <div>
+                <h2>Check your email</h2>
+                <p>
+                    We sent a confirmation link to <strong>{email}</strong>
+                </p>
+                <p>Click the link to activate your account.</p>
+            </div>
+        );
+    }
     return (
         <div className="bg-light-sectionBackground flex items-center justify-center h-screen max-h-dvh w-screen text-light-text overflow-hidden">
             <motion.div
@@ -50,7 +64,6 @@ const SignupPage = () => {
 
                 <form onSubmit={handleSubmit(submitFunc)}>
                     <div className="flex flex-col gap-2 py-3">
-
                         <Input
                             name="name"
                             label="Name"
@@ -76,7 +89,9 @@ const SignupPage = () => {
                         <Input
                             name="password"
                             label="Password"
-                            inputType={visibility.password ? "text" : "password"}
+                            inputType={
+                                visibility.password ? "text" : "password"
+                            }
                             disabled={isSigningUp}
                             placeholder="Enter your password..."
                             register={register}
@@ -85,7 +100,8 @@ const SignupPage = () => {
                                 required: "Password is required",
                                 minLength: {
                                     value: 6,
-                                    message: "Password must be at least 6 characters"
+                                    message:
+                                        "Password must be at least 6 characters"
                                 }
                             }}
                             onHidePassword={() => toggleVisibility("password")}
@@ -95,7 +111,9 @@ const SignupPage = () => {
                         <Input
                             name="confirmPassword"
                             label="Confirm Password"
-                            inputType={visibility.confirmPassword ? "text" : "password"}
+                            inputType={
+                                visibility.confirmPassword ? "text" : "password"
+                            }
                             disabled={isSigningUp}
                             placeholder="Confirm your password..."
                             register={register}
@@ -106,7 +124,9 @@ const SignupPage = () => {
                                     value === watch("password") ||
                                     "Passwords do not match"
                             }}
-                            onHidePassword={() => toggleVisibility("confirmPassword")}
+                            onHidePassword={() =>
+                                toggleVisibility("confirmPassword")
+                            }
                             toggle={visibility.confirmPassword}
                         />
                     </div>
@@ -131,7 +151,10 @@ const SignupPage = () => {
 
                     <div className="flex items-center gap-2">
                         <p>Already a member?</p>
-                        <Link to="/login" className="text-light-primaryCTA font-bold">
+                        <Link
+                            to="/login"
+                            className="text-light-primaryCTA font-bold"
+                        >
                             Login
                         </Link>
                     </div>
