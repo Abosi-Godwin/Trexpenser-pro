@@ -1,24 +1,29 @@
-import { FaEyeSlash, FaEye } from "react-icons/fa6";
+ import { FaEyeSlash, FaEye } from "react-icons/fa6";
 
-import { useAuth } from "../../contexts/AuthContext";
-
-const InputLabel = ({ label, inputType, toggle, hidePassword }) => {
-    const { isSigningUp } = useAuth();
-
-    return inputType !== "password" ? (
-        <label htmlFor={label} className="capitalize font-bold">
-            {label}
-        </label>
-    ) : (
-        <div
-            className="flex justify-between items-center">
-            <label htmlFor={label} className="capitalize font-bold">
+const InputLabel = ({
+    label,
+    name,
+    isPassword,
+    showPassword,
+    onToggle
+}) => {
+    return (
+        <div className="flex justify-between items-center">
+            <label htmlFor={name} className="capitalize font-bold">
                 {label}
             </label>
-            <div className="p-2" disabled={isSigningUp} onClick={hidePassword}>
-                {!toggle ? <FaEyeSlash /> : <FaEye />}
-            </div>
+
+            {isPassword && (
+                <button
+                    type="button"
+                    onClick={onToggle}
+                    className="p-2"
+                >
+                    {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </button>
+            )}
         </div>
     );
 };
+
 export default InputLabel;

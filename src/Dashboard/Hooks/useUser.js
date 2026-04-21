@@ -2,11 +2,11 @@ import { useAuth } from "../contexts/AuthContext";
 
 export const useUser = () => {
     const { user, userError, isUserError, isUserLoading } = useAuth();
- 
+
     const userId = user?.id;
     const lastSeen = user?.last_sign_in_at;
-    const newUser =
-        new Date(user?.last_sign_in_at) === new Date(user?.created_at);
+    /*  const newUser =
+        new Date(user?.last_sign_in_at) === new Date(user?.created_at);*/
     const userIsAuthenticated = user?.role === "authenticated";
     const userName =
         user?.user_metadata?.full_name || user?.user_metadata?.userName;

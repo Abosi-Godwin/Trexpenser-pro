@@ -14,7 +14,7 @@ const HeaderBar = () => {
     const navHandler = () => setShowNav(prev => !prev);
 
     const getPage = useLocation();
-    
+
     const currentPage = getPage.pathname.split("/").pop();
 
     return (
@@ -43,13 +43,15 @@ const HeaderBar = () => {
             </div>
 
             <AnimatePresence mode="wait">
-                {showNav && <NavBar isMenuOpen={showNav} closeNavBar={navHandler}/>}
+                {showNav && (
+                    <NavBar isMenuOpen={showNav} closeNavBar={navHandler} />
+                )}
             </AnimatePresence>
 
             <div className="hidden w-full justify-between items-center p-2 md:flex border-t-2 border-t-light-cardBackground dark:border-t-dark-cardBackground">
                 <p className="text-sm">Welcome to your {currentPage} page.</p>
 
-                {currentPage === "dashboard" && (
+                {currentPage === "" && (
                     <button
                         className="bg-light-primaryCTA text-white font-bold
                  rounded-md p-2 outline-0 ring-1 ring-light-secondaryAccent hover:bg-light-secondaryAccent"

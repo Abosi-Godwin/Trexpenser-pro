@@ -1,20 +1,20 @@
 import {
     FaChartPie,
     FaPiggyBank,
-    FaCoins,
+    
     FaHouse,
     FaMoneyBillTransfer,
     FaUserGear,
-    FaChartLine,
-    FaCalendarCheck,
-    FaPersonCircleCheck,
-    FaDollarSign,
-    FaMoneyCheckDollar,
-    FaSackDollar,
+    
+
+  
+  
+  
+  
     FaChartBar,
-    FaUserShield,
+    
     FaChartSimple,
-    FaAccessibleIcon,
+    
     FaSearchengin,
     FaLightbulb,
     FaArrowTrendUp,
@@ -58,16 +58,16 @@ export const expenseTypes = [
     { label: "Expense", value: "expense" }
 ];
 export const sideBarItems = [
-    { icon: FaHouse, text: "Home", dest: "/dashboard" },
+    { icon: FaHouse, text: "Home", dest: "/" },
     {
         icon: FaMoneyBillTransfer,
-        text: "Transa..",
-        dest: "/dashboard/transactions"
+        text: "Transactions",
+        dest: "/transactions"
     },
-    { icon: FaPiggyBank, text: "Savings", dest: "/dashboard/savings" },
-    { icon: FaChartPie, text: "Budgets", dest: "/dashboard/budgets" },
-    { icon: FaChartSimple, text: "Summary", dest: "/dashboard/summary" },
-    { icon: FaUserGear, text: "Settings", dest: "/dashboard/Profile" }
+    { icon: FaPiggyBank, text: "Savings", dest: "/savings" },
+    { icon: FaChartPie, text: "Budgets", dest: "/budgets" },
+    { icon: FaChartSimple, text: "Summary", dest: "/summary" },
+    { icon: FaUserGear, text: "Settings", dest: "/Profile" }
 ];
 
 export const transactionSortOptions = [

@@ -12,13 +12,18 @@ const useMenuContext = () => {
 };
 
 const MenuProvider = ({ children }) => {
-  const [openMenu, setOpenMenu] = useState(false);
-
-  const handleOpenMenu = () => {
-    setOpenMenu((prev) => !prev);
+  const [position, setPosition] = useState({});
+  const [openId, setOpenId] = useState("");
+  const open = (id) => setOpenId(id);
+  const close = () => {
+    setOpenId("");
   };
-
-  return <MenuContext.Provider value={{ menuCardContext }}>{children}</MenuContext.Provider>;
+  return (
+    <MenuContext.Provider value={{ openId, open, close, position,
+    setPosition,useMenuContext }}>
+      {children}
+    </MenuContext.Provider>
+  );
 };
 
 export default MenuProvider;

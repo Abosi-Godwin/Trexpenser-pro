@@ -1,4 +1,4 @@
-import { useState } from "react";
+ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
@@ -7,7 +7,6 @@ import { Toaster } from "react-hot-toast";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import GoogleBtn from "../Form/GoogleBtn";
-//import UpdatePassword from "./updatedPassword";
 import { useLogIn } from "../../Hooks/useLogIn";
 import { slideUpVariant } from "../../Utils/AnimationVariants";
 
@@ -20,110 +19,90 @@ const LoginPage = () => {
         formState: { errors }
     } = useForm();
 
-    const [hidePassword, setHidePassword] = useState(true);
-    const [remember, setRemember] = useState(true);
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleLogin = enteredInfos => {
-        logIn(enteredInfos);
+    const handleLogin = data => {
+        logIn(data);
     };
 
-    const handleHidePassword = () => {
-        setHidePassword(prev => !prev);
-    };
     return (
-        <div
-            className="bg-light-sectionBackground flex items-center justify-center h-screen
-        max-h-dvh w-screen  overflow-hidden"
-        >
+        <div className="bg-light-sectionBackground flex items-center justify-center h-screen max-h-dvh w-screen overflow-hidden">
             <Toaster />
+
             <motion.div
                 variants={slideUpVariant}
                 initial="hidden"
                 animate="visible"
-                viewport={{ once: true, amount: 0.1 }}
-                className="p-4 rounded-md bg-white hadow-md shadow-color-2"
+                className="p-4 rounded-md bg-white shadow-md shadow-color-2"
             >
-                <div className="py-4">
-                    <h1 className="font-extrabold text-2xl capitalize">
-                        Sign into your account
-                    </h1>
-                </div>
+                <h1 className="font-extrabold text-2xl py-4">
+                    Sign into your account
+                </h1>
 
                 <form onSubmit={handleSubmit(handleLogin)}>
                     <div className="flex flex-col gap-3 py-3">
+
                         <Input
-                            label="email"
+                            name="email"
+                            label="Email"
                             inputType="email"
                             placeholder="Enter your email..."
-                            className="p-3 rounded-md outline-0 border"
-                            disable={logInIsPending}
+                            disabled={logInIsPending}
                             register={register}
                             error={errors}
                             rules={{ required: "Enter your email" }}
                         />
 
                         <Input
-                            inputType={hidePassword ? "password" : "text"}
+                            name="password"
+                            label="Password"
+                            inputType={showPassword ? "text" : "password"}
                             placeholder="Enter your password..."
-                            label="password"
-                            className="p-3 rounded-md outline-0 border"
-                            disable={logInIsPending}
+                            disabled={logInIsPending}
                             register={register}
                             error={errors}
-                            rules={{
-                                required: "Password is required"
-                            }}
-                            onHidePassword={handleHidePassword}
-                            toggle={hidePassword}
+                            rules={{ required: "Password is required" }}
+                            isPassword
+                            toggle={showPassword}
+                            onHidePassword={() => setShowPassword(prev => !prev)}
                         />
 
                         <Button
                             text="Login"
                             type="submit"
-                            className="bg-light-primaryCTA text-white font-extrabold
-                            rounded-md p-2 uppercase w-full flex items-center
-                            justify-center"
+                            className="bg-light-primaryCTA text-white font-extrabold rounded-md p-2 uppercase w-full flex items-center justify-center"
                             disabled={logInIsPending}
                             loader={logInIsPending}
-                            onButtonClick={handleSubmit}
                         />
                     </div>
+
                     <div className="flex justify-between py-2">
-                        <div className="flex gap-2 font-bold">
+                        <label className="flex gap-2 font-bold items-center">
                             <input
                                 type="checkbox"
-                                name="remember"
-                              
+                                {...register("remember")}
                             />
-                            <p>Remember me</p>
-                        </div>
+                            Remember me
+                        </label>
+
                         <Link to="/forgotPassword">
-                            <h1 className="">Lost password?</h1>
+                            Lost password?
                         </Link>
                     </div>
                 </form>
+
                 <div className="py-4 flex flex-col gap-3">
-                    <div
-                        className="flex gap-3 items-center justify-between
-                        "
-                    >
-                        <div
-                            className="h-0.5 rounded-md w-20
-                            bg-light-dividers"
-                        ></div>
-                        <h1>OR</h1>{" "}
-                        <div
-                            className="h-0.5 rounded-md w-20
-                            bg-light-dividers"
-                        ></div>
+                    <div className="flex gap-3 items-center justify-between">
+                        <div className="h-0.5 w-20 bg-light-dividers" />
+                        <span>OR</span>
+                        <div className="h-0.5 w-20 bg-light-dividers" />
                     </div>
+
                     <GoogleBtn />
-                    <div className="flex gap-5 items-center">
+
+                    <div className="flex gap-3 items-center">
                         <p>Not a member yet?</p>
-                        <Link
-                            to="/signup"
-                            className="text-light-primaryCTA font-bold"
-                        >
+                        <Link to="/signup" className="text-light-primaryCTA font-bold">
                             Join us
                         </Link>
                     </div>
@@ -132,4 +111,5 @@ const LoginPage = () => {
         </div>
     );
 };
+
 export default LoginPage;

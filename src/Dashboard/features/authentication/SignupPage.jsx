@@ -1,4 +1,4 @@
-import { useState } from "react";
+ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -11,150 +11,134 @@ import GoogleBtn from "../Form/GoogleBtn";
 import Input from "../Form/Input";
 
 const SignupPage = () => {
-  const { signUp, isSigningUp } = useSignUp();
+    const { signUp, isSigningUp } = useSignUp();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors }
+    } = useForm();
 
-  const [hidePassword, setHidePassword] = useState(true);
-  const password = watch("password");
-  const handleHidePassword = () => {
-    setHidePassword((prev) => !prev);
-  };
+    const [visibility, setVisibility] = useState({
+        password: false,
+        confirmPassword: false
+    });
 
-  const submitFunc = (userInputs) => {
-    signUp({ ...userInputs });
-  };
+    const toggleVisibility = field => {
+        setVisibility(prev => ({
+            ...prev,
+            [field]: !prev[field]
+        }));
+    };
 
-  return (
-    <div
-      className="bg-light-sectionBackground flex items-center justify-center h-screen
-            max-h-dvh w-screen text-light-text overflow-hidden"
-    >
-      <motion.div
-        variants={slideUpVariant}
-        initial="hidden"
-        animate="visible"
-        viewport={{ once: true, amount: 0.1 }}
-        className="p-4 rounded-md bg-white hadow-md shadow-color-2"
-      >
-        <div className="py-4">
-          <h1 className="font-extrabold text-2xl">Sign-up for an account</h1>
-        </div>
+    const submitFunc = data => {
+        signUp(data);
+    };
 
-        <form onSubmit={handleSubmit(submitFunc)}>
-          <div className="flex flex-col gap-1 py-3">
-            <Input
-              label="name"
-              inputType="text"
-              disable={isSigningUp}
-              placeholder="Enter your username..."
-              className="p-3 rounded-md outline-0 border"
-              register={register}
-              error={errors}
-              rules={{
-                required: "Username can't be empty",
-              }}
-            />
-
-            <Input
-              inputType="email"
-              placeholder="Enter your email..."
-              label="email"
-              className="p-3 rounded-md outline-0 border"
-              disable={isSigningUp}
-              register={register}
-              error={errors}
-              rules={{
-                required: "Email is required",
-              }}
-            />
-
-            <Input
-              inputType={hidePassword ? "password" : "text"}
-              placeholder="Enter your password..."
-              label="password"
-              className="p-3 rounded-md outline-0 border"
-              disable={isSigningUp}
-              register={register}
-              error={errors}
-              rules={{
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              }}
-              onHidePassword={handleHidePassword}
-              toggle={hidePassword}
-            />
-
-            <Input
-              inputType={hidePassword ? "password" : "text"}
-              placeholder="Confirm your password..."
-              label="Confirm password"
-              className="p-3 rounded-md outline-0 border"
-              disable={isSigningUp}
-              register={register}
-              error={errors}
-              rules={{
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-                required: "Please confirm your password",
-                validate: (value) => value === password || "Passwords do not match",
-              }}
-              onHidePassword={handleHidePassword}
-              toggle={hidePassword}
-            />
-          </div>
-
-          <Button
-            text="Sign up"
-            loader={isSigningUp}
-            className="bg-light-primaryCTA text-white flex
-                            items-center justify-center
-                                font-extrabold rounded-md p-2 uppercase w-full
-                                hover:bg-light-secondaryAccent"
-            disable={isSigningUp}
-            onButtonClick={handleSubmit}
-          />
-        </form>
-
-        <div className="py-4 flex flex-col gap-3">
-          <div
-            className="flex gap-3 items-center justify-between
-                        "
-          >
-            <div
-              className="h-0.5 rounded-md w-20
-                            bg-light-dividers"
-            ></div>
-            <h1>OR</h1>{" "}
-            <div
-              className="h-0.5 rounded-md w-20
-                            bg-light-dividers"
-            ></div>
-          </div>
-          <GoogleBtn />
-
-          <div className="flex items-center gap-3">
-            <p>Already a member?</p>
-            <Link
-              to="/login"
-              className="text-light-primaryCTA font-bold"
+    return (
+        <div className="bg-light-sectionBackground flex items-center justify-center h-screen max-h-dvh w-screen text-light-text overflow-hidden">
+            <motion.div
+                variants={slideUpVariant}
+                initial="hidden"
+                animate="visible"
+                className="p-4 rounded-md bg-white shadow-md shadow-color-2"
             >
-              Login
-            </Link>
-          </div>
+                <h1 className="font-extrabold text-2xl py-4">
+                    Sign up for an account
+                </h1>
+
+                <form onSubmit={handleSubmit(submitFunc)}>
+                    <div className="flex flex-col gap-2 py-3">
+
+                        <Input
+                            name="name"
+                            label="Name"
+                            inputType="text"
+                            disabled={isSigningUp}
+                            placeholder="Enter your username..."
+                            register={register}
+                            error={errors}
+                            rules={{ required: "Username can't be empty" }}
+                        />
+
+                        <Input
+                            name="email"
+                            label="Email"
+                            inputType="email"
+                            disabled={isSigningUp}
+                            placeholder="Enter your email..."
+                            register={register}
+                            error={errors}
+                            rules={{ required: "Email is required" }}
+                        />
+
+                        <Input
+                            name="password"
+                            label="Password"
+                            inputType={visibility.password ? "text" : "password"}
+                            disabled={isSigningUp}
+                            placeholder="Enter your password..."
+                            register={register}
+                            error={errors}
+                            rules={{
+                                required: "Password is required",
+                                minLength: {
+                                    value: 6,
+                                    message: "Password must be at least 6 characters"
+                                }
+                            }}
+                            onHidePassword={() => toggleVisibility("password")}
+                            toggle={visibility.password}
+                        />
+
+                        <Input
+                            name="confirmPassword"
+                            label="Confirm Password"
+                            inputType={visibility.confirmPassword ? "text" : "password"}
+                            disabled={isSigningUp}
+                            placeholder="Confirm your password..."
+                            register={register}
+                            error={errors}
+                            rules={{
+                                required: "Please confirm your password",
+                                validate: value =>
+                                    value === watch("password") ||
+                                    "Passwords do not match"
+                            }}
+                            onHidePassword={() => toggleVisibility("confirmPassword")}
+                            toggle={visibility.confirmPassword}
+                        />
+                    </div>
+
+                    <Button
+                        text="Sign up"
+                        loader={isSigningUp}
+                        className="bg-light-primaryCTA text-white flex items-center justify-center font-extrabold rounded-md p-2 uppercase w-full hover:bg-light-secondaryAccent"
+                        disabled={isSigningUp}
+                        type="submit"
+                    />
+                </form>
+
+                <div className="py-4 flex flex-col gap-3">
+                    <div className="flex gap-3 items-center justify-between">
+                        <div className="h-0.5 w-20 bg-light-dividers" />
+                        <span>OR</span>
+                        <div className="h-0.5 w-20 bg-light-dividers" />
+                    </div>
+
+                    <GoogleBtn />
+
+                    <div className="flex items-center gap-2">
+                        <p>Already a member?</p>
+                        <Link to="/login" className="text-light-primaryCTA font-bold">
+                            Login
+                        </Link>
+                    </div>
+                </div>
+            </motion.div>
         </div>
-      </motion.div>
-    </div>
-  );
+    );
 };
+
 export default SignupPage;

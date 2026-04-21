@@ -1,12 +1,15 @@
 //Modules
 import { lazy, Suspense } from "react";
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    Navigate
+} from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Analytics } from "@vercel/analytics/react";
-//Pages
-import HomePage from "./Landing/HomePage";
 
+//Pages
 import LoginPage from "./Dashboard/features/authentication/LoginPage";
 import SignupPage from "./Dashboard/features/authentication/SignupPage";
 import ForgotPassword from "./Dashboard/features/authentication/forgotPassword";
@@ -34,120 +37,113 @@ const Summary = lazy(() => import("./Dashboard/pages/Summary"));
 const Profile = lazy(() => import("./Dashboard/pages/Profile"));
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/signup",
-    element: (
-      <AuthRedirect>
-        <SignupPage />
-      </AuthRedirect>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <AuthRedirect>
-        <LoginPage />
-      </AuthRedirect>
-    ),
-  },
+    {
+        path: "/signup",
+        element: (
+            <AuthRedirect>
+                <SignupPage />
+            </AuthRedirect>
+        )
+    },
+    {
+        path: "/login",
+        element: (
+            <AuthRedirect>
+                <LoginPage />
+            </AuthRedirect>
+        )
+    },
 
-  {
-    path: "subscribe",
-    element: <SubscriptionPage />,
-  },
-  {
-    path: "forgotPassword",
-    element: <ForgotPassword />,
-  },
-  {
-    path: "changePassword",
-    element: <UpdatePassword />,
-  },
-  {
-    path: "*",
-    element: (
-      <Navigate
-        to="/dashboard"
-        replace
-      />
-    ),
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <ProtectedRoutes>
-        <DashboardLayout />
-      </ProtectedRoutes>
-    ),
-    children: [
-      {
-        index: true,
+    {
+        path: "subscribe",
+        element: <SubscriptionPage />
+    },
+    {
+        path: "forgotPassword",
+        element: <ForgotPassword />
+    },
+    {
+        path: "changePassword",
+        element: <UpdatePassword />
+    },
+
+    {
+        path: "/",
         element: (
-          <Suspense fallback={<Loader />}>
-            <DashboardHome />
-          </Suspense>
+            <ProtectedRoutes>
+                <DashboardLayout />
+            </ProtectedRoutes>
         ),
-      },
-      {
-        path: "/dashboard/transactions",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Transactions />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/dashboard/savings",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Savings />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/dashboard/budgets",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Budgets />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/dashboard/summary",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Summary />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/dashboard/profile",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Profile />
-          </Suspense>
-        ),
-      },
-    ],
-  },
+        children: [
+            {
+                index: true,
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <DashboardHome />
+                    </Suspense>
+                )
+            },
+            {
+                path: "/transactions",
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Transactions />
+                    </Suspense>
+                )
+            },
+            {
+                path: "/savings",
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Savings />
+                    </Suspense>
+                )
+            },
+            {
+                path: "/budgets",
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Budgets />
+                    </Suspense>
+                )
+            },
+            {
+                path: "/summary",
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Summary />
+                    </Suspense>
+                )
+            },
+            {
+                path: "/profile",
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <Profile />
+                    </Suspense>
+                )
+            }
+        ]
+    },
+    {
+        path: "*",
+        element: <Navigate to="/" replace />
+    }
 ]);
 
 const App = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider>
-          <RouterProvider router={router} /> <Toaster position="top-right" />
-          <Analytics />
-          <ReactQueryDevtools />
-        </ThemeProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+                <ThemeProvider>
+                    <RouterProvider router={router} />{" "}
+                    <Toaster position="top-right" />
+                    <Analytics />
+                    <ReactQueryDevtools />
+                </ThemeProvider>
+            </AuthProvider>
+        </QueryClientProvider>
+    );
 };
 
 export default App;

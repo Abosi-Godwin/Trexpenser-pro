@@ -4,7 +4,7 @@ export const Logo = () => {
         <div
             className="flex items-center justify-center text-center md:text-md text-light-text  dark:text-dark-text"
         >
-            <Link to="/dashboard">
+            <Link to="/">
                 <h1 className="text-2xl font-extrabold uppercase">
                     Trexpenser.
                 </h1>

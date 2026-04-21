@@ -1,40 +1,46 @@
 import InputLabel from "./InputLabel";
 
 export default function Input({
+    name,
     label,
     placeholder,
     inputType,
     register,
     rules,
     error,
-    disable,
+    disabled,
     toggle,
     noLabel,
     onHidePassword,
     className = "bg-light-sectionBackground text-light-text dark:bg-dark-sectionBackground dark:text-dark-text border-none outline-none p-2 rounded"
 }) {
-    const name = label.split(" ").at(-1);
+    const fieldError = error?.[name];
+
     return (
         <>
             {!noLabel && (
-                <InputLabel
-                    label={label}
-                    inputType={inputType}
-                    toggle={toggle}
-                    hidePassword={onHidePassword}
-                />
+            
+            <InputLabel
+    label={label}
+    name={name}
+    isPassword={name === "password" || name === "confirmPassword"}
+    showPassword={toggle}
+    onToggle={onHidePassword}
+/> 
             )}
+
             <input
-                id={label}
+                id={name}
                 type={inputType}
                 placeholder={placeholder}
-                disabled={disable}
+                disabled={disabled}
                 className={className}
                 {...register(name, rules)}
             />
-            {error[label.split(" ").at(-1)] && (
+
+            {fieldError && (
                 <p className="text-red-500 text-sm mt-1">
-                    {error[label.split(" ").at(-1)].message}
+                    {fieldError.message}
                 </p>
             )}
         </>
