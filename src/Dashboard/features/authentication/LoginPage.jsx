@@ -26,7 +26,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="bg-light-sectionBackground flex items-center justify-center h-screen max-h-dvh w-screen overflow-hidden">
+        <div className="bg-light-sectionBackground flex items-center justify-center max-h-dvh w-screen overflow-hidden">
             <Toaster />
 
             <motion.div
