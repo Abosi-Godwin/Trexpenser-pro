@@ -2,20 +2,14 @@ import { supabase } from "../../services/Supabase";
 
 export const getCurrentUser = async () => {
     const {
-        data: { session }
-    } = await supabase.auth.getSession();
-
-    if (!session) return null;
-
-    const {
         data: { user },
         error
     } = await supabase.auth.getUser();
 
     if (error) {
-        console.error(error.message);
+        if (error.message === "Auth session missing!") return null;
         throw new Error(error.message);
     }
 
-    return user;
+    return user ?? null;
 };

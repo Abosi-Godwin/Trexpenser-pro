@@ -8,16 +8,16 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const queryClient = useQueryClient();
-
+ 
     const {
-        data: user,
-        error: userError,
-        isError: isUserError,
-        isPending: isUserLoading
-    } = useQuery({
-        queryKey: ["user"],
-        queryFn: getCurrentUser
-    });
+  data: user,
+  isPending: isUserLoading
+} = useQuery({
+  queryKey: ["user"],
+  queryFn: getCurrentUser,
+  staleTime: 1000 * 60 * 5,  
+  retry: false, 
+});
 
     const {
         mutate: logOut,

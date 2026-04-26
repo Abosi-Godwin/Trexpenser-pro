@@ -14,10 +14,9 @@ export const useLogIn = () => {
         isError: logInIsError
     } = useMutation({
         mutationFn: userLogIn,
-        onSuccess: data => {
-            // queryClient.setQueryData(data);
-            queryClient.invalidateQueries("user");
-            navigate("/dashboard", { replace: true });
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["user"] });
+            navigate("/", { replace: true });
         },
         onError: err => {
             toast.error(err.message);
