@@ -9,7 +9,7 @@ export const useGetSavings = () => {
     const {
         data: savings,
         error: savingsError,
-        isError: isSavingsError,
+       // isError: isSavingsError,
         isPending: isSavingsLoading,
         isSuccess: isSavingsLoaded
     } = useQuery({

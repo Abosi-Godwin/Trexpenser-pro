@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 
 import { useAuth } from "../contexts/AuthContext";
 import { useLogIn } from "./useLogIn";
@@ -24,7 +24,8 @@ export const useLoader = () => {
         loginIsPending ||
         isLoggingOut;
 
-    const allDatasLoaded =transactionLoaded && isBudgetsLoaded && isSavingsLoaded;
+    const allDatasLoaded =
+        transactionLoaded && isBudgetsLoaded && isSavingsLoaded;
 
     return { somethingIsLoading, allDatasLoaded };
 };

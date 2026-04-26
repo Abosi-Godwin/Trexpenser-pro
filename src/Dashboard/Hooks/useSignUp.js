@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+
 import { toast } from "react-hot-toast";
 
 import { userSignUp } from "../apis/authentication/signUp";
 
 export const useSignUp = () => {
-    //const navigate = useNavigate();
     const [emailSent, setEmailSent] = useState(false);
     const {
         mutate: signUp,
