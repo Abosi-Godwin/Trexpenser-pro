@@ -1,3 +1,4 @@
+ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -8,14 +9,14 @@ import Button from "../Form/Button";
 import DateInput from "../Form/DateInput";
 import Modal from "../../ui/Modal";
 import { dropdownVariants } from "../../Utils/AnimationVariants";
-import { incomeCategories } from "../../data/data";
+import { incomeCategories, savingMethods } from "../../data/data";
 import { useUser } from "../../Hooks/useUser";
 import { useAddSavings } from "../../Hooks/useAddSavings";
 import { useEditSavings } from "../../Hooks/useEditSavings";
 import { useToday } from "../../Hooks/useDate";
-import { savingMethods } from "../../data/data";
+
 const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
-  let minDate;
+  const editMinDate = useRef(isEdit ? data.start_date : null);
 
   const {
     register,
@@ -24,75 +25,61 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
     formState: { errors },
   } = useForm({
     defaultValues: isEdit
-      ? (() => {
-          const { id, method, title, funded_by, target_amount, start_date, end_date, percentage } =
-            data;
-          minDate = start_date;
-          return {
-            method: method || savingMethods[0].value,
-            name: title,
-            source: funded_by,
-            amount: target_amount,
-            ["Start date"]: start_date,
-            ["Target date"]: end_date,
-            percentage,
-            id,
-          };
-        })()
+      ? {
+          method: data.method || savingMethods[0].value,
+          name: data.title,
+          source: data.funded_by,
+          amount: data.target_amount,
+          "Start date": data.start_date,
+          "Target date": data.end_date,
+          percentage: data.percentage,
+          id: data.id,
+        }
       : { method: savingMethods[0].value },
   });
 
   const { userId } = useUser();
   const { today } = useToday();
-
   const { addSavings, isAddingSavings } = useAddSavings();
   const { editSavings, isEditingSavings } = useEditSavings();
+
+  const isBusy = isAddingSavings || isEditingSavings;
 
   const startDate = watch("Start date");
   const savingMethod = watch("method");
 
-  function handleFormSubmit(datas) {
-     
-    const id = datas.id;
+  function handleFormSubmit(formData) {
     const newSavings = {
-      title: datas.name,
-      target_amount: +datas.amount,
+      title: formData.name,
+      target_amount: +formData.amount,
       user_id: userId,
-      method: datas.method,
-      percentage: +datas.percentage || null,
-      funded_by: datas.source || null,
-      start_date: datas["Start date"],
-      end_date: datas["Target date"],
+      method: formData.method,
+      percentage: +formData.percentage || null,
+      funded_by: formData.source || null,
+      start_date: formData["Start date"],
+      end_date: formData["Target date"],
       is_active: true,
     };
 
     if (isEdit) {
       editSavings(
-        { newSavings, id },
-        {
-          onSuccess: () => onCloseForm(),
-        }
+        { newSavings, id: formData.id },
+        { onSuccess: onCloseForm }
       );
       return;
     }
-    addSavings(newSavings, {
-      onSuccess: () => onCloseForm(),
-    });
+
+    addSavings(newSavings, { onSuccess: onCloseForm });
   }
-  const savingsNameRule = {
-    required: "Name is required ",
-  };
-  const amountRule = {
-    required: "Amount is required.",
-    min: { value: 1, message: "Can't be less than 1" },
-  };
 
   return (
     <Modal>
-      <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 bg-light-background">
-        <h3 className="text-xl font-bold mb-2">
-          {isEdit ? "Edit your savings goal." : "Add a new goal"}
-        </h3>
+      <div className="border-2 border-light-dividers p-3 rounded-md w-4/5 
+        bg-light-background dark:bg-dark-background dark:text-dark-text">
+
+        <h2 className="text-xl font-bold mb-2">
+          {isEdit ? "Edit your savings goal" : "Add a new goal"}
+        </h2>
 
         <form
           className="flex flex-col gap-1.5"
@@ -100,31 +87,39 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
           noValidate
         >
           <Input
+            name="name"
             label="savings name"
-            inputType="string"
+            inputType="text"
             placeholder="Name your savings goal..."
-            disable={isAddingSavings}
+            disabled={isBusy}
             register={register}
-            rules={savingsNameRule}
+            rules={{ required: "Name is required" }}
             error={errors}
           />
+
           <Input
+            name="amount"
             label="Target amount"
             inputType="number"
             placeholder="Target amount..."
-            rules={amountRule}
-            disable={isAddingSavings}
+            disabled={isBusy}
             register={register}
             error={errors}
+            rules={{
+              required: "Amount is required",
+              min: { value: 1, message: "Can't be less than 1" },
+            }}
           />
+
           <SelectInput
             options={savingMethods}
-            labelFor="funded_by"
-            disable={false}
+            labelFor="method"
             label="method"
+            disabled={false}
             register={register}
             error={errors}
           />
+
           <AnimatePresence mode="wait">
             {savingMethod === "automatic" && (
               <motion.div
@@ -132,18 +127,14 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
                 variants={dropdownVariants}
                 initial="hidden"
                 animate="visible"
-                viewport={{ once: true, amount: 0.1 }}
                 exit="hidden"
               >
-                <RangeSlider
-                  register={register}
-                  watch={watch}
-                />
+                <RangeSlider register={register} watch={watch} />
                 <SelectInput
                   options={incomeCategories}
-                  labelFor="funded_by"
-                  disable={isAddingSavings}
+                  labelFor="source"
                   label="Source"
+                  disabled={isBusy}
                   register={register}
                   error={errors}
                 />
@@ -155,34 +146,42 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
             <DateInput
               label="Start date"
               maxDate=""
-              minDate={isEdit ? minDate : today}
+              minDate={isEdit ? editMinDate.current : today}
               register={register}
-              disable={isAddingSavings}
-              className="w-full outline-none rounded-md p-2"
+              disabled={isBusy}
+              className="w-full outline-none rounded-md p-2 
+                bg-light-sectionBackground dark:bg-dark-sectionBackground 
+                dark:text-dark-text"
             />
 
             <DateInput
               label="Target date"
               maxDate=""
               minDate={startDate}
-              disable={isAddingSavings}
+              disabled={isBusy}
               register={register}
-              className="w-full outline-none rounded-md p-2"
+              className="w-full outline-none rounded-md p-2 
+                bg-light-sectionBackground dark:bg-dark-sectionBackground 
+                dark:text-dark-text"
             />
 
             <Button
-              className="bg-light-sectionBackground rounded "
+              className="bg-light-sectionBackground dark:bg-dark-sectionBackground 
+                rounded font-bold p-2"
               text="Cancel"
+              disabled={isBusy}
               onButtonClick={onCloseForm}
             />
+
             <Button
-              loader={isAddingSavings || isEditingSavings}
-              className="bg-light-primaryCTA flex items-center
-                            justify-center uppercase p-2 rounded
-                            text-white
-        hover:bg-color-5 hover:text-color-2 font-bold text-xl"
+              type="submit"
+              loader={isBusy}
+              disabled={isBusy}
+              className="bg-light-primaryCTA flex items-center justify-center 
+                uppercase p-2 rounded text-white hover:bg-color-5 
+                hover:text-color-2 font-bold text-xl 
+                dark:bg-dark-primaryCTA disabled:opacity-60"
               text={isEdit ? "Edit" : "Save"}
-              onButtonClick={handleSubmit}
             />
           </div>
         </form>
@@ -190,4 +189,5 @@ const AddSavingsForm = ({ onCloseForm, isEdit, data }) => {
     </Modal>
   );
 };
+
 export default AddSavingsForm;

@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { useAI } from "../hooks/useAi";
-
 import EmptySummary from "../ui/EmptySummaryModal";
 import MiniLoader from "../ui/MiniLoader";
 
@@ -42,8 +41,6 @@ const Summary = () => {
         expenseCategories
     } = useTransactions();
 
-    const handleCloseModal = () => setOpenEmptyModal(prev => !prev);
-
     const handleClick = () => {
         const emptySlate =
             currentUserTransactions.length < 1 &&
@@ -54,7 +51,7 @@ const Summary = () => {
             setOpenEmptyModal(true);
             return;
         }
-       
+
         const userData = {
             userName,
             transactions: {
@@ -80,16 +77,23 @@ const Summary = () => {
                 minMaxDate
             }
         };
-        const prompt = buildTrexpenserPrompt(userData);
-        getInsight(prompt);
+        console.log(userData);
+         getInsight(buildTrexpenserPrompt(userData));
     };
 
     const RocketIcon = encouragement.icon;
+
     return (
-        <div className="bg-light-background dark:bg-dark-cardBackground dark:text-dark-text rounded-md p-4">
-            {openEmptyModal && <EmptySummary onCloseModal={handleCloseModal} />}
-            <h1 className="text-2xl font-bold mb-2">Your Financial Insights</h1>
-            <p className="text-gray-600 mb-6">
+        <div
+            className="bg-light-background dark:bg-dark-cardBackground 
+      dark:text-dark-text rounded-md p-4"
+        >
+            {openEmptyModal && (
+                <EmptySummary onCloseModal={() => setOpenEmptyModal(false)} />
+            )}
+
+            <h2 className="text-2xl font-bold mb-2">Your Financial Insights</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Get a clear overview of your income, expenses, budgets, and
                 savings goals in one tap.
             </p>
@@ -97,11 +101,11 @@ const Summary = () => {
             <div className="py-4">
                 <button
                     onClick={handleClick}
-                    className="w-full py-3 rounded-xl bg-indigo-600 text-white
-                    flex items-center justify-center gap-3
-                    font-semibold shadow-md hover:bg-indigo-700
-                    disabled:opacity-60"
                     disabled={gettingInsights}
+                    className="w-full py-3 rounded-xl bg-indigo-600 text-white
+            flex items-center justify-center gap-3 font-semibold 
+            shadow-md hover:bg-indigo-700 disabled:opacity-60 
+            transition-colors"
                 >
                     {gettingInsights ? (
                         <>
@@ -113,61 +117,55 @@ const Summary = () => {
                 </button>
             </div>
 
-            <div className="space-y-4 mb-6 grid grid-cols-1 md:grid-cols-2 gap-2">
-                {previewCards.map((card, index) => {
+            {/* Preview cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {previewCards.map(card => {
                     const Icon = card.icon;
+                    const insightKey = card.title.toLowerCase();
+                    const insightItems = insight?.[insightKey];
+
                     return (
                         <div
-                            key={index}
-                            className="p-4 border rounded-xl shadow-sm gap-3"
+                            key={card.title}
+                            className="p-4 border rounded-xl shadow-sm"
                         >
-                            <div className="flex items-center gap-2">
-                                <h1
-                                    className="flex items-center
-                        justify-center p-2 rounded-md bg-light-mainBackground
-        text-light-text dark:bg-dark-mainBackground dark:text-dark-text"
+                            <div className="flex items-center gap-2 mb-2">
+                                <div
+                                    className="flex items-center justify-center p-2 
+                  rounded-md bg-light-mainBackground text-light-text 
+                  dark:bg-dark-mainBackground dark:text-dark-text"
                                 >
                                     <Icon className="text-indigo-600 w-6 h-6" />
-                                </h1>
-                                <h2 className="font-semibold text-xl">
+                                </div>
+                                <h3 className="font-semibold text-xl">
                                     {card.title}
-                                </h2>
+                                </h3>
                             </div>
-                            <div className="py-5">
-                                {!insight ? (
-                                    <p className="text-gray-600 p-3">
+
+                            <div className="py-3">
+                                {!insightItems ? (
+                                    <p className="text-gray-600 dark:text-gray-400 p-3">
                                         {card.text}
                                     </p>
                                 ) : (
-                                    <ul
-                                        className="list-disc list-inside flex
-                                flex-col gap-3"
-                                    >
-                                        {insight[card.title.toLowerCase()].map(
-                                            (item, index) => {
-                                                const itsHeading =
-                                                    !item.includes(" ") ||
-                                                    item
-                                                        .split("")
-                                                        .filter(
-                                                            text => text === " "
-                                                        ).length < 2;
+                                    <ul className="list-disc list-inside flex flex-col gap-3">
+                                        {insightItems.map((item, i) => {
+                                            const isHeading =
+                                                item.startsWith("**") ||
+                                                item.trim().split(" ").length <=
+                                                    2;
 
-                                                return itsHeading ? (
-                                                    <h1
-                                                        key={index}
-                                                        className="font-bold"
-                                                    >
-                                                        {item.replaceAll(
-                                                            "*",
-                                                            ""
-                                                        )}
-                                                    </h1>
-                                                ) : (
-                                                    <li key={index}>{item}</li>
-                                                );
-                                            }
-                                        )}
+                                            return isHeading ? (
+                                                <h4
+                                                    key={i}
+                                                    className="font-bold"
+                                                >
+                                                    {item.replaceAll("*", "")}
+                                                </h4>
+                                            ) : (
+                                                <li key={i}>{item}</li>
+                                            );
+                                        })}
                                     </ul>
                                 )}
                             </div>
@@ -176,29 +174,26 @@ const Summary = () => {
                 })}
             </div>
 
-            <div
-                className="p-6 border rounded-md flex flex-col items-cenjter
-                justify-center shadow-sm"
-            >
-                <div className="flex items-center gap-2">
-                    <h1
-                        className="flex items-center
-                        justify-center p-2 rounded-md bg-light-mainBackground
-        text-light-text dark:bg-dark-mainBackground dark:text-dark-text"
+            {/* Encouragement card */}
+            <div className="p-6 border rounded-md flex flex-col shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                    <div
+                        className="flex items-center justify-center p-2 rounded-md 
+            bg-light-mainBackground text-light-text 
+            dark:bg-dark-mainBackground dark:text-dark-text"
                     >
                         <RocketIcon className="text-indigo-600 w-6 h-6" />
-                    </h1>
-                    <h2 className="font-semibold text-xl">
+                    </div>
+                    <h3 className="font-semibold text-xl">
                         {encouragement.title}
-                    </h2>
+                    </h3>
                 </div>
-                <p className="py-5">
-                    {insight?.encouragement ||
-                        insight?.conclusion ||
-                        encouragement.text}
+                <p className="py-3 text-gray-700 dark:text-gray-300">
+                    {insight?.encouragement ?? encouragement.text}
                 </p>
             </div>
         </div>
     );
 };
+
 export default Summary;

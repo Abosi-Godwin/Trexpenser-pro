@@ -10,4 +10,3 @@ const Form = ({ children, submitFun, handleSubmitFun }) => {
 };
 
 export default Form;
- 

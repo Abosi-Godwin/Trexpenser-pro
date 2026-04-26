@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { useSearchParams } from "react-router-dom";
 
 import Table from "../ui/Table";
@@ -8,99 +8,123 @@ import Button from "../features/Form/Button";
 import TableFooter from "../ui/TableFooter";
 import EmptyDashboard from "../ui/EmptyDashboard";
 import TransactionForm from "../features/Form/TransactionForm";
-
 import Transaction from "../features/transactions/Transaction";
 
 import { useTransactions } from "../Hooks/useTransactions";
 import { sortingSwitchFunc } from "../Utils/SortSwitchFunc";
 import { filterSwitchFunc } from "../Utils/FilterSwitchFunc";
-
 import { transactionFilterOptions, transactionSortOptions } from "../data/data";
 
 const maxTransactionToShow = 10;
 
 function Transactions() {
-  const [openForm, setOpenForm] = useState(false);
+    const [openForm, setOpenForm] = useState(false);
+    const [searchParams] = useSearchParams();
 
-  const [searchParams] = useSearchParams();
-  const sortParams = searchParams.get("sortBy");
-  const filterParams = searchParams.get("filterBy");
+    const sortParams = searchParams.get("sortBy");
+    const filterParams = searchParams.get("filterBy");
 
-  const { currentUserTransactions } = useTransactions();
+    const { currentUserTransactions } = useTransactions();
 
-  let transactions = null;
+    // Chain: sort first, then filter the sorted result
+    let transactions = sortingSwitchFunc(
+        sortParams,
+        currentUserTransactions ?? []
+    );
+    transactions = filterSwitchFunc(filterParams, transactions);
 
-  transactions = sortingSwitchFunc(sortParams, currentUserTransactions);
+    //const totalTransaction = transactions.length;
+    const [currentPage, setCurrentPage] = useState(1);
 
-  transactions = filterSwitchFunc(filterParams, currentUserTransactions);
+    // Reset to page 1 when sort/filter changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [sortParams, filterParams]);
 
-  const totalTransaction = transactions.length;
+    const totalTransaction = transactions.length;
+    const totalPages = Math.ceil(totalTransaction / maxTransactionToShow);
 
-  const handleOpenForm = () => {
-    setOpenForm((prev) => !prev);
-  };
+    // Slice for current page
+    const paginated = transactions.slice(
+        (currentPage - 1) * maxTransactionToShow,
+        currentPage * maxTransactionToShow
+    );
 
-  return (
-    <div className="bg-light-cardBackground overflow-hidden rounded-md dark:bg-dark-cardBackground dark:text-dark-text">
-      <div className="flex justify-between items-center py-5 px-2">
-        <h1 className="text-2xl font-bold">All transactions </h1>
-        <Button
-          text="Add new"
-          className="bg-light-primaryCTA p-1 rounded-md outline-0
-                    font-semibold text-xl text-white dark:bg-dark-primaryCTA"
-          type="cta"
-          model="normal"
-          onButtonClick={handleOpenForm}
-        />
-        {openForm && <TransactionForm onCloseForm={handleOpenForm} />}
-      </div>
-      {totalTransaction >= 1 ? (
-        <>
-          <div
-            className="flex justify-between p-2 items-center gap-4
-                border-b-2 border-b-light-dividers"
-          >
-            <Filtering
-              options={transactionFilterOptions}
-              label="Filter"
-              labelFor="filtering"
-            />
-            <Sorting
-              options={transactionSortOptions}
-              label="Sort"
-              labelFor="sorting"
-            />
-          </div>
-          <Table>
-            {transactions.map((transaction) => {
-              return (
-                <Transaction
-                  transaction={transaction}
-                  key={transaction.id}
-                >
-                  <Transaction.Icon />
-                  <Transaction.Description />
-                  <Transaction.Action />
-                </Transaction>
-              );
-            })}
-          </Table>
-          <TableFooter
-            maxTransactionToShow={maxTransactionToShow}
-            totalTransaction={totalTransaction}
-          />
-        </>
-      ) : (
-        <EmptyDashboard
-          link="Log an entry"
-          imgSrc="/undraw_credit-card_t6qm.svg"
-          destination="transactions"
-          description="No transaction log yet. add one or more to
-                    track your income and expense."
-          showBtn={false}
-        />
-      )}
-    </div>
-  );
+    const handleOpenForm = () => setOpenForm(prev => !prev);
+
+    return (
+        <div
+            className="bg-light-cardBackground overflow-hidden rounded-md 
+      dark:bg-dark-cardBackground dark:text-dark-text"
+        >
+            {/* Header */}
+            <div className="flex justify-between items-center py-5 px-2">
+                <h1 className="text-2xl font-bold">All Transactions</h1>
+                <Button
+                    text="Add new"
+                    className="bg-light-primaryCTA p-1 rounded-md outline-0
+            font-semibold text-xl text-white dark:bg-dark-primaryCTA"
+                    type="cta"
+                    model="normal"
+                    onButtonClick={handleOpenForm}
+                />
+            </div>
+
+            {/* Form rendered outside header flex container */}
+            {openForm && <TransactionForm onCloseForm={handleOpenForm} />}
+
+            {totalTransaction > 0 ? (
+                <>
+                    <div
+                        className="flex justify-between p-2 items-center gap-4
+            border-b-2 border-b-light-dividers"
+                    >
+                        <Filtering
+                            options={transactionFilterOptions}
+                            label="Filter"
+                            labelFor="filtering"
+                        />
+                        <Sorting
+                            options={transactionSortOptions}
+                            label="Sort"
+                            labelFor="sorting"
+                        />
+                    </div>
+                    <Table>
+                        {paginated.map(transaction => (
+                            <Transaction
+                                transaction={transaction}
+                                key={transaction.id}
+                            >
+                                <Transaction.Icon />
+                                <Transaction.Description />
+                                <Transaction.Action />
+                            </Transaction>
+                        ))}
+                    </Table>
+
+                    <TableFooter
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        totalTransaction={totalTransaction}
+                        maxTransactionToShow={maxTransactionToShow}
+                        onNext={() =>
+                            setCurrentPage(p => Math.min(p + 1, totalPages))
+                        }
+                        onPrev={() => setCurrentPage(p => Math.max(p - 1, 1))}
+                    />
+                </>
+            ) : (
+                <EmptyDashboard
+                    link="Log an entry"
+                    imgSrc="/undraw_credit-card_t6qm.svg"
+                    destination="transactions"
+                    description="No transaction log yet. Add one or more to track your income and expenses."
+                    showBtn={false}
+                />
+            )}
+        </div>
+    );
 }
+
 export default Transactions;

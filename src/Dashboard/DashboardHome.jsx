@@ -8,13 +8,15 @@ import BarChart from "./features/Charts/BarChart";
 import ApexLineChart from "./features/Charts/ApexLineChart";
 import DoughnutChart from "./features/Charts/DoughnutChart";
 import RecentTransactions from "./features/transactions/RecentTransactions";
-
 import SavingGoals from "./features/savings/SavingGoals";
 import BudgetTrackingChart from "./features/budgets/BudgetTracking";
 
 import { useTransactions } from "./Hooks/useTransactions";
 import { useUser } from "./Hooks/useUser";
 import { useLoader } from "./Hooks/useLoader";
+
+const cardClass = `flex flex-col items-start justify-center bg-white 
+  rounded-md p-3 gap-4 dark:bg-dark-cardBackground dark:text-dark-text`;
 
 const DashboardHome = () => {
     const { userName, lastSeen } = useUser();
@@ -31,46 +33,34 @@ const DashboardHome = () => {
 
     useEffect(() => {
         const hoursAgo = differenceInHours(getCurrentDate(), lastSeen) >= 12;
-
         if (userName && !somethingIsLoading && hoursAgo) {
-            toast.success(`Welcome, ${userName}`);
+            toast.success(`Welcome back, ${userName}!`);
         }
     }, [userName, lastSeen, somethingIsLoading]);
 
     return (
-        <section
-            className="grid grid-cols-1 md:grid-cols-3 gap-4
-                    overflow-scroll"
-        >
-            <div
-                className="flex flex-col items-start justify-center bg-light-cardBackground rounded-md p-3 gap-4
-            dark:bg-dark-cardBackground dark:text-dark-text overflow-auto"
-            >
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Balance + ApexChart */}
+            <div className={`${cardClass} bg-light-cardBackground`}>
                 <div className="flex items-center justify-between w-full">
                     <div>
-                        <h1
-                            className="text-3xl font-bold text-gray-700
-                        dark:text-dark-text"
-                        >
+                        <p className="text-3xl font-bold text-gray-700 dark:text-dark-text">
                             {totalBalance}
-                        </h1>
+                        </p>
                         <p className="text-sm">Income and expenses overview</p>
                     </div>
                 </div>
                 <ApexLineChart incomes={incomes} expenses={expenses} />
             </div>
 
-            <div className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4 dark:bg-dark-cardBackground dark:text-dark-text">
-                <div className="flex items-start flex-col justify-between p-3 rounded-md">
-                    <h1
-                        className="text-3xl font-bold text-gray-700
-                        dark:text-dark-text"
-                    >
+            {/* Income + LineChart */}
+            <div className={cardClass}>
+                <div className="flex flex-col p-3 rounded-md">
+                    <p className="text-3xl font-bold text-gray-700 dark:text-dark-text">
                         {totalIncome}
-                    </h1>
-                    <p className="text-sm">Incomes overview </p>
+                    </p>
+                    <p className="text-sm">Incomes overview</p>
                 </div>
-
                 <LineChart
                     allDatas={currentUserTransactions}
                     incomes={incomes}
@@ -79,20 +69,14 @@ const DashboardHome = () => {
                 />
             </div>
 
-            <div
-                className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4
-            dark:bg-dark-cardBackground dark:text-dark-text"
-            >
-                <div className="flex flex-col items-start flex-start justify-between">
-                    <h1
-                        className="text-3xl font-bold text-gray-700
-                        dark:text-dark-text"
-                    >
+            {/* Expenses + LineChart */}
+            <div className={cardClass}>
+                <div className="flex flex-col">
+                    <p className="text-3xl font-bold text-gray-700 dark:text-dark-text">
                         {totalExpenses}
-                    </h1>
+                    </p>
                     <p className="text-sm">Expenses overview</p>
                 </div>
-
                 <LineChart
                     allDatas={currentUserTransactions}
                     incomes={incomes}
@@ -100,11 +84,9 @@ const DashboardHome = () => {
                     label="Expenses"
                 />
             </div>
-            <div
-                className="flex flex-col items-start justify-center bg-white
-            rounded-md p-3 gap-4
-            dark:bg-dark-cardBackground dark:text-dark-text"
-            >
+
+            {/* Bar chart */}
+            <div className={cardClass}>
                 <BarChart
                     allDatas={currentUserTransactions}
                     showTitle={false}
@@ -112,28 +94,31 @@ const DashboardHome = () => {
                 />
             </div>
 
-            <div className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4 dark:bg-dark-cardBackground dark:text-dark-text">
+            {/* Doughnut — income */}
+            <div className={cardClass}>
                 <DoughnutChart
                     allDatas={currentUserTransactions}
                     label="income"
                 />
             </div>
-            <div className="flex flex-col items-start justify-center bg-white rounded-md p-3 gap-4   dark:bg-dark-cardBackground dark:text-dark-text">
+
+            {/* Doughnut — expense */}
+            <div className={cardClass}>
                 <DoughnutChart
                     allDatas={currentUserTransactions}
                     label="expense"
                 />
             </div>
-            <div
-                className="md:col-span-3 grid grid-cols-1 gap-4
-                        md:grid-cols-2
-             rounded-md shadow-md shadow-color-2"
-            >
-                <RecentTransactions />
+
+            <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                    <RecentTransactions />
+                </div>
                 <SavingGoals showTitle={true} />
                 <BudgetTrackingChart />
             </div>
         </section>
     );
 };
+
 export default DashboardHome;

@@ -1,101 +1,43 @@
 export const sortingSwitchFunc = (sortParams, currentUserTransactions) => {
-   
-  let transaction = [];
+    
+    const arr = [...currentUserTransactions];
 
-  switch (sortParams) {
-    case "date_desc":
-      transaction = currentUserTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-      break;
-    case "date_asc":
-      transaction = currentUserTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-      break;
-    case "amount_desc":
-      transaction = currentUserTransactions.sort((a, b) => +b.amount - +a.amount);
-      break;
-    case "amount_asc":
-      transaction = currentUserTransactions.sort((a, b) => +a.amount - +b.amount);
-      break;
-    case "category_asc":
-      transaction = currentUserTransactions.sort(
-        (a, b) => a.category[0].toLowerCase() > b.category[0].toLowerCase()
-      );
-      //   console.log(transaction);
-      break;
-    case "category_desc":
-      transaction = currentUserTransactions.sort((a, b) => a - b);
-      break;
-    case "type_income_first":
-      transaction = currentUserTransactions.sort((a, b) => {
-        if (a.type === "income") {
-          console.log("A");
-          return true;
-        } else {
-          console.log("B");
-          return false;
-        }
-      });
-      break;
-    case "type_expense_first":
-      transaction = currentUserTransactions.sort((a, b) => new Date(a.date) - new Date(b.date));
-      break;
-    default:
-      transaction = currentUserTransactions;
-  }
-  return transaction;
-};
-
-/*
-
-
-export const sortingSwitchFunc = (sortParams, currentUserTransactions) => {
-    let transaction = [];
     switch (sortParams) {
         case "date_desc":
-            transaction = currentUserTransactions.sort(
-                (a, b) => new Date(b.date) - new Date(a.date)
-            );
-            break;
+            return arr.sort((a, b) => new Date(b.date) - new Date(a.date));
+
         case "date_asc":
-            transaction = currentUserTransactions.sort(
-                (a, b) => new Date(a.date) - new Date(b.date)
-            );
-            break;
+            return arr.sort((a, b) => new Date(a.date) - new Date(b.date));
+
         case "amount_desc":
-            transaction = currentUserTransactions.sort(
-                (a, b) => +b.amount - +a.amount
-            );
-            break;
+            return arr.sort((a, b) => +b.amount - +a.amount);
+
         case "amount_asc":
-            transaction = currentUserTransactions.sort(
-                (a, b) => +a.amount - +b.amount
-            );
-            break;
-        case "category_desc":
-            transaction = currentUserTransactions.sort((a, b) => {
-                console.log(a.category, b.category);
-                return b.category.split("")[0] - a.category.split("")[0];
-            });
-            break;
+            return arr.sort((a, b) => +a.amount - +b.amount);
+
         case "category_asc":
-            transaction = currentUserTransactions.sort(
-                (a, b) => a.category - b.category
+            return arr.sort((a, b) =>
+                a.category.toLowerCase().localeCompare(b.category.toLowerCase())
             );
-            break;
+
+        case "category_desc":
+            return arr.sort((a, b) =>
+                b.category.toLowerCase().localeCompare(a.category.toLowerCase())
+            );
+
         case "type_income_first":
-            transaction = currentUserTransactions.sort(
-                (a, b) => new Date(b.date) - new Date(a.date)
-            );
-            break;
+            return arr.sort((a, b) => {
+                if (a.type === b.type) return 0;
+                return a.type === "income" ? -1 : 1;
+            });
+
         case "type_expense_first":
-            transaction = currentUserTransactions.sort(
-                (a, b) => new Date(a.date) - new Date(b.date)
-            );
-            break;
+            return arr.sort((a, b) => {
+                if (a.type === b.type) return 0;
+                return a.type === "expense" ? -1 : 1;
+            });
+
         default:
-            transaction = currentUserTransactions;
+            return arr;
     }
-    return transaction;
 };
-
-
-*/

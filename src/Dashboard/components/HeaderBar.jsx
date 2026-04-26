@@ -1,3 +1,4 @@
+// HeaderBar.jsx
 import { FaBars, FaXmark, FaSun, FaMoon } from "react-icons/fa6";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -7,61 +8,81 @@ import { Logo } from "../ui/Logo";
 import NavBar from "../ui/Nav";
 
 const HeaderBar = () => {
-    const { lightTheme, updateTheme } = useTheme();
+  const { lightTheme, updateTheme } = useTheme();
+  const [showNav, setShowNav] = useState(false);
+  const { pathname } = useLocation();
 
-    const [showNav, setShowNav] = useState(false);
+  const currentPage = pathname.split("/").filter(Boolean).pop() ?? "dashboard";
+  const isHome = currentPage === "dashboard" || pathname === "/";
 
-    const navHandler = () => setShowNav(prev => !prev);
+  return (
+    <header
+      className="col-span-1 md:col-start-2
+        bg-light-sidebarHeaderBackground 
+        dark:bg-dark-sidebarHeaderBackground 
+        dark:text-dark-text
+        fixed md:static top-0 left-0 right-0
+        w-full z-10
+        p-2 flex flex-col gap-2
+        shadow-sm shadow-light-dividers 
+        dark:shadow-dark-dividers"
+    >
+      <div className="flex justify-between items-center">
+        <Logo />
 
-    const getPage = useLocation();
+        <div className="flex gap-3 items-center">
+          {/* Theme toggle */}
+          <button
+            onClick={updateTheme}
+            aria-label={lightTheme ? "Switch to dark mode" : "Switch to light mode"}
+            className="text-2xl p-2 rounded hover:bg-light-sectionBackground
+              dark:hover:bg-dark-sectionBackground transition-colors"
+          >
+            {lightTheme ? <FaMoon /> : <FaSun />}
+          </button>
 
-    const currentPage = getPage.pathname.split("/").pop();
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setShowNav((prev) => !prev)}
+            aria-label={showNav ? "Close menu" : "Open menu"}
+            aria-expanded={showNav}
+            className="text-2xl p-2 rounded md:hidden
+              hover:bg-light-sectionBackground 
+              dark:hover:bg-dark-sectionBackground transition-colors"
+          >
+            {showNav ? <FaXmark /> : <FaBars />}
+          </button>
+        </div>
+      </div>
 
-    return (
-        <header
-            className="bg-light-sidebarHeaderBackground p-2 grid grid-cols-1 gap-2 shadow-s shadow-light-dividers dark:shadow-dark-dividers dark:bg-dark-sidebarHeaderBackground dark:text-dark-text fixed md:static
-        w-screen z-10"
-        >
-            <div className="flex justify-between items-center">
-                <Logo />
-                <div className="flex gap-5 items-center justify-end">
-                    <h1
-                        className="text-2xl p-2 rounded inline-block"
-                        onClick={updateTheme}
-                    >
-                        {lightTheme ? <FaMoon /> : <FaSun />}
-                    </h1>
+      {/* Mobile nav */}
+      <AnimatePresence mode="wait">
+        {showNav && (
+          <NavBar isMenuOpen={showNav} closeNavBar={() => setShowNav(false)} />
+        )}
+      </AnimatePresence>
 
-                    <h1
-                        className="text-2xl p-2 rounded
-                inline-block md:hidden"
-                        onClick={navHandler}
-                    >
-                        {showNav ? <FaXmark /> : <FaBars />}
-                    </h1>
-                </div>
-            </div>
+      {/* Desktop breadcrumb bar */}
+      <div className="hidden md:flex w-full justify-between items-center 
+        p-2 border-t-2 border-t-light-cardBackground 
+        dark:border-t-dark-cardBackground">
+        <p className="text-sm capitalize">
+          Welcome to your <strong>{currentPage}</strong> page.
+        </p>
 
-            <AnimatePresence mode="wait">
-                {showNav && (
-                    <NavBar isMenuOpen={showNav} closeNavBar={navHandler} />
-                )}
-            </AnimatePresence>
-
-            <div className="hidden w-full justify-between items-center p-2 md:flex border-t-2 border-t-light-cardBackground dark:border-t-dark-cardBackground">
-                <p className="text-sm">Welcome to your {currentPage} page.</p>
-
-                {currentPage === "" && (
-                    <button
-                        className="bg-light-primaryCTA text-white font-bold
-                 rounded-md p-2 outline-0 ring-1 ring-light-secondaryAccent hover:bg-light-secondaryAccent"
-                    >
-                        Download Report
-                    </button>
-                )}
-            </div>
-        </header>
-    );
+        {isHome && (
+          <button
+            className="bg-light-primaryCTA text-white font-bold
+              rounded-md px-3 py-2 outline-0 ring-1 
+              ring-light-secondaryAccent 
+              hover:bg-light-secondaryAccent transition-colors"
+          >
+            Download Report
+          </button>
+        )}
+      </div>
+    </header>
+  );
 };
 
 export default HeaderBar;

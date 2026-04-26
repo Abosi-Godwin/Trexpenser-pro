@@ -1,35 +1,33 @@
-import { useGetSavings } from "../../Hooks/useGetSavings";
+ import { useGetSavings } from "../../Hooks/useGetSavings";
 import Saving from "./Saving";
 import EmptyDashboard from "../../ui/EmptyDashboard";
 import { formatCurrency } from "../../Utils/CustomMethods";
+
 function SavingGoals({ showTitle, showAction }) {
-  const { savings, totalSaved } = useGetSavings();
+  const { savings = [], totalSaved } = useGetSavings();
 
   return (
-    <div
-      className="bg-light-cardBackground rounded-md p-2
-        dark:bg-dark-cardBackground dark:text-dark-text"
-    >
+    <div className="bg-light-cardBackground rounded-md p-2
+      dark:bg-dark-cardBackground dark:text-dark-text">
+
       {showTitle && (
         <>
-          <h1 className="text-2xl font-bold">Savings goals</h1>
-          <br />
-          <h1 className="text-2xl font-bold">{formatCurrency(totalSaved)}</h1>
-          <p className="text-sm pb-2">Saved towards your goals .</p>
+          <h2 className="text-2xl font-bold">Savings Goals</h2>
+          <p className="text-2xl font-bold mt-2">
+            {formatCurrency(totalSaved)}
+          </p>
+          <p className="text-sm pb-2">Saved towards your goals.</p>
           <hr />
         </>
       )}
-      {savings?.length >= 1 ? (
-        <div
-          className="grid grid-cols-1 gap-4 divide-y-2
-            divide-light-divider"
-        >
-          {savings?.map((saving) => (
-            <Saving
-              key={saving.id}
-              savingsData={saving}
-            >
-              <Saving.Header>{showAction && <Saving.Action />}</Saving.Header>
+
+      {savings.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4 divide-y-2 divide-light-divider">
+          {savings.map((saving) => (
+            <Saving key={saving.id} savingsData={saving}>
+              <Saving.Header>
+                {showAction && <Saving.Action />}
+              </Saving.Header>
               <Saving.Info />
               <Saving.Form />
             </Saving>

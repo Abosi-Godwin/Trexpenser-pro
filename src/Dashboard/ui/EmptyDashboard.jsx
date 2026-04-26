@@ -13,7 +13,7 @@ const EmptyDashboard = ({
             <p className="text-center text-gray-600 py-4">{description}</p>
             {showBtn && (
                 <Link
-                    to={`/dashboard/${destination}`}
+                    to={`/${destination}`}
                     className="flex justify-start items-center p-2
                      text-md gap-2 inline font-bold bg-light-primaryCTA
                      text-white

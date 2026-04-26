@@ -21,6 +21,8 @@ export const useAI = () => {
         insight,
         insightError,
         isInsightError,
-        gettingInsights,introduction, encouragement
+        gettingInsights,
+        introduction,
+        encouragement
     };
 };
