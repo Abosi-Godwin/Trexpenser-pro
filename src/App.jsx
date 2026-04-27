@@ -83,7 +83,11 @@ const router = createBrowserRouter([
 
             {
                 path: "/change-password",
-                element: <UpdatePassword />
+                element: (
+                    <AuthRedirect>
+                        <UpdatePassword />
+                    </AuthRedirect>
+                )
             }
         ]
     },
