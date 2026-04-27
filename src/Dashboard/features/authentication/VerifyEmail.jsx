@@ -17,7 +17,7 @@ export default function VerifyEmail() {
     }
 
     return (
-        <div className="bg-light-sectionBackground flex items-center justify-center px-4 text-light-text">
+        <div className="flex items-center justify-center px-4 text-light-text">
             <motion.div
                 variants={slideUpVariant}
                 initial="hidden"

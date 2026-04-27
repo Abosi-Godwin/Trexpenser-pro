@@ -1,4 +1,4 @@
- import { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
@@ -26,7 +26,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="bg-light-sectionBackground flex items-center justify-center max-h-dvh w-screen overflow-hidden">
+        <div className="flex items-center justify-center max-h-dvh w-screen overflow-hidden">
             <Toaster />
 
             <motion.div
@@ -41,7 +41,6 @@ const LoginPage = () => {
 
                 <form onSubmit={handleSubmit(handleLogin)}>
                     <div className="flex flex-col gap-3 py-3">
-
                         <Input
                             name="email"
                             label="Email"
@@ -64,7 +63,9 @@ const LoginPage = () => {
                             rules={{ required: "Password is required" }}
                             isPassword
                             toggle={showPassword}
-                            onHidePassword={() => setShowPassword(prev => !prev)}
+                            onHidePassword={() =>
+                                setShowPassword(prev => !prev)
+                            }
                         />
 
                         <Button
@@ -78,16 +79,11 @@ const LoginPage = () => {
 
                     <div className="flex justify-between py-2">
                         <label className="flex gap-2 font-bold items-center">
-                            <input
-                                type="checkbox"
-                                {...register("remember")}
-                            />
+                            <input type="checkbox" {...register("remember")} />
                             Remember me
                         </label>
 
-                        <Link to="/forgotPassword">
-                            Lost password?
-                        </Link>
+                        <Link to="/forgot-password">Lost password?</Link>
                     </div>
                 </form>
 
@@ -102,7 +98,10 @@ const LoginPage = () => {
 
                     <div className="flex gap-3 items-center">
                         <p>Not a member yet?</p>
-                        <Link to="/signup" className="text-light-primaryCTA font-bold">
+                        <Link
+                            to="/signup"
+                            className="text-light-primaryCTA font-bold"
+                        >
                             Join us
                         </Link>
                     </div>

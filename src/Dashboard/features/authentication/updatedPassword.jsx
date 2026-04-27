@@ -1,53 +1,62 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
+import { supabase } from "../../services/Supabase";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 import { Logo } from "../../ui/Logo";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import Form from "../Form/Form";
-
 import { slideUpVariant } from "../../Utils/AnimationVariants";
-import { useSendForgotPassword } from "../../hooks/useSendForgotPassword";
 
 const UpdatePassword = () => {
-    const [emailSent, setEmailSent] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors }
     } = useForm();
 
-    const { error, sendEmail, sendingEmail } = useSendForgotPassword();
+    const newPassword = watch("newPassword");
 
-    console.log(error);
+    const handleFormSubmit = async ({ newPassword }) => {
+        setLoading(true);
 
-    const handleFormSubmit = datas => {
-        const { email } = datas;
-
-        sendEmail(email, {
-            onSuccess: () => setEmailSent(true)
+        const { error } = await supabase.auth.updateUser({
+            password: newPassword
         });
+
+        setLoading(false);
+
+        if (error) {
+            toast.error(error.message);
+            return;
+        }
+
+        toast.success("Password updated successfully!");
     };
+
     return (
         <div
-            className="p-10 bg-light-sectionBackground h-dvh flex flex-1
-        items-center justify-center"
+            className="flex flex-1
+      items-center justify-center"
         >
             <motion.div
                 variants={slideUpVariant}
                 initial="hidden"
                 animate="visible"
-                viewport={{ once: true, amount: 0.1 }}
                 className="bg-light-background rounded-md p-4 flex flex-col
-                gap-4 md:w-5/12 py-6"
+          gap-4 md:w-5/12 py-6"
             >
                 <Logo />
+
                 <div>
-                    <h1 className="text-xl font-bold">Update your password.</h1>
+                    <h2 className="text-xl font-bold">Update your password.</h2>
                     <p className="text-sm mb-2">
-                        Enter your registered email below.
+                        Enter and confirm your new password.
                     </p>
                     <hr />
                 </div>
@@ -57,38 +66,46 @@ const UpdatePassword = () => {
                     submitFun={handleFormSubmit}
                 >
                     <Input
+                        name="newPassword"
                         label="New password"
                         inputType="password"
                         placeholder="Enter your new password..."
-                        className="p-3 rounded-md outline-0 border"
-                        disable={false}
+                        disabled={loading}
                         register={register}
                         error={errors}
                         rules={{
-                            required: "Enter a new password."
+                            required: "New password is required.",
+                            minLength: {
+                                value: 6,
+                                message:
+                                    "Password must be at least 6 characters."
+                            }
                         }}
                     />
                     <Input
+                        name="confirmPassword"
                         label="Confirm password"
                         inputType="password"
                         placeholder="Confirm your new password..."
-                        className="p-3 rounded-md outline-0 border"
-                        disable={false}
+                        disabled={loading}
                         register={register}
                         error={errors}
                         rules={{
-                            required: "Enter a new password."
+                            required: "Please confirm your new password.",
+                            validate: value =>
+                                value === newPassword ||
+                                "Passwords do not match."
                         }}
                     />
                     <Button
-                        text="Update password"
+                        text={loading ? "Updating..." : "Update password"}
+                        type="submit"
+                        disabled={loading}
+                        loader={loading}
                         className="bg-light-primaryCTA text-white flex mt-2
-                            items-center justify-center
-                                font-extrabold rounded-md p-2 uppercase w-full
-                                hover:bg-light-secondaryAccent"
-                        loader={sendingEmail}
-                        disable={sendingEmail}
-                        onButtonClick={handleSubmit}
+              items-center justify-center font-extrabold rounded-md 
+              p-2 uppercase w-full hover:bg-light-secondaryAccent
+              disabled:opacity-60"
                     />
                 </Form>
             </motion.div>

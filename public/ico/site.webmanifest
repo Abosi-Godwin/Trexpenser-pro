@@ -1,0 +1,23 @@
+ {
+  "name": "Trexpenser",
+  "short_name": "Trexpenser",
+  "description": "Track expenses, set budgets, monitor savings goals, and get AI-powered financial insights.",
+  "icons": [
+    {
+      "src": "/ico/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/ico/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#e4e7fb",
+  "background_color": "#e4e7fb",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "orientation": "portrait"
+}
