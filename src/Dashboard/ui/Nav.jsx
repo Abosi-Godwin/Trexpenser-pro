@@ -18,7 +18,7 @@ const NavBar = ({ isMenuOpen, closeNavBar }) => {
     return (
         <AnimatePresence>
             <motion.nav
-            key="menu"
+                key="menu"
                 variants={dropdownVariants}
                 initial="hidden"
                 animate={isMenuOpen ? "visible" : "hidden"}
@@ -37,19 +37,20 @@ const NavBar = ({ isMenuOpen, closeNavBar }) => {
                 <div className="w-full py-4 flex flex-col gap-6">
                     <Avatar />
                     <div>
-                        <button
-                            className="flex justify-start items-center p-2
-                     text-md gap-2 inline font-bold bg-light-secondaryAccent
-                     rounded-md"
-                            onClick={handleLogOut}
-                        >
-                            <FaRightFromBracket
-                                className="-rotate-25
-                         text-xl text-light-primaryCTA
-                         dark:text-dark-primaryCTA"
-                            />
-                            Log out
-                        </button>
+                       <button
+  className="flex justify-start items-center p-2
+    gap-2 font-bold bg-light-secondaryAccent
+    dark:bg-dark-sectionBackground
+    dark:text-dark-text
+    rounded-md"
+  onClick={handleLogOut}
+>
+  <FaRightFromBracket
+    className="text-xl text-light-primaryCTA
+      dark:text-dark-primaryCTA"
+  />
+  Log out
+</button>
                     </div>
                 </div>
             </motion.nav>
