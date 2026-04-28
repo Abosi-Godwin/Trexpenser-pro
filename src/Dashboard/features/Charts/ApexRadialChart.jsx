@@ -47,7 +47,7 @@ const ApexRadialChart = ({ percentage }) => {
             }
         },
         fill: {
-            type: "solid", // or "gradient"
+            type: "solid",
             colors: ["#5e4ab8"]
         },
         labels: ["Progress"]

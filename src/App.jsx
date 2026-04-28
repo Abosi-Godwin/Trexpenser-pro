@@ -29,7 +29,6 @@ import AuthCallback from "./Dashboard/features/authentication/AuthCallback";
 import VerifyEmail from "./Dashboard/features/authentication/VerifyEmail";
 import ForgotPassword from "./Dashboard/features/authentication/forgotPassword";
 import UpdatePassword from "./Dashboard/features/authentication/updatedPassword";
-import SubscriptionPage from "./Dashboard/features/ai/Subscription";
 
 // Dashboard Pages (lazy)
 const DashboardHome = lazy(() => import("./Dashboard/DashboardHome"));
@@ -38,6 +37,9 @@ const Savings = lazy(() => import("./Dashboard/pages/SavingsPage"));
 const Budgets = lazy(() => import("./Dashboard/pages/BudgetPage"));
 const Summary = lazy(() => import("./Dashboard/pages/Summary"));
 const Profile = lazy(() => import("./Dashboard/pages/Profile"));
+const SubscriptionPage = lazy(
+    () => import("./Dashboard/features/ai/Subscription")
+);
 
 const router = createBrowserRouter([
     {
@@ -67,7 +69,6 @@ const router = createBrowserRouter([
                     </AuthRedirect>
                 )
             },
-
             {
                 path: "/auth/callback",
                 element: <AuthCallback />
@@ -80,14 +81,9 @@ const router = createBrowserRouter([
                     </AuthRedirect>
                 )
             },
-
             {
                 path: "/change-password",
-                element: (
-                    <AuthRedirect>
-                        <UpdatePassword />
-                    </AuthRedirect>
-                )
+                element: <UpdatePassword />
             }
         ]
     },
@@ -150,7 +146,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/subscribe",
-                element: <SubscriptionPage />
+                element: (
+                    <Suspense fallback={<Loader />}>
+                        <SubscriptionPage />
+                    </Suspense>
+                )
             }
         ]
     },
@@ -169,7 +169,7 @@ export default function App() {
                     <RouterProvider router={router} />
                     <Toaster position="top-right" />
                     <Analytics />
-                    <ReactQueryDevtools />
+                    {import.meta.env.DEV && <ReactQueryDevtools />}
                 </ThemeProvider>
             </AuthProvider>
         </QueryClientProvider>

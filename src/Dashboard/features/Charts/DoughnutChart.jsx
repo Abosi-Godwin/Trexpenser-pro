@@ -1,55 +1,51 @@
-import { useMemo } from "react";
+ import { useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { formatCurrency } from "../../Utils/CustomMethods";
 import EmptyChart from "../../ui/EmptyChart";
 import { getDoughnutDatas } from "../../Utils/getDoughnutDatas";
 import { useTheme } from "../../contexts/ThemeContext";
-
+import { useCurrency } from "../../hooks/useCurrency";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+
+ChartJS.defaults.maintainAspectRatio = false;
+ChartJS.defaults.responsive = true;
+
+const PALETTE = [
+    "#b0b4f1",
+    "#9190e9",
+    "#7c74e0",
+    "#7866d5",
+    "#5e4ab8",
+    "#4c3e95",
+    "#413877",
+    "#ced2f7"
+];
+
 function DoughnutChart({ allDatas: transactions, label }) {
-  
     const { lightTheme } = useTheme();
+     const { format } = useCurrency();
     const emptyState = transactions.length >= 1;
     const textThemeColor = lightTheme ? "#272145" : "#ffffff";
 
-    const titles = useMemo(
-        () => getDoughnutDatas(transactions, label).titles,
+    
+    const { titles, amounts } = useMemo(
+        () => getDoughnutDatas(transactions, label),
         [transactions, label]
     );
-    const amounts = useMemo(
-        () => getDoughnutDatas(transactions, label).amounts,
-        [transactions, label]
-    );
+
+    
+    const colors = amounts.map((_, i) => PALETTE[i % PALETTE.length]);
 
     const data = {
         labels: titles,
-
         datasets: [
             {
                 label: "Amount",
                 data: amounts,
-                backgroundColor: [
-                    "#b0b4f1",
-                    "#9190e9",
-                    "#7c74e0",
-                    "#7866d5",
-                    "#5e4ab8",
-                    "#4c3e95",
-                    "#413877",
-                    "#ced2f7"
-                ],
-                borderColor: [
-                    "#b0b4f1",
-                    "#9190e9",
-                    "#7c74e0",
-                    "#7866d5",
-                    "#5e4ab8",
-                    "#4c3e95",
-                    "#413877",
-                    "#ced2f7"
-                ],
+                backgroundColor: colors,
+                borderColor: colors,
                 borderWidth: 1
             }
         ]
@@ -79,7 +75,7 @@ function DoughnutChart({ allDatas: transactions, label }) {
                         if (label) {
                             label += ": ";
                         }
-                        label += formatCurrency(context.raw);
+                        label += format(context.raw);
                         return label;
                     }
                 }

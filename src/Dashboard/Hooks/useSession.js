@@ -1,4 +1,4 @@
-import { supabase } from "../Utils/Supabase";
+/*import { supabase } from "../Utils/Supabase";
 import { queryClient } from "../Utils/queryClient";
 import { getUserTransactions } from "../Utils/CustomMethods";
 
@@ -8,7 +8,6 @@ export const checkUserSession = async () => {
     if (session?.session?.user) {
         const userId = session?.session.user.id;
         console.log("user id", userId);
-
         await queryClient.prefetchQuery({
             queryKey: ["transactions", userId],
             queryFn: () => getUserTransactions(userId)
@@ -17,3 +16,4 @@ export const checkUserSession = async () => {
 
     return session;
 };
+*/

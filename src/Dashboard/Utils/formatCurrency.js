@@ -1,6 +1,15 @@
-export const formatCurrency = number => {
-    return new Intl.NumberFormat("en-NG", {
-        style: "currency",
-        currency: "NGN"
-    }).format(number);
+ const localeMap = {
+  NGN: "en-NG",
+  USD: "en-US",
+  GBP: "en-GB",
+  EUR: "de-DE",
+};
+
+export const formatCurrency = (amount, currency = "NGN") => {
+  const locale = localeMap[currency] ?? "en-US";
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 0,
+  }).format(amount);
 };

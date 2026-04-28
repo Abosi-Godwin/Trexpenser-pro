@@ -4,7 +4,8 @@ import { isFuture, isToday, isPast } from "date-fns";
 
 import MenuCard from "../../ui/MenuCard";
 import { useTransactions } from "../../Hooks/useTransactions";
-import { formatCurrency } from "../../Utils/formatCurrency";
+import { useCurrency } from "../../hooks/useCurrency";
+//import { formatCurrency } from "../../Utils/formatCurrency";
 import { formatDate } from "../../Utils/formatDate";
 import { roundDownPrice } from "../../Utils/CustomMethods";
 
@@ -23,7 +24,7 @@ const useBudgetContext = () => {
 function Budget({ budget, children }) {
     const { expenses } = useTransactions();
     const { category, amount, notes, end_date, start_date } = budget;
-
+    
     const totalSpent = roundDownPrice(
         expenses
             .filter(
@@ -71,20 +72,15 @@ function Budget({ budget, children }) {
 }
 
 const Infos = () => {
-    const {
-        category,
-        notes,
-        totalSpent,
-        amount,
-        remaining,
-        isOverSpent
-    } = useBudgetContext();
-
+    const { category, notes, totalSpent, amount, remaining, isOverSpent } =
+        useBudgetContext();
+        
+    const { format } = useCurrency();
     return (
         <div>
             <div className="pb-5">
                 <p className="text-xl font-bold capitalize">{category}</p>
-                <p className="font-bold">{formatCurrency(amount)}</p>
+                <p className="font-bold">{format(amount)}</p>
             </div>
 
             {notes && (
@@ -94,10 +90,10 @@ const Infos = () => {
             )}
 
             <div className="py-2 space-y-1">
-                <p>Spent: {formatCurrency(totalSpent)}</p>
+                <p>Spent: {format(totalSpent)}</p>
                 <p className={isOverSpent ? "text-red-500 font-semibold" : ""}>
                     {isOverSpent ? "Overspent" : "Remaining"}:{" "}
-                    {formatCurrency(Math.abs(remaining))}
+                    {format(Math.abs(remaining))}
                 </p>
             </div>
         </div>

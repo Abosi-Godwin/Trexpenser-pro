@@ -1,84 +1,80 @@
-import { useEffect, useState, useMemo } from "react";
-
-import {
-    formatCurrency,
-    roundTotalPrice,
-    roundDownPrice
-} from "../Utils/CustomMethods";
+ import { useEffect, useState, useMemo } from "react";
+import { useCurrency } from "../hooks/useCurrency";
+import { roundTotalPrice, roundDownPrice } from "../Utils/CustomMethods";
 
 import { useGetTransactions } from "./useGetTransactions";
 import { useGetSavings } from "./useGetSavings";
 
 export const useTransactions = () => {
-    const { transactions, transactionLoaded, istransactionsLoading } =
-        useGetTransactions();
-    const { totalSaved } = useGetSavings();
+  const { transactions, transactionLoaded, istransactionsLoading } =
+    useGetTransactions();
+  const { totalSaved } = useGetSavings();
+  const { format } = useCurrency();
 
-    const [currentUserTransactions, setCurrentUserTransactions] = useState([]);
+  const [currentUserTransactions, setCurrentUserTransactions] = useState([]);
 
-    const isEmpty = currentUserTransactions?.length <= 0;
+  const isEmpty = currentUserTransactions?.length <= 0;
 
-    const incomes = currentUserTransactions.filter(
-        transaction => transaction.type.toLowerCase() === "income"
-    );
+  const incomes = currentUserTransactions.filter(
+    (transaction) => transaction.type.toLowerCase() === "income"
+  );
 
-    const expenses = currentUserTransactions?.filter(
-        transaction => transaction.type.toLowerCase() === "expense"
-    );
+  const expenses = currentUserTransactions.filter(
+    (transaction) => transaction.type.toLowerCase() === "expense"
+  );
 
-    const expenseCategories = [
-        ...new Set(expenses.map(expense => expense.category.toLowerCase()))
-    ].map(category => ({
-        label: category.at(0).toUpperCase() + category.slice(1),
-        value: category
-    }));
+  const expenseCategories = [
+    ...new Set(expenses.map((expense) => expense.category.toLowerCase())),
+  ].map((category) => ({
+    label: category.at(0).toUpperCase() + category.slice(1),
+    value: category,
+  }));
 
-    expenseCategories.unshift({ label: "Select", value: "select" });
+  expenseCategories.unshift({ label: "Select", value: "select" });
 
-    const incomePrices = useMemo(
-        () => incomes.map(income => income.amount),
-        [incomes]
-    );
-    const expensePrices = useMemo(
-        () => expenses.map(expense => expense.amount),
-        [expenses]
-    );
+  const incomePrices = useMemo(
+    () => incomes.map((income) => income.amount),
+    [incomes]
+  );
 
-    const totalBalance = useMemo(
-        () =>
-            formatCurrency(
-                roundTotalPrice(currentUserTransactions) - totalSaved
-            ),
-        [currentUserTransactions, totalSaved]
-    );
+  const expensePrices = useMemo(
+    () => expenses.map((expense) => expense.amount),
+    [expenses]
+  );
 
-    const totalIncome = useMemo(
-        () => formatCurrency(roundDownPrice(incomePrices)),
-        [incomePrices]
-    );
-    const totalExpenses = useMemo(
-        () => formatCurrency(roundDownPrice(expensePrices)),
-        [expensePrices]
-    );
+  const totalBalance = useMemo(
+    () => format(roundTotalPrice(currentUserTransactions) - totalSaved),
+    [currentUserTransactions, totalSaved, format]
+  );
 
-    useEffect(() => {
-        if (transactions) {
-            setCurrentUserTransactions(transactions);
-        }
-    }, [transactions]);
+  const totalIncome = useMemo(
+    () => format(roundDownPrice(incomePrices)),
+    [incomePrices, format]
+  );
 
-    return {
-        currentUserTransactions,
-        transactionLoaded,
-        istransactionsLoading,
-        isEmpty,
-        incomes,
-        expenses,
-        incomePrices,
-        expensePrices,
-        totalIncome,
-        totalExpenses,
-        totalBalance,
-        expenseCategories
-    };
+  const totalExpenses = useMemo(
+    () => format(roundDownPrice(expensePrices)),
+    [expensePrices, format]
+  );
+
+  useEffect(() => {
+    if (transactions) {
+      setCurrentUserTransactions(transactions);
+    }
+  }, [transactions]);
+
+  return {
+    currentUserTransactions,
+    transactionLoaded,
+    istransactionsLoading,
+    isEmpty,
+    incomes,
+    expenses,
+    incomePrices,
+    expensePrices,
+    totalIncome,
+    totalExpenses,
+    totalBalance,
+    expenseCategories,
+  };
 };

@@ -1,4 +1,3 @@
-//import { supabase } from "../services/Supabase";
 
 export const formatCurrency = (number) => {
   return new Intl.NumberFormat("en-NG", {

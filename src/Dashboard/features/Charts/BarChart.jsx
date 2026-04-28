@@ -2,7 +2,7 @@ import "chartjs-adapter-moment";
 
 import EmptyChart from "../../ui/EmptyChart";
 
-import { formatCurrency } from "../../Utils/CustomMethods";
+import { useCurrency } from "../../hooks/useCurrency";
 import { useTheme } from "../../contexts/ThemeContext";
 import { savingsGoals } from "../../data/data";
 
@@ -34,12 +34,11 @@ defaults.maintainAspectRatio = false;
 defaults.responsive = true;
 
 function BarChart({ allDatas, showTitle, type }) {
-
+    const { format } = useCurrency();
     const emptyState = allDatas.length >= 1;
     const { lightTheme } = useTheme();
 
     const bgThemeColor = lightTheme ? "#f0f2fd" : "#12141c";
-
     const textThemeColor = lightTheme ? "#272145" : "#ffffff";
 
     const options = {
@@ -69,7 +68,6 @@ function BarChart({ allDatas, showTitle, type }) {
                 ticks: {
                     color: textThemeColor
                 },
-
                 min: 0
             }
         },
@@ -91,18 +89,19 @@ function BarChart({ allDatas, showTitle, type }) {
                         if (label) {
                             label += ": ";
                         }
-                        label += formatCurrency(context.raw.y);
+                        label += format(context.raw.y);
                         return label;
                     }
                 }
             },
             title: {
-                display: "true",
+                display: showTitle, // Fix 2 & 3: was "true" (string), now uses the showTitle prop (boolean)
                 text: "Income Vs. Expenses Over Time",
                 color: textThemeColor
             }
         }
     };
+
     const data = {
         datasets: [
             {
@@ -125,7 +124,7 @@ function BarChart({ allDatas, showTitle, type }) {
     };
 
     const config = {
-        type: "bar",
+        // Fix 4: removed dead `type: "bar"` key
         data: {
             labels: savingsGoals.map(data => data.name),
             datasets: [
@@ -146,14 +145,17 @@ function BarChart({ allDatas, showTitle, type }) {
             ]
         },
         options: {
-            title: {
-                color: "ffffff"
-            },
             indexAxis: "y",
             scales: {
                 x: {
                     beginAtZero: true,
-                    max: savingsGoals.map(data => data.targetAmount)[-1],
+                    max: Math.max(...savingsGoals.map(d => d.targetAmount)), // Fix 1: was [-1] which returns undefined
+                    grid: {
+                        color: bgThemeColor // Fix 5: added missing theme grid color
+                    },
+                    border: {
+                        color: bgThemeColor // Fix 5: added missing theme border color
+                    },
                     title: {
                         display: true,
                         color: textThemeColor,
@@ -164,6 +166,12 @@ function BarChart({ allDatas, showTitle, type }) {
                     }
                 },
                 y: {
+                    grid: {
+                        color: bgThemeColor // Fix 5: added missing theme grid color
+                    },
+                    border: {
+                        color: bgThemeColor // Fix 5: added missing theme border color
+                    },
                     title: {
                         display: true,
                         color: textThemeColor,
@@ -176,6 +184,7 @@ function BarChart({ allDatas, showTitle, type }) {
             },
             plugins: {
                 legend: {
+                    display: true, // Fix 6: was missing
                     labels: {
                         color: textThemeColor
                     }
@@ -191,8 +200,8 @@ function BarChart({ allDatas, showTitle, type }) {
                             const targetValue =
                                 chart.data.datasets[1].data[dataIndex];
                             return [
-                                `Saved: ${formatCurrency(savedValue)}`,
-                                `Target: ${formatCurrency(targetValue)}`
+                                `Saved: ${format(savedValue)}`,
+                                `Target: ${format(targetValue)}`
                             ];
                         }
                     }

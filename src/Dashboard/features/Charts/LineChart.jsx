@@ -2,8 +2,8 @@ import "chartjs-adapter-moment";
 import ChartDeferred from "chartjs-plugin-deferred";
 
 import EmptyChart from "../../ui/EmptyChart";
-
-import { formatCurrency } from "../../Utils/CustomMethods.js";
+ 
+import { useCurrency } from "../../hooks/useCurrency";
 
 import { Line } from "react-chartjs-2";
 
@@ -26,17 +26,23 @@ ChartJS.register(
     Filler,
     ChartDeferred
 );
-
-ChartJS.defaults.maintainAspectRatio = true;
-ChartJS.defaults.backgroundColor = "#ffffff";
-ChartJS.defaults.borderColor = "#ffffff";
-ChartJS.defaults.color = "#000000";
+ 
+ChartJS.defaults.maintainAspectRatio = false;
 ChartJS.defaults.responsive = true;
-const LineChart = ({ allDatas, incomes, expenses, label, type = "single" }) => {
-    const emptyState = allDatas.length >= 1;
-    const data = {
-        labels: [...allDatas.map(data => data.date)],
 
+
+const LineChart = ({ allDatas, incomes, expenses, label, type = "single" }) => {
+  
+   const { format } = useCurrency();
+    const emptyState = allDatas.length >= 1;
+ 
+    const doubleLabels =
+        incomes.length >= expenses.length
+            ? incomes.map(d => d.date)
+            : expenses.map(d => d.date);
+
+    const data = {
+        labels: doubleLabels,
         datasets: [
             {
                 label: "Income",
@@ -58,6 +64,7 @@ const LineChart = ({ allDatas, incomes, expenses, label, type = "single" }) => {
             }
         ]
     };
+
     const singleData = {
         labels:
             label === "Income"
@@ -78,10 +85,11 @@ const LineChart = ({ allDatas, incomes, expenses, label, type = "single" }) => {
                 tension: 0.4,
                 fill: true,
                 showLine: true,
-                pointRadiuys: 4
+                pointRadius: 4  
             }
         ]
     };
+
     const options = {
         responsive: true,
         plugins: {
@@ -96,7 +104,7 @@ const LineChart = ({ allDatas, incomes, expenses, label, type = "single" }) => {
                         if (label) {
                             label += ": ";
                         }
-                        label += formatCurrency(context.raw);
+                        label += format(context.raw);
                         return label;
                     }
                 }
@@ -108,8 +116,10 @@ const LineChart = ({ allDatas, incomes, expenses, label, type = "single" }) => {
         scales: {
             x: {
                 grid: {
-                    drawBorder: false,
                     display: false
+                },
+                border: {
+                    display: false  
                 },
                 ticks: {
                     display: false
@@ -117,9 +127,11 @@ const LineChart = ({ allDatas, incomes, expenses, label, type = "single" }) => {
             },
             y: {
                 grid: {
-                    drawBorder: true,
                     color: context =>
                         context.tick.value === 0 ? "black" : "rgba(0,0,0,0)"
+                },
+                border: {
+                    display: true  
                 },
                 ticks: {
                     display: false

@@ -3,11 +3,11 @@ import Budget from "./Budget";
 import Budgets from "./Budgets";
 import EmptyDashboard from "../../ui/EmptyDashboard";
 import { useBudgets } from "../../Hooks/useBudgets";
-import { formatCurrency } from "../../Utils/formatCurrency";
+import { useCurrency } from "../../hooks/useCurrency";
 
 const BudgetTrackingChart = () => {
   const { budgets, spendingLimit, categories = [], minMaxDate } = useBudgets();
-
+ const { format } = useCurrency();
   const hasBudgets = budgets?.length > 0;
 
   const formatCategories = (cats) => {
@@ -33,7 +33,7 @@ const BudgetTrackingChart = () => {
         {hasBudgets && (
           <p className="whitespace-break-spaces">
             Maximum of{" "}
-            <strong>{formatCurrency(spendingLimit)}</strong>{" "}
+            <strong>{format(spendingLimit)}</strong>{" "}
             in {formatCategories(categories)}{" "}
             dated from {minMaxDate?.[0]} to {minMaxDate?.[1]}
           </p>

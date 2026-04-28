@@ -3,14 +3,14 @@ import { useState } from "react";
 import Budgets from "../features/budgets/Budgets";
 import EmptyDashboard from "../ui/EmptyDashboard";
 import { useBudgets } from "../Hooks/useBudgets";
-
+import { useCurrency } from "../hooks/useCurrency";
 import BudgetForm from "../features/budgets/BudgetForm";
 import Button from "../features/Form/Button";
-import { formatCurrency } from "../Utils/formatCurrency";
+ 
 
 function BudgetPlanning() {
   const { budgets, spendingLimit, spentPercent, totalSpent } = useBudgets();
-
+ const { format } = useCurrency();
   const [openForm, setOpenForm] = useState(false);
 
   const handleOpenForm = () => setOpenForm((prev) => !prev);
@@ -32,8 +32,8 @@ function BudgetPlanning() {
       {budgets.length >= 1 ? (
         <>
           <div className="flejustify-start justify-center flex-col">
-            <h1 className="font-bold">Limit amount: {formatCurrency(spendingLimit)}</h1>
-            <h1 className="font-bold">Spent amount: {formatCurrency(totalSpent)}</h1>
+            <h1 className="font-bold">Limit amount: {format(spendingLimit)}</h1>
+            <h1 className="font-bold">Spent amount: {format(totalSpent)}</h1>
             <h1 className="font-bold">Percentage: {spentPercent}%</h1>
           </div>
            <Budgets showAction={true} />
