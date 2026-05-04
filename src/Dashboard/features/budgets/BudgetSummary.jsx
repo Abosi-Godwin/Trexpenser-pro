@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import BudgetForm from "./BudgetForm";
 import Button from "../../features/Form/Button";
-import { useBudgets } from "../../Hooks/useBudgets";
-import { formatCurrency } from "../../Utils/formatCurrency";
+import { useBudgets } from "../../hooks/useBudgets";
+import { formatCurrency } from "../../utils/formatCurrency";
  
 const BudgetSummary = () => {
     const { spendingLimit, spentPercent, totalSpent } = useBudgets();

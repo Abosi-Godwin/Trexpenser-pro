@@ -5,11 +5,11 @@ import { format } from "date-fns";
 import Button from "../Form/Button";
 import Modal from "../../ui/Modal";
 
-import { useDeleteTransaction } from "../../Hooks/useDeleteTransaction";
-import { useDeleteSavings } from "../../Hooks/useDeleteSavings";
-import { useDeleteBudget } from "../../Hooks/useDeleteBudget";
-import { formatCurrency } from "../../Utils/CustomMethods";
-import { formatDate } from "../../Utils/formatDate";
+import { useDeleteTransaction } from "../../hooks/useDeleteTransaction";
+import { useDeleteSavings } from "../../hooks/useDeleteSavings";
+import { useDeleteBudget } from "../../hooks/useDeleteBudget";
+import { formatCurrency } from "../../utils/CustomMethods";
+import { formatDate } from "../../utils/formatDate";
 
 function DeleteDataForm({ data, onCloseForm, type }) {
     const dataId = data.id;
@@ -35,7 +35,6 @@ function DeleteDataForm({ data, onCloseForm, type }) {
             });
         }
         if (type === "budget") {
-            
             deleteBudget(dataId, {
                 onSuccess: () => {
                     onCloseForm();

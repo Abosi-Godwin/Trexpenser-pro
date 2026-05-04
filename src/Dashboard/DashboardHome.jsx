@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { differenceInHours } from "date-fns";
-import { getCurrentDate } from "./Utils/currentDate";
+import { getCurrentDate } from "./utils/currentDate";
 
 import LineChart from "./features/Charts/LineChart";
 import BarChart from "./features/Charts/BarChart";
@@ -11,9 +11,9 @@ import RecentTransactions from "./features/transactions/RecentTransactions";
 import SavingGoals from "./features/savings/SavingGoals";
 import BudgetTrackingChart from "./features/budgets/BudgetTracking";
 
-import { useTransactions } from "./Hooks/useTransactions";
-import { useUser } from "./Hooks/useUser";
-import { useLoader } from "./Hooks/useLoader";
+import { useTransactions } from "./hooks/useTransactions";
+import { useUser } from "./hooks/useUser";
+import { useLoader } from "./hooks/useLoader";
 
 const cardClass = `flex flex-col items-start justify-center bg-white 
   rounded-md p-3 gap-4 dark:bg-dark-cardBackground dark:text-dark-text`;

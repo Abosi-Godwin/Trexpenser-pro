@@ -1,4 +1,4 @@
-// Sidebar.jsx
+
 import { sideBarItems } from "../data/data";
 import DesktopNav from "../ui/DesktopNav";
 

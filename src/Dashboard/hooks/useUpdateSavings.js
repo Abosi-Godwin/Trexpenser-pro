@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-import { addSavingsApi } from "../Apis/Transactions/adSavings";
+import { updateSavingsApi } from "../apis/transactions/updateSavings";
 
-export const useAddSavings = () => {
+export const useUpdateSavings = () => {
     const queryClient = useQueryClient();
 
     const {
-        mutate: addSavings,
-        isPending: isAddingSavings,
-        onSuccess: isSuccessful
+        mutate: updateSavings,
+        isPending: isUpdatingSavings,
+        onSuccess: isUpdateSuccessful
     } = useMutation({
-        mutationFn: addSavingsApi,
+        mutationFn: updateSavingsApi,
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ["savings"]
@@ -24,7 +24,8 @@ export const useAddSavings = () => {
     });
 
     return {
-        addSavings,
-        isAddingSavings,isSuccessful
+        updateSavings,
+        isUpdatingSavings,
+        isUpdateSuccessful
     };
 };

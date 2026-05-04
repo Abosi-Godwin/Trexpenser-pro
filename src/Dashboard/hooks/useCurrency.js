@@ -1,5 +1,5 @@
-import { formatCurrency } from "../Utils/formatCurrency";
-import { useUser } from "../Hooks/useUser";
+import { formatCurrency } from "../utils/formatCurrency";
+import { useUser } from "../hooks/useUser";
 
 export const useCurrency = () => {
     const { user } = useUser();

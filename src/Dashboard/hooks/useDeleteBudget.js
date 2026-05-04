@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-import { deleteBudgetApi } from "../Apis/Transactions/deleteBudget";
+import { deleteBudgetApi } from "../apis/transactions/deleteBudget";
 
 export const useDeleteBudget = () => {
     const queryClient = useQueryClient();

@@ -1,4 +1,4 @@
-import { useGetSavings } from "../../Hooks/useGetSavings";
+import { useGetSavings } from "../../hooks/useGetSavings";
 import { useCurrency } from "../../hooks/useCurrency";
 import Saving from "./Saving";
 

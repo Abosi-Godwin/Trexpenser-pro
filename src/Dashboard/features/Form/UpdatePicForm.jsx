@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { format, addDays, isAfter } from "date-fns";
 
 import { supabaseUrl } from "../../services/Supabase";
-import { useUser } from "../../Hooks/useUser";
-import { useUpdatePic } from "../../Hooks/useUpdateProfilePic";
+import { useUser } from "../../hooks/useUser";
+import { useUpdatePic } from "../../hooks/useUpdateProfilePic";
 
 import Modal from "../../ui/Modal";
 import Button from "./Button";

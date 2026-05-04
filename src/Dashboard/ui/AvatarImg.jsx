@@ -1,4 +1,4 @@
-import { useUser } from "../Hooks/useUser";
+import { useUser } from "../hooks/useUser";
 
 const AvatarImg = ({ className = "w-12 h-12 rounded-full" }) => {
     const { userImage } = useUser();

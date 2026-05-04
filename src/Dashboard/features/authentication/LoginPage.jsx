@@ -7,8 +7,8 @@ import { Toaster } from "react-hot-toast";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import GoogleBtn from "../Form/GoogleBtn";
-import { useLogIn } from "../../Hooks/useLogIn";
-import { slideUpVariant } from "../../Utils/AnimationVariants";
+import { useLogIn } from "../../hooks/useLogIn";
+import { slideUpVariant } from "../../utils/AnimationVariants";
 
 const LoginPage = () => {
     const { logIn, logInIsPending } = useLogIn();
@@ -48,6 +48,7 @@ const LoginPage = () => {
                             placeholder="Enter your email..."
                             disabled={logInIsPending}
                             register={register}
+                            autoComplete="email"
                             error={errors}
                             rules={{ required: "Enter your email" }}
                         />
@@ -59,6 +60,7 @@ const LoginPage = () => {
                             placeholder="Enter your password..."
                             disabled={logInIsPending}
                             register={register}
+                              autoComplete="current-password"
                             error={errors}
                             rules={{ required: "Password is required" }}
                             isPassword

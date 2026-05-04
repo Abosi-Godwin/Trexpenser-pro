@@ -1,5 +1,5 @@
 import InputLabel from "./InputLabel";
-
+ 
 export default function Input({
     name,
     label,
@@ -11,6 +11,7 @@ export default function Input({
     disabled,
     toggle,
     noLabel,
+    autoComplete = "off", 
     onHidePassword,
     className = "bg-light-sectionBackground text-light-text dark:bg-dark-sectionBackground dark:text-dark-text border-none outline-none p-2 rounded"
 }) {
@@ -19,14 +20,15 @@ export default function Input({
     return (
         <>
             {!noLabel && (
-            
-            <InputLabel
-    label={label}
-    name={name}
-    isPassword={name === "password" || name === "confirmPassword"}
-    showPassword={toggle}
-    onToggle={onHidePassword}
-/> 
+                <InputLabel
+                    label={label}
+                    name={name}
+                    isPassword={
+                        name === "password" || name === "confirmPassword"
+                    }
+                    showPassword={toggle}
+                    onToggle={onHidePassword}
+                />
             )}
 
             <input
@@ -35,6 +37,7 @@ export default function Input({
                 placeholder={placeholder}
                 disabled={disabled}
                 className={className}
+                autoComplete={autoComplete}
                 {...register(name, rules)}
             />
 

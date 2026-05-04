@@ -1,4 +1,4 @@
-// HeaderBar.jsx
+
 import { FaBars, FaXmark, FaSun, FaMoon } from "react-icons/fa6";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";

@@ -3,11 +3,11 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { isFuture, isToday, isPast } from "date-fns";
 
 import MenuCard from "../../ui/MenuCard";
-import { useTransactions } from "../../Hooks/useTransactions";
+import { useTransactions } from "../../hooks/useTransactions";
 import { useCurrency } from "../../hooks/useCurrency";
-//import { formatCurrency } from "../../Utils/formatCurrency";
-import { formatDate } from "../../Utils/formatDate";
-import { roundDownPrice } from "../../Utils/CustomMethods";
+ 
+import { formatDate } from "../../utils/formatDate";
+import { roundDownPrice } from "../../utils/CustomMethods";
 
 const BudgetContext = createContext();
 
@@ -24,7 +24,7 @@ const useBudgetContext = () => {
 function Budget({ budget, children }) {
     const { expenses } = useTransactions();
     const { category, amount, notes, end_date, start_date } = budget;
-    
+
     const totalSpent = roundDownPrice(
         expenses
             .filter(
@@ -74,7 +74,7 @@ function Budget({ budget, children }) {
 const Infos = () => {
     const { category, notes, totalSpent, amount, remaining, isOverSpent } =
         useBudgetContext();
-        
+
     const { format } = useCurrency();
     return (
         <div>

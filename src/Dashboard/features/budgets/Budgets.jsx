@@ -1,4 +1,4 @@
-import { useBudgets } from "../../Hooks/useBudgets";
+import { useBudgets } from "../../hooks/useBudgets";
 import Budget from "./Budget";
 
 const Budgets = ({ showAction }) => {

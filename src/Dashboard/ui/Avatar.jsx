@@ -1,5 +1,5 @@
 import {  memo } from "react";
-import { useUser } from "../Hooks/useUser";
+import { useUser } from "../hooks/useUser";
 import AvatarImg from "./AvatarImg";
 const Avatar = () => {
     const { user } = useUser();

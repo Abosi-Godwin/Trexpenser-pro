@@ -10,7 +10,7 @@ import Input from "../Form/Input";
 import Button from "../Form/Button";
 import Form from "../Form/Form";
 import Loader from "../../ui/Loader";
-import { slideUpVariant } from "../../Utils/AnimationVariants";
+import { slideUpVariant } from "../../utils/AnimationVariants";
 
 const UpdatePassword = () => {
     const navigate = useNavigate();

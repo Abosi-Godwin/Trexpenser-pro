@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../services/Supabase";
-import { useUser } from "../Hooks/useUser";
+import { useUser } from "../hooks/useUser";
 import toast from "react-hot-toast";
 
 export const useAppSettings = () => {

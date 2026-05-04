@@ -1,5 +1,5 @@
 import { supabase } from "../../services/Supabase";
-import {sortData} from "../../Utils/sortDatas"
+import {sortData} from "../../utils/sortDatas"
 export const getSavingsApi = async userId => {
     let { data, error } = await supabase
         .from("savings")

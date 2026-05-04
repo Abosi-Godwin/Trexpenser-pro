@@ -1,6 +1,6 @@
  import { useEffect, useState, useMemo } from "react";
 import { useCurrency } from "../hooks/useCurrency";
-import { roundTotalPrice, roundDownPrice } from "../Utils/CustomMethods";
+import { roundTotalPrice, roundDownPrice } from "../utils/CustomMethods";
 
 import { useGetTransactions } from "./useGetTransactions";
 import { useGetSavings } from "./useGetSavings";

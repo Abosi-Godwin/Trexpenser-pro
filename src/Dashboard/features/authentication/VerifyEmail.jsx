@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { slideUpVariant } from "../../Utils/AnimationVariants";
+import { slideUpVariant } from "../../utils/AnimationVariants";
 
 export default function VerifyEmail() {
     const [resent, setResent] = useState(false);

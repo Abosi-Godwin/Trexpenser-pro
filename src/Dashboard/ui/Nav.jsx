@@ -8,7 +8,7 @@ import Avatar from "./Avatar";
 import { useAuth } from "../contexts/AuthContext";
 
 import { sideBarItems } from "../data/data";
-import { dropdownVariants } from "../Utils/AnimationVariants";
+import { dropdownVariants } from "../utils/AnimationVariants";
 
 const NavBar = ({ isMenuOpen, closeNavBar }) => {
     const { logOut } = useAuth();

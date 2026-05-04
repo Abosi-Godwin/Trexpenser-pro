@@ -1,4 +1,4 @@
-import { useGoogleSignUp } from "../../Hooks/useGoogleSignUp";
+import { useGoogleSignUp } from "../../hooks/useGoogleSignUp";
 
 const GoogleBtn = () => {
     const { signUpWithGoogle } = useGoogleSignUp();

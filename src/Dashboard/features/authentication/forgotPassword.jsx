@@ -8,7 +8,7 @@ import { Logo } from "../../ui/Logo";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 import Form from "../Form/Form";
-import { slideUpVariant } from "../../Utils/AnimationVariants";
+import { slideUpVariant } from "../../utils/AnimationVariants";
 import { useSendForgotPassword } from "../../hooks/useSendForgotPassword";
 
 const ForgotPassword = () => {

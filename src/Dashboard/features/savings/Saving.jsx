@@ -8,9 +8,9 @@ import MenuCard from "../../ui/MenuCard";
 import Input from "../Form/Input";
 import Button from "../Form/Button";
 
-import { useUpdateSavings } from "../../Hooks/useUpdateSavings";
+import { useUpdateSavings } from "../../hooks/useUpdateSavings";
 import { useCurrency } from "../../hooks/useCurrency";
-import { formatDate } from "../../Utils/CustomMethods";
+import { formatDate } from "../../utils/CustomMethods";
 
 const SavingsContext = createContext();
 

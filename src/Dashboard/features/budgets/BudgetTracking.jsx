@@ -2,7 +2,7 @@
 import Budget from "./Budget";
 import Budgets from "./Budgets";
 import EmptyDashboard from "../../ui/EmptyDashboard";
-import { useBudgets } from "../../Hooks/useBudgets";
+import { useBudgets } from "../../hooks/useBudgets";
 import { useCurrency } from "../../hooks/useCurrency";
 
 const BudgetTrackingChart = () => {

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getSavingsApi } from "../Apis/Transactions/getSavings";
+import { getSavingsApi } from "../apis/transactions/getSavings";
 import { useUser } from "./useUser";
 
 
-import { roundDownPrice } from "../Utils/CustomMethods";
+import { roundDownPrice } from "../utils/CustomMethods";
 
 export const useGetSavings = () => {
     const { userId } = useUser();

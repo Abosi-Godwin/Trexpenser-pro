@@ -5,9 +5,9 @@ import Button from "../Form/Button";
 import UpdatePicForm from "../Form/UpdatePicForm";
 import UpdatePasswordForm from "../Form/UpdatePasswordForm";
 
-import { useUser } from "../../Hooks/useUser";
+import { useUser } from "../../hooks/useUser";
 import { useDeleteAccount } from "../../hooks/useDeleteAccount";
-import { formatDate } from "../../Utils/formatDate";
+import { formatDate } from "../../utils/formatDate";
 
 const getMemberDuration = date => {
     if (!date) return null;

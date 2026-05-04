@@ -8,12 +8,12 @@ import DateInput from "../Form/DateInput";
 import SelectInput from "../Form/SelectInput";
 import TextArea from "../Form/TextArea";
 
-import { useTransactions } from "../../Hooks/useTransactions";
-import { useUser } from "../../Hooks/useUser";
-import { useBudgets } from "../../Hooks/useBudgets";
-import { useAddBudget } from "../../Hooks/useAddBudget";
-import { useEditBudget } from "../../Hooks/useEditBudget";
-import { useToday } from "../../Hooks/useDate";
+import { useTransactions } from "../../hooks/useTransactions";
+import { useUser } from "../../hooks/useUser";
+import { useBudgets } from "../../hooks/useBudgets";
+import { useAddBudget } from "../../hooks/useAddBudget";
+import { useEditBudget } from "../../hooks/useEditBudget";
+import { useToday } from "../../hooks/useDate";
 
 function BudgetForm({ onCloseForm, isEdit, data }) {
   const { expenseCategories: budgetCategories } = useTransactions();

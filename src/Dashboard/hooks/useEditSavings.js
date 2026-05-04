@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-import { editSavingsApi } from "../Apis/Transactions/editSavings";
+import { editSavingsApi } from "../apis/transactions/editSavings";
 
 export const useEditSavings = () => {
     const queryClient = useQueryClient();

@@ -1,4 +1,4 @@
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import Table from "../ui/Table";
@@ -10,9 +10,9 @@ import EmptyDashboard from "../ui/EmptyDashboard";
 import TransactionForm from "../features/Form/TransactionForm";
 import Transaction from "../features/transactions/Transaction";
 
-import { useTransactions } from "../Hooks/useTransactions";
-import { sortingSwitchFunc } from "../Utils/SortSwitchFunc";
-import { filterSwitchFunc } from "../Utils/FilterSwitchFunc";
+import { useTransactions } from "../hooks/useTransactions";
+import { sortingSwitchFunc } from "../utils/SortSwitchFunc";
+import { filterSwitchFunc } from "../utils/FilterSwitchFunc";
 import { transactionFilterOptions, transactionSortOptions } from "../data/data";
 
 const maxTransactionToShow = 10;
@@ -26,17 +26,14 @@ function Transactions() {
 
     const { currentUserTransactions } = useTransactions();
 
-    // Chain: sort first, then filter the sorted result
     let transactions = sortingSwitchFunc(
         sortParams,
         currentUserTransactions ?? []
     );
     transactions = filterSwitchFunc(filterParams, transactions);
 
-    //const totalTransaction = transactions.length;
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Reset to page 1 when sort/filter changes
     useEffect(() => {
         setCurrentPage(1);
     }, [sortParams, filterParams]);
@@ -44,7 +41,6 @@ function Transactions() {
     const totalTransaction = transactions.length;
     const totalPages = Math.ceil(totalTransaction / maxTransactionToShow);
 
-    // Slice for current page
     const paginated = transactions.slice(
         (currentPage - 1) * maxTransactionToShow,
         currentPage * maxTransactionToShow
@@ -70,7 +66,6 @@ function Transactions() {
                 />
             </div>
 
-            {/* Form rendered outside header flex container */}
             {openForm && <TransactionForm onCloseForm={handleOpenForm} />}
 
             {totalTransaction > 0 ? (

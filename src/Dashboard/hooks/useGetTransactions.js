@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "./useUser";
-import { getUserTransactions } from "../Apis/Transactions/getUserTransactions";
+import { getUserTransactions } from "../apis/transactions/getUserTransactions";
 export const useGetTransactions = () => {
     const { userId } = useUser();
     const {

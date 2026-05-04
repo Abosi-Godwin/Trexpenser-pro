@@ -1,7 +1,7 @@
 import { createContext, useContext, useRef } from "react";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa6";
-import { formatDate } from "../../Utils/formatDate";
-//import { formatCurrency } from "../../Utils/formatCurrency";
+import { formatDate } from "../../utils/formatDate";
+ 
 import MenuProvider from "../../contexts/MenuContext";
 import { useCurrency } from "../../hooks/useCurrency";
 const TransactionContext = createContext();
@@ -51,7 +51,7 @@ const Icon = () => {
 
 const Description = () => {
     const { transaction } = useTransaction();
- const { format } = useCurrency();
+    const { format } = useCurrency();
     return (
         <div className="grid grid-cols-transactions items-center gap-3 justify-between w-[90%] px-2">
             <div>

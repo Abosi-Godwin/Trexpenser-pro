@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../ui/Loader";
 import { useAuth } from "../../contexts/AuthContext";
-import { useLoader } from "../../Hooks/useLoader";
+import { useLoader } from "../../hooks/useLoader";
 
 const ProtectedRoutes = ({ children }) => {
     const navigate = useNavigate();

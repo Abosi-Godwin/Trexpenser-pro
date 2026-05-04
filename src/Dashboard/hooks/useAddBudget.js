@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-import { addBudgetApi } from "../Apis/Transactions/addBudget";
+import { addBudgetApi } from "../apis/transactions/addBudget";
 
 export const useAddBudget = () => {
     const queryClient = useQueryClient();

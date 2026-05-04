@@ -1,9 +1,9 @@
  import { useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { formatCurrency } from "../../Utils/CustomMethods";
+import { formatCurrency } from "../../utils/CustomMethods";
 import EmptyChart from "../../ui/EmptyChart";
-import { getDoughnutDatas } from "../../Utils/getDoughnutDatas";
+import { getDoughnutDatas } from "../../utils/getDoughnutDatas";
 import { useTheme } from "../../contexts/ThemeContext";
 import { useCurrency } from "../../hooks/useCurrency";
 ChartJS.register(ArcElement, Tooltip, Legend);

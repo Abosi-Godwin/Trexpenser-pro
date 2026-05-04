@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import { slideUpVariant } from "../../Utils/AnimationVariants";
-import { useSignUp } from "../../Hooks/useSignUp";
+import { slideUpVariant } from "../../utils/AnimationVariants";
+import { useSignUp } from "../../hooks/useSignUp";
 
 import Button from "../Form/Button";
 import GoogleBtn from "../Form/GoogleBtn";
@@ -124,6 +124,7 @@ const SignupPage = () => {
                             name="email"
                             label="Email"
                             inputType="email"
+                            autoComplete="email"
                             disabled={isSigningUp}
                             placeholder="Enter your email..."
                             register={register}
@@ -136,6 +137,7 @@ const SignupPage = () => {
                             inputType={
                                 visibility.password ? "text" : "password"
                             }
+                            autoComplete="new-password"
                             disabled={isSigningUp}
                             placeholder="Enter your password..."
                             register={register}
@@ -154,6 +156,7 @@ const SignupPage = () => {
                         <Input
                             name="confirmPassword"
                             label="Confirm Password"
+                               autoComplete="new-password"
                             inputType={
                                 visibility.confirmPassword ? "text" : "password"
                             }

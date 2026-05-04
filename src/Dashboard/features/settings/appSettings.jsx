@@ -42,7 +42,6 @@ const AppSettings = () => {
         defaultValues: settings
     });
 
-    // Sync form when settings load from Supabase
     useEffect(() => {
         reset(settings);
     }, [
@@ -55,12 +54,11 @@ const AppSettings = () => {
     const onSubmit = data => {
         saveSettings(data);
 
-        // If dark mode toggled, apply immediately
         if (data.darkMode !== settings.darkMode) {
             updateTheme();
         }
 
-        reset(data); // clear dirty state after save
+        reset(data);
     };
 
     return (

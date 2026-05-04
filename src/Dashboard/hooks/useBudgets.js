@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { format, compareAsc } from "date-fns";
 
-import { getUserBudgetsApi } from "../Apis/Transactions/getBudgets";
+import { getUserBudgetsApi } from "../apis/transactions/getBudgets";
 
 import { useUser } from "./useUser";
 import { useTransactions } from "./useTransactions";
-import { roundDownPrice } from "../Utils/CustomMethods";
+import { roundDownPrice } from "../utils/CustomMethods";
 
 export const useBudgets = () => {
     const { userId } = useUser();

@@ -9,11 +9,11 @@ import SelectInput from "./SelectInput";
 import Form from "./Form";
 
 import { useAuth } from "../../contexts/AuthContext";
-import { useGetSavings } from "../../Hooks/useGetSavings";
-import { useUpdateSavings } from "../../Hooks/useUpdateSavings";
-import { useEditTransaction } from "../../Hooks/useEditTransaction";
-import { useAddTransaction } from "../../Hooks/useAddTransaction";
-import { useToday } from "../../Hooks/useDate";
+import { useGetSavings } from "../../hooks/useGetSavings";
+import { useUpdateSavings } from "../../hooks/useUpdateSavings";
+import { useEditTransaction } from "../../hooks/useEditTransaction";
+import { useAddTransaction } from "../../hooks/useAddTransaction";
+import { useToday } from "../../hooks/useDate";
 import {
   incomeCategories,
   expenseCategories,
